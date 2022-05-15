@@ -1,22 +1,25 @@
 package org.ua.wohnung.bot
 
+import mu.KotlinLogging
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
-import org.ua.wohnung.bot.security.SecretContainer
 
 class WohnungsBot(
-    private val secretContainer: SecretContainer,
+    private val secret: String,
     private val userRegistrationFlow: UserRegistrationFlow,
-    private val session: Session
+    private val session: Session,
 ) : TelegramLongPollingBot() {
-    override fun getBotToken(): String = secretContainer.getApiToken()
+    private val logger = KotlinLogging.logger {}
+
+    override fun getBotToken(): String = secret
 
     override fun getBotUsername(): String = "UA_Wohnung_Bot"
 
     override fun onUpdateReceived(update: Update) {
+        logger.info { "Received update, chatId: ${update.message.chatId}" }
         kotlin.runCatching {
             if (update.hasMessage() && update.message.hasText() && update.message.isUserMessage) {
                 val chatId = update.message.chatId
@@ -37,6 +40,8 @@ class WohnungsBot(
                                 }
                             )
                         }
+                    } else {
+                        replyMarkup = null
                     }
                 }.let {
                     execute(it)
@@ -44,8 +49,8 @@ class WohnungsBot(
                 }
             }
         }.onFailure {
-            println(it.message)
             println(it.stackTraceToString())
+            logger.error { it }
         }
     }
 
@@ -54,4 +59,3 @@ class WohnungsBot(
 //        const val CREATOR_ID = 193689183L
 //    }
 }
-

@@ -18,7 +18,7 @@ import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 import org.ua.wohnung.bot.persistence.generated.Keys;
-import org.ua.wohnung.bot.persistence.generated.Public;
+import org.ua.wohnung.bot.persistence.generated.Main;
 import org.ua.wohnung.bot.persistence.generated.enums.Role;
 import org.ua.wohnung.bot.persistence.generated.tables.records.AccountRecord;
 
@@ -32,7 +32,7 @@ public class Account extends TableImpl<AccountRecord> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>public.account</code>
+     * The reference instance of <code>main.account</code>
      */
     public static final Account ACCOUNT = new Account();
 
@@ -45,12 +45,12 @@ public class Account extends TableImpl<AccountRecord> {
     }
 
     /**
-     * The column <code>public.account.login</code>.
+     * The column <code>main.account.login</code>.
      */
     public final TableField<AccountRecord, String> LOGIN = createField(DSL.name("login"), SQLDataType.VARCHAR(128).nullable(false), this, "");
 
     /**
-     * The column <code>public.account.role</code>.
+     * The column <code>main.account.role</code>.
      */
     public final TableField<AccountRecord, Role> ROLE = createField(DSL.name("role"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(org.ua.wohnung.bot.persistence.generated.enums.Role.class), this, "");
 
@@ -63,21 +63,21 @@ public class Account extends TableImpl<AccountRecord> {
     }
 
     /**
-     * Create an aliased <code>public.account</code> table reference
+     * Create an aliased <code>main.account</code> table reference
      */
     public Account(String alias) {
         this(DSL.name(alias), ACCOUNT);
     }
 
     /**
-     * Create an aliased <code>public.account</code> table reference
+     * Create an aliased <code>main.account</code> table reference
      */
     public Account(Name alias) {
         this(alias, ACCOUNT);
     }
 
     /**
-     * Create a <code>public.account</code> table reference
+     * Create a <code>main.account</code> table reference
      */
     public Account() {
         this(DSL.name("account"), null);
@@ -89,7 +89,7 @@ public class Account extends TableImpl<AccountRecord> {
 
     @Override
     public Schema getSchema() {
-        return aliased() ? null : Public.PUBLIC;
+        return aliased() ? null : Main.MAIN;
     }
 
     @Override

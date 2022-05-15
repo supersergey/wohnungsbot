@@ -14,7 +14,7 @@ import org.ua.wohnung.bot.persistence.generated.tables.records.AccountRecord;
 
 /**
  * A class modelling foreign key relationships and constraints of tables in
- * public.
+ * main.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Keys {

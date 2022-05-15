@@ -3,7 +3,7 @@ package org.ua.wohnung.bot
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
-object Session {
+class Session {
 
     // userId to StepId
     private val internalMap: ConcurrentMap<Long, String> = ConcurrentHashMap()

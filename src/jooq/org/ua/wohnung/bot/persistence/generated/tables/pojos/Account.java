@@ -34,14 +34,14 @@ public class Account implements Serializable {
     }
 
     /**
-     * Getter for <code>public.account.login</code>.
+     * Getter for <code>main.account.login</code>.
      */
     public String getLogin() {
         return this.login;
     }
 
     /**
-     * Getter for <code>public.account.role</code>.
+     * Getter for <code>main.account.role</code>.
      */
     public Role getRole() {
         return this.role;

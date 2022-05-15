@@ -22,28 +22,28 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> implements
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>public.account.login</code>.
+     * Setter for <code>main.account.login</code>.
      */
     public void setLogin(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>public.account.login</code>.
+     * Getter for <code>main.account.login</code>.
      */
     public String getLogin() {
         return (String) get(0);
     }
 
     /**
-     * Setter for <code>public.account.role</code>.
+     * Setter for <code>main.account.role</code>.
      */
     public void setRole(Role value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>public.account.role</code>.
+     * Getter for <code>main.account.role</code>.
      */
     public Role getRole() {
         return (Role) get(1);

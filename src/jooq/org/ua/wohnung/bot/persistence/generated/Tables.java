@@ -8,13 +8,13 @@ import org.ua.wohnung.bot.persistence.generated.tables.Account;
 
 
 /**
- * Convenience access to all tables in public.
+ * Convenience access to all tables in main.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
 
     /**
-     * The table <code>public.account</code>.
+     * The table <code>main.account</code>.
      */
     public static final Account ACCOUNT = Account.ACCOUNT;
 }

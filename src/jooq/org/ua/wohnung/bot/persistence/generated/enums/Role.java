@@ -7,7 +7,7 @@ package org.ua.wohnung.bot.persistence.generated.enums;
 import org.jooq.Catalog;
 import org.jooq.EnumType;
 import org.jooq.Schema;
-import org.ua.wohnung.bot.persistence.generated.Public;
+import org.ua.wohnung.bot.persistence.generated.Main;
 
 
 /**
@@ -35,7 +35,7 @@ public enum Role implements EnumType {
 
     @Override
     public Schema getSchema() {
-        return Public.PUBLIC;
+        return Main.MAIN;
     }
 
     @Override

@@ -6,7 +6,7 @@ interface Flow {
     fun add(step: Step)
 }
 
-class UserRegistrationFlow(private val firstStep: Step): Flow {
+class UserRegistrationFlow(private val firstStep: Step) : Flow {
 
     private val internalMap = mutableMapOf<String, Step>()
 
