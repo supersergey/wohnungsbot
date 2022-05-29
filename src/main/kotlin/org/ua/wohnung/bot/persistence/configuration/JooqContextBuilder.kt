@@ -1,14 +1,14 @@
 package org.ua.wohnung.bot.persistence.configuration
 
-import org.jooq.ConnectionProvider
 import org.jooq.DSLContext
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
+import javax.sql.DataSource
 
 class JooqContextBuilder(
-    private val connectionProvider: ConnectionProvider,
-    private val dialect: String
+    private val dataSource: DataSource,
+    private val dialect: SQLDialect
 ) {
     fun build(): DSLContext =
-        DSL.using(connectionProvider, SQLDialect.valueOf(dialect))
+        DSL.using(dataSource, dialect)
 }

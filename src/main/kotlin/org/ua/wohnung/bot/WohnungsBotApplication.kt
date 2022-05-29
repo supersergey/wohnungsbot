@@ -14,6 +14,7 @@ fun main() {
             wohnungsBotModule
         )
         fileProperties("/secrets/secrets.properties")
+        fileProperties("/flows/userflow.properties")
     }
     app.koin.get<UserRegistrationFlow>().apply {
         add(UserRegistrationFlowSteps.PERSONAL_DATA_STEP)

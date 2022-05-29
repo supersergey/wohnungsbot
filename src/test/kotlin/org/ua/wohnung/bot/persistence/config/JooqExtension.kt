@@ -1,8 +1,10 @@
 package org.ua.wohnung.bot.persistence.config
 
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway
-import org.jooq.ConnectionProvider
 import org.jooq.DSLContext
+import org.jooq.SQLDialect
 import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
@@ -16,6 +18,7 @@ import org.testcontainers.containers.PostgreSQLContainer
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.configuration.JooqContextBuilder
 import org.ua.wohnung.bot.security.Secrets
+import javax.sql.DataSource
 
 class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
 
@@ -28,13 +31,20 @@ class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
                 .withUsername("foo")
                 .withPassword("secret")
         }
-        single<ConnectionProvider> {
-            TestContainersJdbcConnectionProvider(get())
+        single<DataSource> {
+            val container = get<PostgreSQLContainer<*>>()
+            HikariDataSource(
+                HikariConfig().apply {
+                    username = container.username
+                    password = container.password
+                    jdbcUrl = container.jdbcUrl
+                }
+            )
         }
         single {
             JooqContextBuilder(
                 get(),
-                requireNotNull(getKoin().getProperty(Secrets.SQL_DIALECT.setting))
+                SQLDialect.valueOf(requireNotNull(getKoin().getProperty(Secrets.SQL_DIALECT.setting)))
             ).build()
         }
 

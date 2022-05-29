@@ -25,6 +25,7 @@ repositories {
 dependencies {
     implementation("io.insert-koin:koin-core:$koinVersion")
 
+    implementation("com.zaxxer:HikariCP:5.0.1")
     implementation("org.flywaydb:flyway-core:8.5.10")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
