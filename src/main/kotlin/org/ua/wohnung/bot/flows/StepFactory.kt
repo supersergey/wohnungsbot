@@ -1,22 +1,30 @@
 package org.ua.wohnung.bot.flows
 
 import org.ua.wohnung.bot.configuration.MessageSource
+import org.ua.wohnung.bot.flows.processors.PostProcessor
+import org.ua.wohnung.bot.flows.processors.PreProcessor
 
 sealed class Step(
     open val id: String,
     open val caption: String,
-    open val reply: Reply
+    open val reply: Reply,
+    open val preProcessor: PreProcessor,
+    open val postProcessor: PostProcessor,
 ) {
     class General internal constructor(
         override val id: String,
         override val caption: String,
         override val reply: Reply,
-    ) : Step(id, caption, reply)
+        override val preProcessor: PreProcessor,
+        override val postProcessor: PostProcessor,
+    ) : Step(id, caption, reply, preProcessor, postProcessor)
 
     class Termination internal constructor(
         override val id: String,
-        override val caption: String
-        ) : Step(id, caption, Reply.Custom(null))
+        override val caption: String,
+        override val preProcessor: PreProcessor,
+        override val postProcessor: PostProcessor,
+    ) : Step(id, caption, Reply.Custom(null), preProcessor, postProcessor)
 }
 
 sealed class Reply(val options: Map<String, String?>) {
@@ -29,16 +37,33 @@ sealed class Reply(val options: Map<String, String?>) {
 }
 
 class StepFactory(private val messageSource: MessageSource, private val flow: Flow) {
-    fun singleReply(id: String, next: String): Step.General =
-            Step.General(id, messageSource[id], Reply.Custom(next)).add()
+    fun singleReply(
+        id: String,
+        next: String,
+        preProcessor: PreProcessor = PreProcessor.Empty(id),
+        postProcessor: PostProcessor = PostProcessor.Empty(id)
+    ): Step.General =
+        Step.General(id, messageSource[id], Reply.Custom(next), preProcessor, postProcessor)
+            .add()
 
-    fun multipleReplies(id: String, vararg replies: Pair<String, String>): Step.General =
-            Step.General(id, messageSource[id], Reply.Inline(*replies)).add()
+    fun multipleReplies(
+        id: String,
+        vararg replies: Pair<String, String>,
+        preProcessor: PreProcessor = PreProcessor.Empty(id),
+        postProcessor: PostProcessor = PostProcessor.Empty(id)
+    ): Step.General =
+        Step.General(id, messageSource[id], Reply.Inline(*replies), preProcessor, postProcessor)
+            .add()
 
-    fun termination(id: String): Step.Termination =
-        Step.Termination(id, messageSource[id]).add()
+    fun termination(
+        id: String,
+        preProcessor: PreProcessor = PreProcessor.Empty(id),
+        postProcessor: PostProcessor = PostProcessor.Empty(id)
+    ): Step.Termination =
+        Step.Termination(id, messageSource[id], preProcessor, postProcessor)
+            .add()
 
-    private fun <T: Step> T.add(): T {
+    private fun <T : Step> T.add(): T {
         flow.add(this)
         return this
     }
