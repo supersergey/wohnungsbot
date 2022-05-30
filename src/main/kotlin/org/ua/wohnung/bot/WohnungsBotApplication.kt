@@ -2,27 +2,26 @@ package org.ua.wohnung.bot
 
 import org.koin.core.context.startKoin
 import org.koin.core.logger.PrintLogger
+import org.koin.core.qualifier.named
 import org.koin.fileProperties
-import org.ua.wohnung.bot.configuration.WohnungsBotApplication
+import org.telegram.telegrambots.meta.TelegramBotsApi
+import org.telegram.telegrambots.meta.generics.LongPollingBot
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 import org.ua.wohnung.bot.configuration.wohnungsBotModule
+import org.ua.wohnung.bot.flows.FlowInitializer
 
 fun main() {
-    val app = startKoin {
+    startKoin {
         printLogger()
         logger(PrintLogger())
         modules(
             wohnungsBotModule
         )
         fileProperties("/secrets/secrets.properties")
-        fileProperties("/flows/userflow.properties")
+        koin.get<FlowInitializer>(named("UserRegistrationFlowInitializer")).initialize()
+        koin.get<LongPollingBot>(named("WohnungsBot")).let { bot ->
+            TelegramBotsApi(DefaultBotSession::class.java).registerBot(bot)
+        }
     }
-    app.koin.get<UserRegistrationFlow>().apply {
-        add(UserRegistrationFlowSteps.PERSONAL_DATA_STEP)
-        add(UserRegistrationFlowSteps.LAND_SELECTION_STEP)
-        add(UserRegistrationFlowSteps.NUMBER_OF_TENANTS_STEP)
-        add(UserRegistrationFlowSteps.PETS_STEP)
-        add(UserRegistrationFlowSteps.FAILED_STEP)
-        add(UserRegistrationFlowSteps.SUCCESS_STEP)
-    }
-    app.koin.get<WohnungsBotApplication>().registerBot(app.koin.get())
+
 }

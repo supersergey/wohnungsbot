@@ -41,6 +41,9 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.21")
     implementation("commons-logging:commons-logging:1.2")
 
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testImplementation("io.insert-koin:koin-test-junit5:$koinVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")

@@ -1,6 +1,6 @@
 package org.ua.wohnung.bot.security
 
-import org.koin.java.KoinJavaComponent
+import java.lang.System.getProperty
 
 enum class Secrets(val setting: String) {
     JDBC_PASSWORD("jdbc_password"),
@@ -10,5 +10,5 @@ enum class Secrets(val setting: String) {
     SQL_DIALECT("sql_dialect"),
     BOT_API_SECRET("bot_api_secret");
 
-    fun asProperty(): String = requireNotNull(KoinJavaComponent.getKoin().getProperty(this.setting))
+    fun getProperty(): String = getProperty(setting)
 }

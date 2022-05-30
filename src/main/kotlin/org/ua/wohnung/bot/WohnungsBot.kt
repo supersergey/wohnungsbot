@@ -5,11 +5,14 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
+import org.ua.wohnung.bot.flows.Flow
+import org.ua.wohnung.bot.flows.Reply
 
 class WohnungsBot(
     private val secret: String,
-    private val userRegistrationFlow: UserRegistrationFlow,
+    private val userRegistrationFlow: Flow,
     private val session: Session,
 ) : TelegramLongPollingBot() {
     private val logger = KotlinLogging.logger {}
@@ -34,24 +37,29 @@ class WohnungsBot(
                     text = nextMessage.caption
                     if (nextMessage.reply is Reply.Inline) {
                         replyMarkup = ReplyKeyboardMarkup().apply {
-                            this.keyboard = listOf(
-                                KeyboardRow().apply {
-                                    this.addAll(nextMessage.reply.options.map { it.key })
-                                }
-                            )
+                            oneTimeKeyboard = true
+                            keyboard = (nextMessage.reply as Reply.Inline).keyboardRows(3)
                         }
                     } else {
                         replyMarkup = null
                     }
+                    session.updateState(chatId.toLong(), nextMessage.id)
                 }.let {
                     execute(it)
-                    session.updateState(it.chatId.toLong(), it.text)
                 }
             }
         }.onFailure {
             println(it.stackTraceToString())
             logger.error { it }
         }
+    }
+
+    private fun Reply.Inline.keyboardRows(buttonsPerRow: Int): List<KeyboardRow> {
+        return options
+            .map { it.key }
+            .map { KeyboardButton(it) }
+            .chunked(buttonsPerRow)
+            .map { KeyboardRow(it) }
     }
 
 //    companion object {

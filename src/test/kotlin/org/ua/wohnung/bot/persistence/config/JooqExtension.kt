@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway
 import org.jooq.DSLContext
 import org.jooq.SQLDialect
+import org.jooq.impl.DSL
 import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
@@ -16,7 +17,6 @@ import org.koin.fileProperties
 import org.koin.java.KoinJavaComponent.inject
 import org.testcontainers.containers.PostgreSQLContainer
 import org.ua.wohnung.bot.persistence.AccountRepository
-import org.ua.wohnung.bot.persistence.configuration.JooqContextBuilder
 import org.ua.wohnung.bot.security.Secrets
 import javax.sql.DataSource
 
@@ -42,10 +42,7 @@ class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
             )
         }
         single {
-            JooqContextBuilder(
-                get(),
-                SQLDialect.valueOf(requireNotNull(getKoin().getProperty(Secrets.SQL_DIALECT.setting)))
-            ).build()
+            DSL.using(get<DataSource>(), SQLDialect.POSTGRES)
         }
 
         single { AccountRepository(get()) }
