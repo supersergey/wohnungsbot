@@ -11,6 +11,7 @@ import org.jooq.Catalog;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
 import org.ua.wohnung.bot.persistence.generated.tables.Account;
+import org.ua.wohnung.bot.persistence.generated.tables.UserDetails;
 
 
 /**
@@ -32,6 +33,11 @@ public class Main extends SchemaImpl {
     public final Account ACCOUNT = Account.ACCOUNT;
 
     /**
+     * The table <code>main.user_details</code>.
+     */
+    public final UserDetails USER_DETAILS = UserDetails.USER_DETAILS;
+
+    /**
      * No further instances allowed
      */
     private Main() {
@@ -47,7 +53,8 @@ public class Main extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
-            Account.ACCOUNT
+            Account.ACCOUNT,
+            UserDetails.USER_DETAILS
         );
     }
 }

@@ -4,12 +4,15 @@
 package org.ua.wohnung.bot.persistence.generated;
 
 
+import org.jooq.ForeignKey;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
 import org.ua.wohnung.bot.persistence.generated.tables.Account;
+import org.ua.wohnung.bot.persistence.generated.tables.UserDetails;
 import org.ua.wohnung.bot.persistence.generated.tables.records.AccountRecord;
+import org.ua.wohnung.bot.persistence.generated.tables.records.UserDetailsRecord;
 
 
 /**
@@ -24,4 +27,11 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<AccountRecord> ACCOUNT_PKEY = Internal.createUniqueKey(Account.ACCOUNT, DSL.name("account_pkey"), new TableField[] { Account.ACCOUNT.LOGIN }, true);
+    public static final UniqueKey<UserDetailsRecord> USER_DETAILS_PKEY = Internal.createUniqueKey(UserDetails.USER_DETAILS, DSL.name("user_details_pkey"), new TableField[] { UserDetails.USER_DETAILS.LOGIN }, true);
+
+    // -------------------------------------------------------------------------
+    // FOREIGN KEY definitions
+    // -------------------------------------------------------------------------
+
+    public static final ForeignKey<UserDetailsRecord, AccountRecord> USER_DETAILS__USER_DETAILS_LOGIN_FKEY = Internal.createForeignKey(UserDetails.USER_DETAILS, DSL.name("user_details_login_fkey"), new TableField[] { UserDetails.USER_DETAILS.LOGIN }, Keys.ACCOUNT_PKEY, new TableField[] { Account.ACCOUNT.LOGIN }, true);
 }
