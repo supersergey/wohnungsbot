@@ -17,7 +17,6 @@ import org.koin.fileProperties
 import org.koin.java.KoinJavaComponent.inject
 import org.testcontainers.containers.PostgreSQLContainer
 import org.ua.wohnung.bot.persistence.AccountRepository
-import org.ua.wohnung.bot.security.Secrets
 import javax.sql.DataSource
 
 class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {

@@ -5,6 +5,7 @@ package org.ua.wohnung.bot.persistence.generated;
 
 
 import org.ua.wohnung.bot.persistence.generated.tables.Account;
+import org.ua.wohnung.bot.persistence.generated.tables.UserDetails;
 
 
 /**
@@ -17,4 +18,9 @@ public class Tables {
      * The table <code>main.account</code>.
      */
     public static final Account ACCOUNT = Account.ACCOUNT;
+
+    /**
+     * The table <code>main.user_details</code>.
+     */
+    public static final UserDetails USER_DETAILS = UserDetails.USER_DETAILS;
 }

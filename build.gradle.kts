@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jooq.meta.jaxb.Logging
-import java.util.Properties
 import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     kotlin("jvm") version "1.6.21"

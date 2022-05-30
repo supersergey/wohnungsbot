@@ -23,5 +23,4 @@ fun main() {
             TelegramBotsApi(DefaultBotSession::class.java).registerBot(bot)
         }
     }
-
 }

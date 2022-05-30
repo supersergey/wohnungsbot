@@ -1,17 +1,22 @@
 package org.ua.wohnung.bot.flows
 
+import org.ua.wohnung.bot.flows.processors.PostProcessor
+import org.ua.wohnung.bot.flows.processors.PreProcessor
+
 interface FlowInitializer {
     fun initialize()
 }
 
 class UserRegistrationFlowInitializer(
-    private val factory: StepFactory
-): FlowInitializer {
+    private val factory: StepFactory,
+    private val preProcessors: List<PreProcessor> = emptyList(),
+    private val postProcessors: List<PostProcessor> = emptyList()
+) : FlowInitializer {
     override fun initialize() {
         factory.multipleReplies(
             id = "conversation_start",
             "Зареєструватися" to "accept_policies",
-            "Видаліть мої дані з системи" to "conversation_finish_removal"
+            "Видаліть мої дані з системи" to "conversation_finish_removal",
         )
         factory.multipleReplies(
             id = "accept_policies",
@@ -51,7 +56,8 @@ class UserRegistrationFlowInitializer(
         )
         factory.singleReply(
             id = "firstname_and_lastname",
-            next = "phone_number")
+            next = "phone_number"
+        )
         factory.singleReply(
             id = "phone_number",
             next = "pets"
@@ -62,7 +68,7 @@ class UserRegistrationFlowInitializer(
         )
         factory.termination("conversation_finished_success")
         factory.termination("conversation_finished_declined")
-        factory.termination("conversation_finish_removal")
+        factory.termination("conversation_finish_removal", preProcessor = preProcessors.first { it.stepId == "conversation_finish_removal" })
     }
 
     private fun List<String>.allTo(next: String) = map { it to next }.toTypedArray()
