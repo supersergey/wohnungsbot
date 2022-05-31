@@ -15,16 +15,14 @@ public class UserDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final String  login;
-    private final String  userName;
+    private final String  username;
     private final String  phone;
     private final Short   numberOfTenants;
     private final Boolean pets;
     private final String  bundesLand;
 
     public UserDetails(UserDetails value) {
-        this.login = value.login;
-        this.userName = value.userName;
+        this.username = value.username;
         this.phone = value.phone;
         this.numberOfTenants = value.numberOfTenants;
         this.pets = value.pets;
@@ -32,15 +30,13 @@ public class UserDetails implements Serializable {
     }
 
     public UserDetails(
-        String  login,
-        String  userName,
+        String  username,
         String  phone,
         Short   numberOfTenants,
         Boolean pets,
         String  bundesLand
     ) {
-        this.login = login;
-        this.userName = userName;
+        this.username = username;
         this.phone = phone;
         this.numberOfTenants = numberOfTenants;
         this.pets = pets;
@@ -48,17 +44,10 @@ public class UserDetails implements Serializable {
     }
 
     /**
-     * Getter for <code>main.user_details.login</code>.
+     * Getter for <code>main.user_details.username</code>.
      */
-    public String getLogin() {
-        return this.login;
-    }
-
-    /**
-     * Getter for <code>main.user_details.user_name</code>.
-     */
-    public String getUserName() {
-        return this.userName;
+    public String getUsername() {
+        return this.username;
     }
 
     /**
@@ -93,8 +82,7 @@ public class UserDetails implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("UserDetails (");
 
-        sb.append(login);
-        sb.append(", ").append(userName);
+        sb.append(username);
         sb.append(", ").append(phone);
         sb.append(", ").append(numberOfTenants);
         sb.append(", ").append(pets);

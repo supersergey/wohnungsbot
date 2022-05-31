@@ -17,27 +17,27 @@ public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final String login;
+    private final String username;
     private final Role   role;
 
     public Account(Account value) {
-        this.login = value.login;
+        this.username = value.username;
         this.role = value.role;
     }
 
     public Account(
-        String login,
+        String username,
         Role   role
     ) {
-        this.login = login;
+        this.username = username;
         this.role = role;
     }
 
     /**
-     * Getter for <code>main.account.login</code>.
+     * Getter for <code>main.account.username</code>.
      */
-    public String getLogin() {
-        return this.login;
+    public String getUsername() {
+        return this.username;
     }
 
     /**
@@ -51,7 +51,7 @@ public class Account implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("Account (");
 
-        sb.append(login);
+        sb.append(username);
         sb.append(", ").append(role);
 
         sb.append(")");

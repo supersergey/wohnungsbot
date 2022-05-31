@@ -26,12 +26,12 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<AccountRecord> ACCOUNT_PKEY = Internal.createUniqueKey(Account.ACCOUNT, DSL.name("account_pkey"), new TableField[] { Account.ACCOUNT.LOGIN }, true);
-    public static final UniqueKey<UserDetailsRecord> USER_DETAILS_PKEY = Internal.createUniqueKey(UserDetails.USER_DETAILS, DSL.name("user_details_pkey"), new TableField[] { UserDetails.USER_DETAILS.LOGIN }, true);
+    public static final UniqueKey<AccountRecord> ACCOUNT_PKEY = Internal.createUniqueKey(Account.ACCOUNT, DSL.name("account_pkey"), new TableField[] { Account.ACCOUNT.USERNAME }, true);
+    public static final UniqueKey<UserDetailsRecord> USER_DETAILS_PKEY = Internal.createUniqueKey(UserDetails.USER_DETAILS, DSL.name("user_details_pkey"), new TableField[] { UserDetails.USER_DETAILS.USERNAME }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<UserDetailsRecord, AccountRecord> USER_DETAILS__USER_DETAILS_LOGIN_FKEY = Internal.createForeignKey(UserDetails.USER_DETAILS, DSL.name("user_details_login_fkey"), new TableField[] { UserDetails.USER_DETAILS.LOGIN }, Keys.ACCOUNT_PKEY, new TableField[] { Account.ACCOUNT.LOGIN }, true);
+    public static final ForeignKey<UserDetailsRecord, AccountRecord> USER_DETAILS__USER_DETAILS_USERNAME_FKEY = Internal.createForeignKey(UserDetails.USER_DETAILS, DSL.name("user_details_username_fkey"), new TableField[] { UserDetails.USER_DETAILS.USERNAME }, Keys.ACCOUNT_PKEY, new TableField[] { Account.ACCOUNT.USERNAME }, true);
 }

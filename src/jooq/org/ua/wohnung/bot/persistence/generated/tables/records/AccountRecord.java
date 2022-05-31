@@ -22,16 +22,16 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> implements
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>main.account.login</code>.
+     * Setter for <code>main.account.username</code>.
      */
-    public void setLogin(String value) {
+    public void setUsername(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>main.account.login</code>.
+     * Getter for <code>main.account.username</code>.
      */
-    public String getLogin() {
+    public String getUsername() {
         return (String) get(0);
     }
 
@@ -74,7 +74,7 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> implements
 
     @Override
     public Field<String> field1() {
-        return Account.ACCOUNT.LOGIN;
+        return Account.ACCOUNT.USERNAME;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> implements
 
     @Override
     public String component1() {
-        return getLogin();
+        return getUsername();
     }
 
     @Override
@@ -94,7 +94,7 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> implements
 
     @Override
     public String value1() {
-        return getLogin();
+        return getUsername();
     }
 
     @Override
@@ -104,7 +104,7 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> implements
 
     @Override
     public AccountRecord value1(String value) {
-        setLogin(value);
+        setUsername(value);
         return this;
     }
 
@@ -135,10 +135,10 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> implements
     /**
      * Create a detached, initialised AccountRecord
      */
-    public AccountRecord(String login, Role role) {
+    public AccountRecord(String username, Role role) {
         super(Account.ACCOUNT);
 
-        setLogin(login);
+        setUsername(username);
         setRole(role);
     }
 
@@ -149,7 +149,7 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> implements
         super(Account.ACCOUNT);
 
         if (value != null) {
-            setLogin(value.getLogin());
+            setUsername(value.getUsername());
             setRole(value.getRole());
         }
     }

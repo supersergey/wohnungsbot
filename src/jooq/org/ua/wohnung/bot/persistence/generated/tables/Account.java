@@ -45,9 +45,9 @@ public class Account extends TableImpl<AccountRecord> {
     }
 
     /**
-     * The column <code>main.account.login</code>.
+     * The column <code>main.account.username</code>.
      */
-    public final TableField<AccountRecord, String> LOGIN = createField(DSL.name("login"), SQLDataType.VARCHAR(128).nullable(false), this, "");
+    public final TableField<AccountRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.VARCHAR(128).nullable(false), this, "");
 
     /**
      * The column <code>main.account.role</code>.

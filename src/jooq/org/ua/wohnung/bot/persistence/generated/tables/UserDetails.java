@@ -11,7 +11,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -47,14 +47,9 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     }
 
     /**
-     * The column <code>main.user_details.login</code>.
+     * The column <code>main.user_details.username</code>.
      */
-    public final TableField<UserDetailsRecord, String> LOGIN = createField(DSL.name("login"), SQLDataType.VARCHAR(128).nullable(false), this, "");
-
-    /**
-     * The column <code>main.user_details.user_name</code>.
-     */
-    public final TableField<UserDetailsRecord, String> USER_NAME = createField(DSL.name("user_name"), SQLDataType.VARCHAR(128), this, "");
+    public final TableField<UserDetailsRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.VARCHAR(128).nullable(false), this, "");
 
     /**
      * The column <code>main.user_details.phone</code>.
@@ -121,7 +116,7 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
 
     @Override
     public List<ForeignKey<UserDetailsRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.USER_DETAILS__USER_DETAILS_LOGIN_FKEY);
+        return Arrays.asList(Keys.USER_DETAILS__USER_DETAILS_USERNAME_FKEY);
     }
 
     private transient Account _account;
@@ -131,7 +126,7 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
      */
     public Account account() {
         if (_account == null)
-            _account = new Account(this, Keys.USER_DETAILS__USER_DETAILS_LOGIN_FKEY);
+            _account = new Account(this, Keys.USER_DETAILS__USER_DETAILS_USERNAME_FKEY);
 
         return _account;
     }
@@ -163,11 +158,11 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<String, String, String, Short, Boolean, String> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row5<String, String, Short, Boolean, String> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }
