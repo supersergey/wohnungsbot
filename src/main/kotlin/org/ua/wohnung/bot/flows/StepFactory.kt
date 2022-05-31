@@ -36,7 +36,7 @@ sealed class Reply(val options: Map<String, String?>) {
     }
 }
 
-class StepFactory(private val messageSource: MessageSource, private val flow: Flow) {
+class StepFactory(private val messageSource: MessageSource) {
     fun singleReply(
         id: String,
         next: String,
@@ -44,7 +44,6 @@ class StepFactory(private val messageSource: MessageSource, private val flow: Fl
         postProcessor: PostProcessor = PostProcessor.Empty(id)
     ): Step.General =
         Step.General(id, messageSource[id], Reply.Custom(next), preProcessor, postProcessor)
-            .add()
 
     fun multipleReplies(
         id: String,
@@ -53,7 +52,6 @@ class StepFactory(private val messageSource: MessageSource, private val flow: Fl
         postProcessor: PostProcessor = PostProcessor.Empty(id)
     ): Step.General =
         Step.General(id, messageSource[id], Reply.Inline(*replies), preProcessor, postProcessor)
-            .add()
 
     fun termination(
         id: String,
@@ -61,10 +59,4 @@ class StepFactory(private val messageSource: MessageSource, private val flow: Fl
         postProcessor: PostProcessor = PostProcessor.Empty(id)
     ): Step.Termination =
         Step.Termination(id, messageSource[id], preProcessor, postProcessor)
-            .add()
-
-    private fun <T : Step> T.add(): T {
-        flow.add(this)
-        return this
-    }
 }

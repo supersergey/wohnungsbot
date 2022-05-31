@@ -33,9 +33,9 @@ val wohnungsBotModule = module {
     yamlObjectMapper()
     single { MessageSource(get(), Path.of("flows", "userflow.yml")) }
     single<Flow> { UserRegistrationFlow() }
-    single { StepFactory(get(), get()) }
+    single { StepFactory(get()) }
     single<FlowInitializer>(named("UserRegistrationFlowInitializer")) {
-        UserRegistrationFlowInitializer(get())
+        UserRegistrationFlowInitializer(get(), get())
     }
     single<LongPollingBot>(named("WohnungsBot")) { WohnungsBot(getProperty(BOT_API_SECRET.setting), get(), get()) }
 
