@@ -17,6 +17,7 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 
 val koinVersion = "3.2.0"
 val mockkVersion = "1.12.4"
+val junitVersion = "5.8.2"
 
 repositories {
     mavenCentral()
@@ -44,7 +45,10 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+
     testImplementation("io.insert-koin:koin-test-junit5:$koinVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("org.testcontainers:testcontainers:1.17.1")

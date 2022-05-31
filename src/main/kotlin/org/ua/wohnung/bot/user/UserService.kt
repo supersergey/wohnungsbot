@@ -23,9 +23,16 @@ class UserService(
 
     fun updateUserDetails(userDetails: UserDetails) {
         dslContext.transaction { _ ->
-            accountRepository.findByLogin(userDetails.username)
+            accountRepository.findById(userDetails.username)
                 ?: throw UserNotFoundException(userDetails.username)
             userDetailsRepository.save(userDetails)
+        }
+    }
+
+    fun deleteUser(username: String) {
+        dslContext.transaction { _ ->
+            userDetailsRepository.deleteById(username)
+            accountRepository.deleteById(username)
         }
     }
 }

@@ -11,10 +11,11 @@ class UserDetailsRepository(private val dslContext: DSLContext) {
             ?: dslContext.newRecord(USER_DETAILS)
 
         userDetailsRecord.apply {
-            this.username = userDetails.username
-            this.phone = userDetails.phone
-            this.pets = userDetails.pets
-            this.bundesLand = userDetails.bundesLand
+            username = userDetails.username
+            phone = userDetails.phone
+            numberOfTenants = userDetails.numberOfTenants
+            pets = userDetails.pets
+            bundesLand = userDetails.bundesLand
         }
         userDetailsRecord.store()
     }
@@ -29,4 +30,8 @@ class UserDetailsRepository(private val dslContext: DSLContext) {
                 it.bundesLand
             )
         }
+
+    fun deleteById(username: String) {
+        dslContext.deleteFrom(USER_DETAILS).where(USER_DETAILS.USERNAME.eq(username)).execute()
+    }
 }

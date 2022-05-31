@@ -16,13 +16,13 @@ class AccountRepository(private val dslContext: DSLContext) {
         }.store()
     }
 
-    fun findByLogin(login: String): Account? {
-        return dslContext.fetchOne(ACCOUNT, ACCOUNT.USERNAME.eq(login))?.let {
+    fun findById(username: String): Account? {
+        return dslContext.fetchOne(ACCOUNT, ACCOUNT.USERNAME.eq(username))?.let {
             Account(it.username, it.role)
         }
     }
 
-    fun deleteByLogin(login: String) {
+    fun deleteById(login: String) {
         dslContext.fetchOne(ACCOUNT, ACCOUNT.USERNAME.eq(login))?.delete()
     }
 }

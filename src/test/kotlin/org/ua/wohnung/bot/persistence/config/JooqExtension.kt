@@ -17,6 +17,7 @@ import org.koin.fileProperties
 import org.koin.java.KoinJavaComponent.inject
 import org.testcontainers.containers.PostgreSQLContainer
 import org.ua.wohnung.bot.persistence.AccountRepository
+import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import javax.sql.DataSource
 
 class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
@@ -45,6 +46,7 @@ class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
         }
 
         single { AccountRepository(get()) }
+        single { UserDetailsRepository(get()) }
     }
 
     override fun beforeAll(context: ExtensionContext) {

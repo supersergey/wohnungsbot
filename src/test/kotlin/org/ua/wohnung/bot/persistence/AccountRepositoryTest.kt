@@ -17,8 +17,8 @@ internal class AccountRepositoryTest {
     fun `should save the userRecord`() {
         val accountRecord = Account("my_login", ADMIN)
         accountRepository.save(accountRecord)
-        val saved = accountRepository.findByLogin(accountRecord.username)
-        assertThat(saved).isEqualTo(accountRecord)
+        val saved = accountRepository.findById(accountRecord.username)
+        assertThat(saved).usingRecursiveComparison().isEqualTo(accountRecord)
     }
 
     @Test
@@ -27,7 +27,7 @@ internal class AccountRepositoryTest {
         accountRepository.save(accountRecord)
         val newAccountRecord = Account("my_login", ADMIN)
         accountRepository.save(newAccountRecord)
-        val saved = accountRepository.findByLogin(accountRecord.username)
-        assertThat(saved).isEqualTo(newAccountRecord)
+        val saved = accountRepository.findById(accountRecord.username)
+        assertThat(saved).usingRecursiveComparison().isEqualTo(newAccountRecord)
     }
 }
