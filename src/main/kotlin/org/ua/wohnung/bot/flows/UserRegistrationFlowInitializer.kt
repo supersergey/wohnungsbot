@@ -2,6 +2,7 @@ package org.ua.wohnung.bot.flows
 
 import org.ua.wohnung.bot.flows.processors.PostProcessor
 import org.ua.wohnung.bot.flows.processors.PreProcessor
+import org.ua.wohnung.bot.user.model.BundesLand
 
 interface FlowInitializer {
     fun initialize()
@@ -31,25 +32,7 @@ class UserRegistrationFlowInitializer(
         ).add()
         factory.multipleReplies(
             id = "bundesland_selection",
-            *listOf(
-                "Berlin",
-                "Bayern (Баварія)",
-                "Niedersachsen (Нижня Саксонія)",
-                "Baden-Württemberg",
-                "Rheinland-Pfalz (Rhineland-Palatinate)",
-                "Sachsen (Саксонія)",
-                "Thüringen (Тюрінгія)",
-                "Hessen",
-                "Nordrhein-Westfalen (Північна Рейн-Вестфалія)",
-                "Sachsen-Anhalt (Саксонія Анхальт)",
-                "Brandenburg",
-                "Mecklenburg-Vorpommern",
-                "Hamburg",
-                "Schleswig-Holstein",
-                "Saarland",
-                "Bremen",
-                "Не зареєстрований"
-            ).allTo("family_count")
+            *BundesLand.values().map { it.germanName }.allTo("family_count")
         ).add()
         factory.multipleReplies(
             id = "family_count",

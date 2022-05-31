@@ -7,6 +7,8 @@ import org.koin.fileProperties
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
+import org.ua.wohnung.bot.configuration.persistenceModule
+import org.ua.wohnung.bot.configuration.userFlowModule
 import org.ua.wohnung.bot.configuration.wohnungsBotModule
 import org.ua.wohnung.bot.flows.FlowInitializer
 
@@ -15,6 +17,8 @@ fun main() {
         printLogger()
         logger(PrintLogger())
         modules(
+            persistenceModule,
+            userFlowModule,
             wohnungsBotModule
         )
         fileProperties("/secrets/secrets.properties")

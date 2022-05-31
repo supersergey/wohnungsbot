@@ -21,28 +21,37 @@ import org.ua.wohnung.bot.flows.StepFactory
 import org.ua.wohnung.bot.flows.UserRegistrationFlow
 import org.ua.wohnung.bot.flows.UserRegistrationFlowInitializer
 import org.ua.wohnung.bot.persistence.AccountRepository
+import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import org.ua.wohnung.bot.security.Secrets.BOT_API_SECRET
 import org.ua.wohnung.bot.security.Secrets.DRIVER_CLASS_NAME
 import org.ua.wohnung.bot.security.Secrets.JDBC_PASSWORD
 import org.ua.wohnung.bot.security.Secrets.JDBC_URL
 import org.ua.wohnung.bot.security.Secrets.JDBC_USER
+import org.ua.wohnung.bot.user.UserService
 import java.nio.file.Path
 import javax.sql.DataSource
 
-val wohnungsBotModule = module {
+val persistenceModule = module {
     yamlObjectMapper()
-    single { MessageSource(get(), Path.of("flows", "userflow.yml")) }
-    single<Flow> { UserRegistrationFlow() }
-    single { StepFactory(get()) }
-    single<FlowInitializer>(named("UserRegistrationFlowInitializer")) {
-        UserRegistrationFlowInitializer(get(), get())
-    }
-    single<LongPollingBot>(named("WohnungsBot")) { WohnungsBot(getProperty(BOT_API_SECRET.setting), get(), get()) }
-
-    singleOf(::Session)
     datasource()
     jooq()
     single { AccountRepository(get()) }
+    single { UserDetailsRepository(get()) }
+    single { UserService(get(), get(), get()) }
+}
+
+val userFlowModule = module {
+    singleOf(::Session)
+    single { MessageSource(get(), Path.of("flows", "userflow.yml")) }
+    single<Flow> { UserRegistrationFlow() }
+    single<FlowInitializer>(named("UserRegistrationFlowInitializer")) {
+        UserRegistrationFlowInitializer(get(), get())
+    }
+}
+
+val wohnungsBotModule = module {
+    single { StepFactory(get()) }
+    single<LongPollingBot>(named("WohnungsBot")) { WohnungsBot(getProperty(BOT_API_SECRET.setting), get(), get()) }
 }
 
 fun Module.jooq() = single { DSL.using(get<DataSource>(), SQLDialect.POSTGRES) }
