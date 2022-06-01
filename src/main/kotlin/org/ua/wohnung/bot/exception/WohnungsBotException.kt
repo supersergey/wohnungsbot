@@ -8,4 +8,6 @@ sealed class ServiceException(message: String, cause: Throwable? = null) : Wohnu
 
 sealed class UserInputValidationException(message: String, cause: Throwable? = null) : WohnungsBotException(message, cause) {
     class InvalidBundesLand(val bundesLand: String) : UserInputValidationException("Bundesland not found: $bundesLand")
+    class InvalidPhoneNumber(val phoneNumber: String) : UserInputValidationException("Invalid phone number: $phoneNumber")
+    class InvalidUserName(val userName: String) : UserInputValidationException("Invalid user name: $userName")
 }

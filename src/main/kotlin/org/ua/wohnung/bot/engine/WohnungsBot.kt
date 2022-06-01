@@ -19,7 +19,6 @@ class WohnungsBot(
     override fun getBotUsername(): String = "UA_Wohnung_Bot"
 
     override fun onUpdateReceived(update: Update) {
-        logger.info { "Received update, chatId: ${update.message.chatId}" }
         if (update.isProcessable()) {
             val incomingMessage = update.input()
             val currentStep = session.current(incomingMessage.chatId)?.let { stepId ->

@@ -34,7 +34,10 @@ sealed class UpdateUserDetailsPostProcessor(private val userService: UserService
         override val stepId = FlowStep.FIRSTNAME_AND_LASTNAME
 
         override fun doInvoke(userDetails: UserDetails, input: String) {
-            userDetails.firstLastName = input
+            if (input.length in (5..50)) {
+                userDetails.firstLastName = input
+            } else
+                throw UserInputValidationException.InvalidUserName(input)
         }
     }
 
@@ -42,7 +45,11 @@ sealed class UpdateUserDetailsPostProcessor(private val userService: UserService
         override val stepId = FlowStep.PHONE_NUMBER
 
         override fun doInvoke(userDetails: UserDetails, input: String) {
-            userDetails.phone = input
+            val clean = input.replace("\\s*\\D".toRegex(), "")
+            if (clean.length in (5..15)) {
+                userDetails.phone = clean
+            } else
+                throw UserInputValidationException.InvalidPhoneNumber(input)
         }
     }
 
