@@ -17,8 +17,10 @@ public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final String username;
-    private final Role   role;
+    private String username;
+    private Role   role;
+
+    public Account() {}
 
     public Account(Account value) {
         this.username = value.username;
@@ -41,10 +43,24 @@ public class Account implements Serializable {
     }
 
     /**
+     * Setter for <code>main.account.username</code>.
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
      * Getter for <code>main.account.role</code>.
      */
     public Role getRole() {
         return this.role;
+    }
+
+    /**
+     * Setter for <code>main.account.role</code>.
+     */
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override

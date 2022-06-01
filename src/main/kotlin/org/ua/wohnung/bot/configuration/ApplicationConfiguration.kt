@@ -11,15 +11,19 @@ import org.jooq.impl.DSL
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.ua.wohnung.bot.Session
 import org.ua.wohnung.bot.WohnungsBot
-import org.ua.wohnung.bot.flows.Flow
-import org.ua.wohnung.bot.flows.FlowInitializer
 import org.ua.wohnung.bot.flows.StepFactory
-import org.ua.wohnung.bot.flows.UserRegistrationFlow
-import org.ua.wohnung.bot.flows.UserRegistrationFlowInitializer
+import org.ua.wohnung.bot.flows.processors.ProcessorContainer
+import org.ua.wohnung.bot.flows.processors.UpdateUserDetailsPostProcessor
+import org.ua.wohnung.bot.flows.processors.UserDetailsPreProcessor
+import org.ua.wohnung.bot.flows.userregistration.Flow
+import org.ua.wohnung.bot.flows.userregistration.FlowInitializer
+import org.ua.wohnung.bot.flows.userregistration.UserRegistrationFlow
+import org.ua.wohnung.bot.flows.userregistration.UserRegistrationFlowInitializer
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import org.ua.wohnung.bot.security.Secrets.BOT_API_SECRET
@@ -50,13 +54,39 @@ val userFlowModule = module {
 }
 
 val wohnungsBotModule = module {
-    single { StepFactory(get()) }
-    single<LongPollingBot>(named("WohnungsBot")) { WohnungsBot(getProperty(BOT_API_SECRET.setting), get(), get()) }
+    single {
+        ProcessorContainer.PreProcessors(
+            UserDetailsPreProcessor.BundesLandSelectionPreProcessor(get()),
+            UserDetailsPreProcessor.UserRegistrationFlowConditionsRejectedPreProcessor(get())
+        )
+    }
+    single {
+        ProcessorContainer.PostProcessors(
+            UpdateUserDetailsPostProcessor.Bundesland(get()),
+            UpdateUserDetailsPostProcessor.FamilyCountPostProcessorUpdate(get()),
+            UpdateUserDetailsPostProcessor.FirstAndLastNamePostProcessorUpdate(get()),
+            UpdateUserDetailsPostProcessor.PhoneNumberPostProcessorUpdate(get()),
+            UpdateUserDetailsPostProcessor.PetsPostProcessorUpdate(get())
+        )
+    }
+
+    single {
+        StepFactory(
+            get(), get(), get())
+    }
+    single<LongPollingBot>(named("WohnungsBot")) {
+        WohnungsBot(
+            getProperty(BOT_API_SECRET.setting),
+            get(),
+            get(),
+            get()
+        )
+    }
 }
 
-fun Module.jooq() = single { DSL.using(get<DataSource>(), SQLDialect.POSTGRES) }
+private fun Module.jooq() = single { DSL.using(get<DataSource>(), SQLDialect.POSTGRES) }
 
-fun Module.yamlObjectMapper() = single<ObjectMapper> {
+private fun Module.yamlObjectMapper() = single<ObjectMapper> {
     ObjectMapper(YAMLFactory()).registerModule(
         KotlinModule.Builder()
             .withReflectionCacheSize(512)
@@ -69,7 +99,7 @@ fun Module.yamlObjectMapper() = single<ObjectMapper> {
     )
 }
 
-fun Module.datasource() = single<DataSource> {
+private fun Module.datasource() = single<DataSource> {
     HikariDataSource(
         HikariConfig().apply {
             this.driverClassName = DRIVER_CLASS_NAME.getProperty()
@@ -79,3 +109,12 @@ fun Module.datasource() = single<DataSource> {
         }
     )
 }
+
+private fun Scope.postProcessors(): List<UpdateUserDetailsPostProcessor> =
+    listOf(
+        UpdateUserDetailsPostProcessor.Bundesland(get()),
+        UpdateUserDetailsPostProcessor.PhoneNumberPostProcessorUpdate(get()),
+        UpdateUserDetailsPostProcessor.PetsPostProcessorUpdate(get()),
+        UpdateUserDetailsPostProcessor.FirstAndLastNamePostProcessorUpdate(get()),
+        UpdateUserDetailsPostProcessor.FamilyCountPostProcessorUpdate(get())
+    )

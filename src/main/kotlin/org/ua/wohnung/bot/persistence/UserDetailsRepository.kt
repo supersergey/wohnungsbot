@@ -12,10 +12,11 @@ class UserDetailsRepository(private val dslContext: DSLContext) {
 
         userDetailsRecord.apply {
             username = userDetails.username
+            firstLastName = userDetails.firstLastName
             phone = userDetails.phone
             numberOfTenants = userDetails.numberOfTenants
             pets = userDetails.pets
-            bundesLand = userDetails.bundesLand
+            bundesland = userDetails.bundesland
         }
         userDetailsRecord.store()
     }
@@ -24,10 +25,11 @@ class UserDetailsRepository(private val dslContext: DSLContext) {
         dslContext.fetchOne(USER_DETAILS, USER_DETAILS.USERNAME.eq(username))?.let {
             UserDetails(
                 it.username,
+                it.firstLastName,
                 it.phone,
                 it.numberOfTenants,
                 it.pets,
-                it.bundesLand
+                it.bundesland
             )
         }
 

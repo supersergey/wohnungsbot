@@ -106,8 +106,8 @@ jooq {
                     }
                     generate.apply {
                         isDeprecated = false
-                        isRecords = true
-                        isImmutablePojos = true
+                        isPojos = true
+                        isImmutablePojos = false
                         isFluentSetters = false
                         withJavaTimeTypes(true)
                     }

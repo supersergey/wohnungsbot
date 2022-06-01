@@ -10,18 +10,18 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 import org.ua.wohnung.bot.configuration.persistenceModule
 import org.ua.wohnung.bot.configuration.userFlowModule
 import org.ua.wohnung.bot.configuration.wohnungsBotModule
-import org.ua.wohnung.bot.flows.FlowInitializer
+import org.ua.wohnung.bot.flows.userregistration.FlowInitializer
 
 fun main() {
     startKoin {
         printLogger()
         logger(PrintLogger())
+        fileProperties("/secrets/secrets.properties")
         modules(
             persistenceModule,
             userFlowModule,
             wohnungsBotModule
         )
-        fileProperties("/secrets/secrets.properties")
         koin.get<FlowInitializer>(named("UserRegistrationFlowInitializer")).initialize()
         koin.get<LongPollingBot>(named("WohnungsBot")).let { bot ->
             TelegramBotsApi(DefaultBotSession::class.java).registerBot(bot)

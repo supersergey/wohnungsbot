@@ -11,7 +11,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row6;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -52,6 +52,11 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     public final TableField<UserDetailsRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.VARCHAR(128).nullable(false), this, "");
 
     /**
+     * The column <code>main.user_details.first_last_name</code>.
+     */
+    public final TableField<UserDetailsRecord, String> FIRST_LAST_NAME = createField(DSL.name("first_last_name"), SQLDataType.VARCHAR(128), this, "");
+
+    /**
      * The column <code>main.user_details.phone</code>.
      */
     public final TableField<UserDetailsRecord, String> PHONE = createField(DSL.name("phone"), SQLDataType.VARCHAR(128), this, "");
@@ -67,9 +72,9 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     public final TableField<UserDetailsRecord, Boolean> PETS = createField(DSL.name("pets"), SQLDataType.BOOLEAN, this, "");
 
     /**
-     * The column <code>main.user_details.bundes_land</code>.
+     * The column <code>main.user_details.bundesland</code>.
      */
-    public final TableField<UserDetailsRecord, String> BUNDES_LAND = createField(DSL.name("bundes_land"), SQLDataType.VARCHAR(128), this, "");
+    public final TableField<UserDetailsRecord, String> BUNDESLAND = createField(DSL.name("bundesland"), SQLDataType.VARCHAR(128), this, "");
 
     private UserDetails(Name alias, Table<UserDetailsRecord> aliased) {
         this(alias, aliased, null);
@@ -158,11 +163,11 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<String, String, Short, Boolean, String> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row6<String, String, String, Short, Boolean, String> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 }

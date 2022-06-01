@@ -41,7 +41,7 @@ internal class UserServiceTest {
         userDetailsRepository.save(userDetails)
         every { mockUserDetailsRepository.deleteById(any()) } throws Exception("")
 
-        assertThrows<Exception> {  userService.deleteUser(userDetails.username) }
+        assertThrows<Exception> { userService.delete(userDetails.username) }
 
         assertThat(userDetailsRepository.findById(userDetails.username)).isNotNull
         assertThat(accountRepository.findById(userDetails.username)).isNotNull

@@ -1,16 +1,17 @@
 package org.ua.wohnung.bot
 
+import org.ua.wohnung.bot.flows.userregistration.FlowStep
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
 class Session {
 
     // userId to StepId
-    private val internalMap: ConcurrentMap<Long, String> = ConcurrentHashMap()
+    private val internalMap: ConcurrentMap<Long, FlowStep> = ConcurrentHashMap()
 
-    fun current(chatId: Long): String? = internalMap[chatId]
+    fun current(chatId: Long): FlowStep? = internalMap[chatId]
 
-    fun updateState(chatId: Long, state: String) {
+    fun updateState(chatId: Long, state: FlowStep) {
         internalMap[chatId] = state
     }
 

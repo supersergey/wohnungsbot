@@ -3,16 +3,18 @@ package org.ua.wohnung.bot.flows
 import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.flows.processors.PostProcessor
 import org.ua.wohnung.bot.flows.processors.PreProcessor
+import org.ua.wohnung.bot.flows.processors.ProcessorContainer
+import org.ua.wohnung.bot.flows.userregistration.FlowStep
 
 sealed class Step(
-    open val id: String,
+    open val id: FlowStep,
     open val caption: String,
     open val reply: Reply,
     open val preProcessor: PreProcessor,
     open val postProcessor: PostProcessor,
 ) {
     class General internal constructor(
-        override val id: String,
+        override val id: FlowStep,
         override val caption: String,
         override val reply: Reply,
         override val preProcessor: PreProcessor,
@@ -20,43 +22,42 @@ sealed class Step(
     ) : Step(id, caption, reply, preProcessor, postProcessor)
 
     class Termination internal constructor(
-        override val id: String,
+        override val id: FlowStep,
         override val caption: String,
         override val preProcessor: PreProcessor,
         override val postProcessor: PostProcessor,
     ) : Step(id, caption, Reply.Custom(null), preProcessor, postProcessor)
 }
 
-sealed class Reply(val options: Map<String, String?>) {
-    class Inline(vararg options: Pair<String, String?>) : Reply(options.toMap())
-    class Custom(nextStep: String?) : Reply(mapOf(ANY_ANSWER_ACCEPTED to nextStep))
+sealed class Reply(val options: Map<String, FlowStep?>) {
+    class Inline(vararg options: Pair<String, FlowStep?>) : Reply(options.toMap())
+    class Custom(nextStep: FlowStep?) : Reply(mapOf(ANY_ANSWER_ACCEPTED to nextStep))
 
     companion object {
         const val ANY_ANSWER_ACCEPTED = "ANY_ANSWER_ACCEPTED"
     }
 }
 
-class StepFactory(private val messageSource: MessageSource) {
+class StepFactory(
+    private val messageSource: MessageSource,
+    private val preProcessors: ProcessorContainer.PreProcessors,
+    private val postProcessors: ProcessorContainer.PostProcessors
+    )
+{
     fun singleReply(
-        id: String,
-        next: String,
-        preProcessor: PreProcessor = PreProcessor.Empty(id),
-        postProcessor: PostProcessor = PostProcessor.Empty(id)
+        id: FlowStep,
+        next: FlowStep
     ): Step.General =
-        Step.General(id, messageSource[id], Reply.Custom(next), preProcessor, postProcessor)
+        Step.General(id, messageSource[id], Reply.Custom(next), preProcessors[id], postProcessors[id])
 
     fun multipleReplies(
-        id: String,
-        vararg replies: Pair<String, String>,
-        preProcessor: PreProcessor = PreProcessor.Empty(id),
-        postProcessor: PostProcessor = PostProcessor.Empty(id)
+        id: FlowStep,
+        vararg replies: Pair<String, FlowStep>
     ): Step.General =
-        Step.General(id, messageSource[id], Reply.Inline(*replies), preProcessor, postProcessor)
+        Step.General(id, messageSource[id], Reply.Inline(*replies), preProcessors[id], postProcessors[id])
 
     fun termination(
-        id: String,
-        preProcessor: PreProcessor = PreProcessor.Empty(id),
-        postProcessor: PostProcessor = PostProcessor.Empty(id)
+        id: FlowStep,
     ): Step.Termination =
-        Step.Termination(id, messageSource[id], preProcessor, postProcessor)
+        Step.Termination(id, messageSource[id], preProcessors[id], postProcessors[id])
 }

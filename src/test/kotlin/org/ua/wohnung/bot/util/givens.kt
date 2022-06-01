@@ -7,6 +7,7 @@ import kotlin.random.Random.Default.nextInt
 
 fun aFullUserDetails() = UserDetails(
     RandomStringUtils.randomAlphabetic(10),
+    "John Smith",
     "12234",
     nextInt(1, 5).toShort(),
     true,
@@ -15,6 +16,7 @@ fun aFullUserDetails() = UserDetails(
 
 fun aPartialUserDetails() = UserDetails(
     RandomStringUtils.randomAlphabetic(10),
+    null,
     null,
     null,
     true,

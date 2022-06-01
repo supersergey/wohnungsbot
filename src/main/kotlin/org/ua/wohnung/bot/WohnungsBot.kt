@@ -7,13 +7,16 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
-import org.ua.wohnung.bot.flows.Flow
 import org.ua.wohnung.bot.flows.Reply
+import org.ua.wohnung.bot.flows.dto.UserInput
+import org.ua.wohnung.bot.flows.userregistration.Flow
+import org.ua.wohnung.bot.user.UserService
 
 class WohnungsBot(
     private val secret: String,
     private val userRegistrationFlow: Flow,
     private val session: Session,
+    private val userService: UserService
 ) : TelegramLongPollingBot() {
     private val logger = KotlinLogging.logger {}
 
@@ -23,36 +26,52 @@ class WohnungsBot(
 
     override fun onUpdateReceived(update: Update) {
         logger.info { "Received update, chatId: ${update.message.chatId}" }
-        kotlin.runCatching {
-            if (update.hasMessage() && update.message.hasText() && update.message.isUserMessage) {
-                val chatId = update.message.chatId
-                val currentStepId = session.current(chatId) ?: userRegistrationFlow.first().caption
+        if (update.isProcessable()) {
+            kotlin.runCatching {
+                val incomingMessage = update.input()
+                val currentStep = session.current(incomingMessage.chatId)?.let { stepId ->
+                    userRegistrationFlow.current(stepId)
+                } ?: userRegistrationFlow.first()
 
-                val nextMessage = userRegistrationFlow.next(
-                    stepId = currentStepId, userInput = update.message.text
+                currentStep.postProcessor(incomingMessage.username, incomingMessage.input)
+
+                val nextStep = userRegistrationFlow.next(
+                    currentStep = currentStep.id, userInput = incomingMessage.input
                 ) ?: userRegistrationFlow.first()
 
-                SendMessage().apply {
-                    this.chatId = chatId.toString()
-                    text = nextMessage.caption
-                    if (nextMessage.reply is Reply.Inline) {
+                nextStep.preProcessor(incomingMessage.username, incomingMessage.input)
+
+                val sendMessage = SendMessage().apply {
+                    chatId = incomingMessage.chatId.toString()
+                    text = nextStep.caption
+                    if (nextStep.reply is Reply.Inline) {
                         replyMarkup = ReplyKeyboardMarkup().apply {
                             oneTimeKeyboard = true
-                            keyboard = (nextMessage.reply as Reply.Inline).keyboardRows(3)
+                            keyboard = (nextStep.reply as Reply.Inline).keyboardRows(3)
                         }
                     } else {
                         replyMarkup = null
                     }
-                    session.updateState(chatId.toLong(), nextMessage.id)
-                }.let {
-                    execute(it)
+                    session.updateState(chatId.toLong(), nextStep.id)
                 }
+                execute(sendMessage)
+                nextStep.preProcessor(incomingMessage.username, incomingMessage.input)
+            }.onFailure {
+                println(it.stackTraceToString())
+                logger.error { it }
             }
-        }.onFailure {
-            println(it.stackTraceToString())
-            logger.error { it }
         }
     }
+
+    private fun Update.isProcessable(): Boolean =
+        hasMessage() && message.hasText() && message.isUserMessage
+
+    private fun Update.input(): UserInput =
+        UserInput(
+            username = message.chat.userName,
+            chatId = message.chatId,
+            input = message.text
+        )
 
     private fun Reply.Inline.keyboardRows(buttonsPerRow: Int): List<KeyboardRow> {
         return options
@@ -61,9 +80,4 @@ class WohnungsBot(
             .chunked(buttonsPerRow)
             .map { KeyboardRow(it) }
     }
-
-//    companion object {
-//        const val BOT_NAME = "UA_Wohnung_Bot"
-//        const val CREATOR_ID = 193689183L
-//    }
 }

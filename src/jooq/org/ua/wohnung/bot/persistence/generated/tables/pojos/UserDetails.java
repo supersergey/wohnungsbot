@@ -15,32 +15,38 @@ public class UserDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final String  username;
-    private final String  phone;
-    private final Short   numberOfTenants;
-    private final Boolean pets;
-    private final String  bundesLand;
+    private String  username;
+    private String  firstLastName;
+    private String  phone;
+    private Short   numberOfTenants;
+    private Boolean pets;
+    private String  bundesland;
+
+    public UserDetails() {}
 
     public UserDetails(UserDetails value) {
         this.username = value.username;
+        this.firstLastName = value.firstLastName;
         this.phone = value.phone;
         this.numberOfTenants = value.numberOfTenants;
         this.pets = value.pets;
-        this.bundesLand = value.bundesLand;
+        this.bundesland = value.bundesland;
     }
 
     public UserDetails(
         String  username,
+        String  firstLastName,
         String  phone,
         Short   numberOfTenants,
         Boolean pets,
-        String  bundesLand
+        String  bundesland
     ) {
         this.username = username;
+        this.firstLastName = firstLastName;
         this.phone = phone;
         this.numberOfTenants = numberOfTenants;
         this.pets = pets;
-        this.bundesLand = bundesLand;
+        this.bundesland = bundesland;
     }
 
     /**
@@ -51,10 +57,38 @@ public class UserDetails implements Serializable {
     }
 
     /**
+     * Setter for <code>main.user_details.username</code>.
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * Getter for <code>main.user_details.first_last_name</code>.
+     */
+    public String getFirstLastName() {
+        return this.firstLastName;
+    }
+
+    /**
+     * Setter for <code>main.user_details.first_last_name</code>.
+     */
+    public void setFirstLastName(String firstLastName) {
+        this.firstLastName = firstLastName;
+    }
+
+    /**
      * Getter for <code>main.user_details.phone</code>.
      */
     public String getPhone() {
         return this.phone;
+    }
+
+    /**
+     * Setter for <code>main.user_details.phone</code>.
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     /**
@@ -65,6 +99,13 @@ public class UserDetails implements Serializable {
     }
 
     /**
+     * Setter for <code>main.user_details.number_of_tenants</code>.
+     */
+    public void setNumberOfTenants(Short numberOfTenants) {
+        this.numberOfTenants = numberOfTenants;
+    }
+
+    /**
      * Getter for <code>main.user_details.pets</code>.
      */
     public Boolean getPets() {
@@ -72,10 +113,24 @@ public class UserDetails implements Serializable {
     }
 
     /**
-     * Getter for <code>main.user_details.bundes_land</code>.
+     * Setter for <code>main.user_details.pets</code>.
      */
-    public String getBundesLand() {
-        return this.bundesLand;
+    public void setPets(Boolean pets) {
+        this.pets = pets;
+    }
+
+    /**
+     * Getter for <code>main.user_details.bundesland</code>.
+     */
+    public String getBundesland() {
+        return this.bundesland;
+    }
+
+    /**
+     * Setter for <code>main.user_details.bundesland</code>.
+     */
+    public void setBundesland(String bundesland) {
+        this.bundesland = bundesland;
     }
 
     @Override
@@ -83,10 +138,11 @@ public class UserDetails implements Serializable {
         StringBuilder sb = new StringBuilder("UserDetails (");
 
         sb.append(username);
+        sb.append(", ").append(firstLastName);
         sb.append(", ").append(phone);
         sb.append(", ").append(numberOfTenants);
         sb.append(", ").append(pets);
-        sb.append(", ").append(bundesLand);
+        sb.append(", ").append(bundesland);
 
         sb.append(")");
         return sb.toString();
