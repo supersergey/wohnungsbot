@@ -1,4 +1,4 @@
-package org.ua.wohnung.bot
+package org.ua.wohnung.bot.engine
 
 import org.ua.wohnung.bot.flows.userregistration.FlowStep
 import java.util.concurrent.ConcurrentHashMap

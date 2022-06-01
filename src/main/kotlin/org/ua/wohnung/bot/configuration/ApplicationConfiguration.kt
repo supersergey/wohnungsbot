@@ -14,8 +14,9 @@ import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import org.telegram.telegrambots.meta.generics.LongPollingBot
-import org.ua.wohnung.bot.Session
-import org.ua.wohnung.bot.WohnungsBot
+import org.ua.wohnung.bot.engine.MessageFactory
+import org.ua.wohnung.bot.engine.Session
+import org.ua.wohnung.bot.engine.WohnungsBot
 import org.ua.wohnung.bot.flows.StepFactory
 import org.ua.wohnung.bot.flows.processors.ProcessorContainer
 import org.ua.wohnung.bot.flows.processors.UpdateUserDetailsPostProcessor
@@ -51,9 +52,6 @@ val userFlowModule = module {
     single<FlowInitializer>(named("UserRegistrationFlowInitializer")) {
         UserRegistrationFlowInitializer(get(), get())
     }
-}
-
-val wohnungsBotModule = module {
     single {
         ProcessorContainer.PreProcessors(
             UserDetailsPreProcessor.BundesLandSelectionPreProcessor(get()),
@@ -69,11 +67,11 @@ val wohnungsBotModule = module {
             UpdateUserDetailsPostProcessor.PetsPostProcessorUpdate(get())
         )
     }
+}
 
-    single {
-        StepFactory(
-            get(), get(), get())
-    }
+val wohnungsBotModule = module {
+    single { StepFactory(get(), get(), get()) }
+    singleOf(::MessageFactory)
     single<LongPollingBot>(named("WohnungsBot")) {
         WohnungsBot(
             getProperty(BOT_API_SECRET.setting),
@@ -109,12 +107,3 @@ private fun Module.datasource() = single<DataSource> {
         }
     )
 }
-
-private fun Scope.postProcessors(): List<UpdateUserDetailsPostProcessor> =
-    listOf(
-        UpdateUserDetailsPostProcessor.Bundesland(get()),
-        UpdateUserDetailsPostProcessor.PhoneNumberPostProcessorUpdate(get()),
-        UpdateUserDetailsPostProcessor.PetsPostProcessorUpdate(get()),
-        UpdateUserDetailsPostProcessor.FirstAndLastNamePostProcessorUpdate(get()),
-        UpdateUserDetailsPostProcessor.FamilyCountPostProcessorUpdate(get())
-    )
