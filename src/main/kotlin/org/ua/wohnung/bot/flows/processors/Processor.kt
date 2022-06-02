@@ -1,9 +1,9 @@
 package org.ua.wohnung.bot.flows.processors
 
-import org.ua.wohnung.bot.flows.userregistration.FlowStep
+import org.ua.wohnung.bot.flows.FlowStep
 
 interface Processor {
-    operator fun invoke(username: String, input: String)
+    operator fun invoke(username: String, input: String): Any
     val stepId: FlowStep
 
     object Empty : Processor {
@@ -22,20 +22,5 @@ interface PostProcessor : Processor {
     object Empty: PostProcessor {
         override val stepId = FlowStep.CONVERSATION_START
         override fun invoke(username: String, input: String) {}
-    }
-}
-
-sealed class ProcessorContainer<T : Processor>(vararg processors: T) {
-    protected val map: Map<FlowStep, T>
-
-    init {
-        map = processors.associateBy { it.stepId }
-    }
-
-    class PreProcessors(vararg preProcessors: PreProcessor) : ProcessorContainer<PreProcessor>(*preProcessors) {
-        operator fun get(stepId: FlowStep): PreProcessor = map[stepId] ?: PreProcessor.Empty
-    }
-    class PostProcessors(vararg postProcessors: PostProcessor) : ProcessorContainer<PostProcessor>(*postProcessors) {
-        operator fun get(stepId: FlowStep): PostProcessor = map[stepId] ?: PostProcessor.Empty
     }
 }

@@ -1,39 +1,55 @@
 package org.ua.wohnung.bot.flows.userregistration
 
-import org.ua.wohnung.bot.flows.Reply
-import org.ua.wohnung.bot.flows.Step
+import org.ua.wohnung.bot.flows.Flow
+import org.ua.wohnung.bot.flows.FlowStep
+import org.ua.wohnung.bot.flows.StepFactory
+import org.ua.wohnung.bot.user.model.BundesLand
+import org.ua.wohnung.bot.user.model.Role
 
-interface Flow {
-    fun first(): Step
-    fun current(flowStep: FlowStep): Step?
-    fun next(currentStep: FlowStep, userInput: String): Step?
-    fun add(step: Step)
-}
+class UserRegistrationFlow(private val stepFactory: StepFactory) : Flow() {
 
-class UserRegistrationFlow : Flow {
+    override val supportedRole = Role.GUEST
 
-    private val internalMap = mutableMapOf<FlowStep, Step>()
-    private var firstStep: Step? = null
-
-    override fun first(): Step = requireNotNull(firstStep)
-
-    override fun current(flowStep: FlowStep): Step? = internalMap[flowStep] ?: firstStep
-
-    override fun add(step: Step) {
-        if (internalMap.isEmpty()) {
-            firstStep = step
-        }
-        internalMap[step.id] = step
-    }
-
-    override fun next(currentStep: FlowStep, userInput: String): Step? {
-        return internalMap[currentStep]?.let {
-            val next = if (it.reply is Reply.Inline) {
-                it.reply.options[userInput]
-            } else {
-                it.reply.options[Reply.ANY_ANSWER_ACCEPTED]
-            }
-            internalMap[next]
-        }
+    override fun initialize() {
+        stepFactory.multipleReplies(
+            id = FlowStep.CONVERSATION_START,
+            "Зареєструватися" to FlowStep.ACCEPT_POLICIES
+        ).addSingle()
+        stepFactory.multipleReplies(
+            id = FlowStep.ACCEPT_POLICIES,
+            "Так" to FlowStep.PERSONAL_DATA_PROCESSING_APPROVAL,
+            "Ні" to FlowStep.CONVERSATION_FINISHED_DECLINED
+        ).addSingle()
+        stepFactory.multipleReplies(
+            id = FlowStep.PERSONAL_DATA_PROCESSING_APPROVAL,
+            "Так" to FlowStep.BUNDESLAND_SELECTION,
+            "Ні" to FlowStep.CONVERSATION_FINISHED_DECLINED
+        ).addSingle()
+        stepFactory.multipleReplies(
+            id = FlowStep.BUNDESLAND_SELECTION,
+            *BundesLand.values().map { it.germanName }.allTo(FlowStep.FAMILY_COUNT)
+        ).addSingle()
+        stepFactory.multipleReplies(
+            id = FlowStep.FAMILY_COUNT,
+            *(1..8).map { "$it" }.allTo(FlowStep.FIRSTNAME_AND_LASTNAME)
+        ).addSingle()
+        stepFactory.singleReply(
+            id = FlowStep.FIRSTNAME_AND_LASTNAME,
+            next = FlowStep.PHONE_NUMBER
+        ).addSingle()
+        stepFactory.singleReply(
+            id = FlowStep.PHONE_NUMBER,
+            next = FlowStep.PETS
+        ).addSingle()
+        stepFactory.multipleReplies(
+            id = FlowStep.PETS,
+            *listOf("Так", "Ні").allTo(FlowStep.CONVERSATION_FINISHED_SUCCESS),
+        ).addSingle()
+        stepFactory.multipleReplies(
+            id = FlowStep.CONVERSATION_FINISHED_SUCCESS,
+            "Доступне мені житло" to FlowStep.REGISTERED_USER_LIST_APARTMENTS,
+            "Видаліть мої дані" to FlowStep.CONVERSATION_FINISH_REMOVAL
+        ).addSingle()
+        stepFactory.termination(FlowStep.CONVERSATION_FINISHED_DECLINED).addSingle()
     }
 }

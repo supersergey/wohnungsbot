@@ -4,7 +4,6 @@ import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.flows.processors.PostProcessor
 import org.ua.wohnung.bot.flows.processors.PreProcessor
 import org.ua.wohnung.bot.flows.processors.ProcessorContainer
-import org.ua.wohnung.bot.flows.userregistration.FlowStep
 
 sealed class Step(
     open val id: FlowStep,

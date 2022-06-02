@@ -1,4 +1,4 @@
-package org.ua.wohnung.bot.engine
+package org.ua.wohnung.bot.gateway
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup
@@ -6,8 +6,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
 import org.ua.wohnung.bot.flows.Reply
 import org.ua.wohnung.bot.flows.Step
+import org.ua.wohnung.bot.flows.processors.MessagePreProcessor
+import org.ua.wohnung.bot.flows.processors.PreProcessor
+import org.ua.wohnung.bot.flows.processors.ProcessorContainer
+import org.ua.wohnung.bot.flows.processors.ProcessorContainer.*
 
-class MessageFactory {
+class MessageFactory() {
     fun newStepMessage(chatIdentifier: Long, step: Step): SendMessage = SendMessage().apply {
         this.chatId = chatIdentifier.toString()
         text = step.caption

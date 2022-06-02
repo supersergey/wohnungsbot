@@ -17,6 +17,10 @@ class UserService(
         return userDetailsRepository.findById(username)
     }
 
+    fun findUserRoleById(username: String): Role? {
+        return accountRepository.findById(username)?.role
+    }
+
     fun createAccount(account: Account) {
         dslContext.transaction { _ ->
             accountRepository.save(

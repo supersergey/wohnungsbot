@@ -8,9 +8,9 @@ import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 import org.ua.wohnung.bot.configuration.persistenceModule
+import org.ua.wohnung.bot.configuration.registeredUserFlow
 import org.ua.wohnung.bot.configuration.userFlowModule
-import org.ua.wohnung.bot.configuration.wohnungsBotModule
-import org.ua.wohnung.bot.flows.userregistration.FlowInitializer
+import org.ua.wohnung.bot.configuration.messageGatewayModule
 
 fun main() {
     startKoin {
@@ -20,9 +20,9 @@ fun main() {
         modules(
             persistenceModule,
             userFlowModule,
-            wohnungsBotModule
+            registeredUserFlow,
+            messageGatewayModule
         )
-        koin.get<FlowInitializer>(named("UserRegistrationFlowInitializer")).initialize()
         koin.get<LongPollingBot>(named("WohnungsBot")).let { bot ->
             TelegramBotsApi(DefaultBotSession::class.java).registerBot(bot)
         }

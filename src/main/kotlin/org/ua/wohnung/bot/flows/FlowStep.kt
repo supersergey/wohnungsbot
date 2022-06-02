@@ -1,4 +1,4 @@
-package org.ua.wohnung.bot.flows.userregistration
+package org.ua.wohnung.bot.flows
 
 enum class FlowStep {
     CONVERSATION_START,
@@ -11,5 +11,8 @@ enum class FlowStep {
     PETS,
     CONVERSATION_FINISHED_SUCCESS,
     CONVERSATION_FINISHED_DECLINED,
-    CONVERSATION_FINISH_REMOVAL
+
+    REGISTERED_USER_CONVERSATION_START,
+    REGISTERED_USER_LIST_APARTMENTS,
+    CONVERSATION_FINISH_REMOVAL;
 }
