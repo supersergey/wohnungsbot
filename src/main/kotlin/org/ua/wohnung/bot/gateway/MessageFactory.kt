@@ -1,4 +1,4 @@
-package org.ua.wohnung.bot.engine
+package org.ua.wohnung.bot.gateway
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup

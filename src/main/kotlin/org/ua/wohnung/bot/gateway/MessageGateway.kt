@@ -1,14 +1,14 @@
-package org.ua.wohnung.bot.engine
+package org.ua.wohnung.bot.gateway
 
 import mu.KotlinLogging
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
+import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.dto.UserInput
-import org.ua.wohnung.bot.flows.userregistration.Flow
 
-class WohnungsBot(
+class MessageGateway(
     private val secret: String,
-    private val userRegistrationFlow: Flow,
+    private val flowRegistry: FlowRegistry,
     private val session: Session,
     private val messageFactory: MessageFactory
 ) : TelegramLongPollingBot() {
@@ -19,25 +19,26 @@ class WohnungsBot(
     override fun getBotUsername(): String = "UA_Wohnung_Bot"
 
     override fun onUpdateReceived(update: Update) {
+        logger.info { "Received update, chatId: ${update.message.chatId}" }
         if (update.isProcessable()) {
             val incomingMessage = update.input()
+            val flow = flowRegistry.getFlowByUserId(incomingMessage.username)
             val currentStep = session.current(incomingMessage.chatId)?.let { stepId ->
-                userRegistrationFlow.current(stepId)
-            } ?: userRegistrationFlow.first()
+                flow.current(stepId)
+            } ?: flow.first()
 
-            kotlin.runCatching {
+            runCatching {
                 currentStep.postProcessor(incomingMessage.username, incomingMessage.input)
 
-                val nextStep = userRegistrationFlow.next(
+                val nextStep = flow.next(
                     currentStep = currentStep.id, userInput = incomingMessage.input
-                ) ?: userRegistrationFlow.first()
+                ) ?: flow.first()
 
                 nextStep.preProcessor(incomingMessage.username, incomingMessage.input)
 
                 val sendMessage = messageFactory.newStepMessage(incomingMessage.chatId, nextStep)
                 execute(sendMessage)
                 session.updateState(incomingMessage.chatId, nextStep.id)
-                nextStep.preProcessor(incomingMessage.username, incomingMessage.input)
             }.onFailure {
                 println(it.stackTraceToString())
                 logger.error { it }

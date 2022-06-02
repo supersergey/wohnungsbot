@@ -1,7 +1,7 @@
 package org.ua.wohnung.bot.flows.processors
 
 import org.ua.wohnung.bot.exception.UserInputValidationException
-import org.ua.wohnung.bot.flows.userregistration.FlowStep
+import org.ua.wohnung.bot.flows.FlowStep
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 import org.ua.wohnung.bot.user.UserService
 import org.ua.wohnung.bot.user.model.BundesLand

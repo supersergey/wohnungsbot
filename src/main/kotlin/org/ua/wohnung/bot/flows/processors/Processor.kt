@@ -1,6 +1,6 @@
 package org.ua.wohnung.bot.flows.processors
 
-import org.ua.wohnung.bot.flows.userregistration.FlowStep
+import org.ua.wohnung.bot.flows.FlowStep
 
 interface Processor {
     operator fun invoke(username: String, input: String)

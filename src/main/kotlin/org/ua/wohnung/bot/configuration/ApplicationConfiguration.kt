@@ -11,20 +11,19 @@ import org.jooq.impl.DSL
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
-import org.koin.core.scope.Scope
 import org.koin.dsl.module
 import org.telegram.telegrambots.meta.generics.LongPollingBot
-import org.ua.wohnung.bot.engine.MessageFactory
-import org.ua.wohnung.bot.engine.Session
-import org.ua.wohnung.bot.engine.WohnungsBot
+import org.ua.wohnung.bot.gateway.MessageFactory
+import org.ua.wohnung.bot.gateway.Session
+import org.ua.wohnung.bot.gateway.MessageGateway
+import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.StepFactory
 import org.ua.wohnung.bot.flows.processors.ProcessorContainer
+import org.ua.wohnung.bot.flows.processors.RegisteredUserPreProcessor
 import org.ua.wohnung.bot.flows.processors.UpdateUserDetailsPostProcessor
 import org.ua.wohnung.bot.flows.processors.UserDetailsPreProcessor
-import org.ua.wohnung.bot.flows.userregistration.Flow
-import org.ua.wohnung.bot.flows.userregistration.FlowInitializer
+import org.ua.wohnung.bot.flows.registereduser.RegisteredUserFlow
 import org.ua.wohnung.bot.flows.userregistration.UserRegistrationFlow
-import org.ua.wohnung.bot.flows.userregistration.UserRegistrationFlowInitializer
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import org.ua.wohnung.bot.security.Secrets.BOT_API_SECRET
@@ -46,16 +45,11 @@ val persistenceModule = module {
 }
 
 val userFlowModule = module {
-    singleOf(::Session)
-    single { MessageSource(get(), Path.of("flows", "userflow.yml")) }
-    single<Flow> { UserRegistrationFlow() }
-    single<FlowInitializer>(named("UserRegistrationFlowInitializer")) {
-        UserRegistrationFlowInitializer(get(), get())
-    }
+    single { UserRegistrationFlow(get()) }
     single {
         ProcessorContainer.PreProcessors(
             UserDetailsPreProcessor.BundesLandSelectionPreProcessor(get()),
-            UserDetailsPreProcessor.UserRegistrationFlowConditionsRejectedPreProcessor(get())
+            RegisteredUserPreProcessor.UserRegistrationFlowConditionsRejectedPreProcessor(get())
         )
     }
     single {
@@ -69,11 +63,18 @@ val userFlowModule = module {
     }
 }
 
-val wohnungsBotModule = module {
+val registeredUserFlow = module {
+    single { RegisteredUserFlow(get()) }
+}
+
+val messageGatewayModule = module {
+    singleOf(::Session)
+    single { MessageSource(get(), Path.of("flows", "newUserFlow.yml")) }
     single { StepFactory(get(), get(), get()) }
     singleOf(::MessageFactory)
+    single { FlowRegistry(get(), get<UserRegistrationFlow>(), get<RegisteredUserFlow>()) }
     single<LongPollingBot>(named("WohnungsBot")) {
-        WohnungsBot(
+        MessageGateway(
             getProperty(BOT_API_SECRET.setting),
             get(),
             get(),
