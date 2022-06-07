@@ -45,6 +45,10 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
 
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.6.0")
+    implementation("com.google.oauth-client:google-oauth-client-jetty:1.34.0")
+    implementation("com.google.apis:google-api-services-sheets:v4-rev612-1.25.0")
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")

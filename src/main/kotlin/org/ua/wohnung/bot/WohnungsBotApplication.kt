@@ -7,10 +7,12 @@ import org.koin.fileProperties
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
+import org.ua.wohnung.bot.configuration.commonModule
 import org.ua.wohnung.bot.configuration.persistenceModule
 import org.ua.wohnung.bot.configuration.registeredUserFlow
 import org.ua.wohnung.bot.configuration.userFlowModule
 import org.ua.wohnung.bot.configuration.messageGatewayModule
+import org.ua.wohnung.bot.configuration.sheetReaderModule
 
 fun main() {
     startKoin {
@@ -18,10 +20,12 @@ fun main() {
         logger(PrintLogger())
         fileProperties("/secrets/secrets.properties")
         modules(
+            commonModule,
             persistenceModule,
             userFlowModule,
             registeredUserFlow,
-            messageGatewayModule
+            messageGatewayModule,
+            sheetReaderModule
         )
         koin.get<LongPollingBot>(named("WohnungsBot")).let { bot ->
             TelegramBotsApi(DefaultBotSession::class.java).registerBot(bot)

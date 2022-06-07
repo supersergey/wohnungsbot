@@ -32,12 +32,18 @@ import org.ua.wohnung.bot.security.Secrets.DRIVER_CLASS_NAME
 import org.ua.wohnung.bot.security.Secrets.JDBC_PASSWORD
 import org.ua.wohnung.bot.security.Secrets.JDBC_URL
 import org.ua.wohnung.bot.security.Secrets.JDBC_USER
+import org.ua.wohnung.bot.sheets.GoogleCredentialsProvider
+import org.ua.wohnung.bot.sheets.SheetProperties
+import org.ua.wohnung.bot.sheets.SheetReader
 import org.ua.wohnung.bot.user.UserService
 import java.nio.file.Path
 import javax.sql.DataSource
 
-val persistenceModule = module {
+val commonModule = module {
     yamlObjectMapper()
+}
+
+val persistenceModule = module {
     datasource()
     jooq()
     single { AccountRepository(get()) }
@@ -75,7 +81,7 @@ val registeredUserFlow = module {
 
 val messageGatewayModule = module {
     singleOf(::Session)
-    single { MessageSource(get(), Path.of("flows", "newUserFlow.yml")) }
+    single() { MessageSource(get(), Path.of("flows", "newUserFlow.yml")) }
     single { StepFactory(get(), get(), get()) }
     singleOf(::MessageFactory)
     single { FlowRegistry(get(), get<UserRegistrationFlow>(), get<RegisteredUserFlow>()) }
@@ -88,6 +94,12 @@ val messageGatewayModule = module {
             get()
         )
     }
+}
+
+val sheetReaderModule = module {
+    single { SheetProperties(get(), Path.of("sheets", "sheet-properties.yml")) }
+    singleOf(::GoogleCredentialsProvider)
+    single { SheetReader(get(), get()) }
 }
 
 private fun Module.jooq() = single { DSL.using(get<DataSource>(), SQLDialect.POSTGRES) }
