@@ -15,6 +15,7 @@ import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 import org.ua.wohnung.bot.util.aFullUserDetails
 import org.ua.wohnung.bot.util.aPartialUserDetails
 import java.util.stream.Stream
+import kotlin.random.Random.Default.nextLong
 
 @ExtendWith(JooqExtension::class)
 internal class UserDetailsRepositoryTest {
@@ -26,11 +27,11 @@ internal class UserDetailsRepositoryTest {
     @MethodSource("generateUserDetails")
     fun `should save the user details`(userDetails: UserDetails) {
         accountRepository.save(
-            Account(userDetails.username, Role.USER)
+            Account(userDetails.id, nextLong(), "user name", Role.USER)
         )
         userDetailsRepository.save(userDetails)
         userDetailsRepository.save(userDetails)
-        val saved = userDetailsRepository.findById(userDetails.username)
+        val saved = userDetailsRepository.findById(userDetails.id)
         assertThat(saved).usingRecursiveComparison().isEqualTo(userDetails)
     }
 
@@ -44,12 +45,12 @@ internal class UserDetailsRepositoryTest {
     @Test
     fun `should delete an entry by id`() {
         val userDetails = aFullUserDetails()
-        accountRepository.save(Account(userDetails.username, Role.USER))
+        accountRepository.save(Account(userDetails.id, nextLong(), "userName", Role.USER))
         userDetailsRepository.save(userDetails)
-        userDetailsRepository.deleteById(userDetails.username)
+        userDetailsRepository.deleteById(userDetails.id)
 
-        assertThat(userDetailsRepository.findById(userDetails.username)).isNull()
-        assertThat(accountRepository.findById(userDetails.username)).isNotNull
+        assertThat(userDetailsRepository.findById(userDetails.id)).isNull()
+        assertThat(accountRepository.findById(userDetails.id)).isNotNull
     }
 
     companion object {

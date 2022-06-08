@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row6;
@@ -49,7 +50,7 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     /**
      * The column <code>main.user_details.id</code>.
      */
-    public final TableField<UserDetailsRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(128).nullable(false), this, "");
+    public final TableField<UserDetailsRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>main.user_details.first_last_name</code>.
@@ -115,6 +116,11 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     }
 
     @Override
+    public Identity<UserDetailsRecord, Long> getIdentity() {
+        return (Identity<UserDetailsRecord, Long>) super.getIdentity();
+    }
+
+    @Override
     public UniqueKey<UserDetailsRecord> getPrimaryKey() {
         return Keys.USER_DETAILS_PKEY;
     }
@@ -167,7 +173,7 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<String, String, String, Short, Boolean, String> fieldsRow() {
+    public Row6<Long, String, String, Short, Boolean, String> fieldsRow() {
         return (Row6) super.fieldsRow();
     }
 }

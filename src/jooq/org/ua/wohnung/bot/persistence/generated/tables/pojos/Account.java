@@ -17,8 +17,8 @@ public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String id;
-    private String chatId;
+    private Long   id;
+    private Long   chatId;
     private String username;
     private Role   role;
 
@@ -32,8 +32,8 @@ public class Account implements Serializable {
     }
 
     public Account(
-        String id,
-        String chatId,
+        Long   id,
+        Long   chatId,
         String username,
         Role   role
     ) {
@@ -46,28 +46,28 @@ public class Account implements Serializable {
     /**
      * Getter for <code>main.account.id</code>.
      */
-    public String getId() {
+    public Long getId() {
         return this.id;
     }
 
     /**
      * Setter for <code>main.account.id</code>.
      */
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     /**
      * Getter for <code>main.account.chat_id</code>.
      */
-    public String getChatId() {
+    public Long getChatId() {
         return this.chatId;
     }
 
     /**
      * Setter for <code>main.account.chat_id</code>.
      */
-    public void setChatId(String chatId) {
+    public void setChatId(Long chatId) {
         this.chatId = chatId;
     }
 

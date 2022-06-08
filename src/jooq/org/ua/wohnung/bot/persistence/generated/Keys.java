@@ -30,7 +30,6 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<AccountRecord> ACCOUNT_CHAT_ID_KEY = Internal.createUniqueKey(Account.ACCOUNT, DSL.name("account_chat_id_key"), new TableField[] { Account.ACCOUNT.CHAT_ID }, true);
     public static final UniqueKey<AccountRecord> ACCOUNT_PKEY = Internal.createUniqueKey(Account.ACCOUNT, DSL.name("account_pkey"), new TableField[] { Account.ACCOUNT.ID }, true);
     public static final UniqueKey<ApartmentRecord> APARTMENT_PKEY = Internal.createUniqueKey(Apartment.APARTMENT, DSL.name("apartment_pkey"), new TableField[] { Apartment.APARTMENT.ID }, true);
     public static final UniqueKey<UserDetailsRecord> USER_DETAILS_PKEY = Internal.createUniqueKey(UserDetails.USER_DETAILS, DSL.name("user_details_pkey"), new TableField[] { UserDetails.USER_DETAILS.ID }, true);

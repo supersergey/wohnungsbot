@@ -6,6 +6,7 @@ package org.ua.wohnung.bot.persistence.generated.tables;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row8;
@@ -46,7 +47,7 @@ public class Apartment extends TableImpl<ApartmentRecord> {
     /**
      * The column <code>main.apartment.id</code>.
      */
-    public final TableField<ApartmentRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(128).nullable(false), this, "");
+    public final TableField<ApartmentRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>main.apartment.city</code>.
@@ -122,6 +123,11 @@ public class Apartment extends TableImpl<ApartmentRecord> {
     }
 
     @Override
+    public Identity<ApartmentRecord, Long> getIdentity() {
+        return (Identity<ApartmentRecord, Long>) super.getIdentity();
+    }
+
+    @Override
     public UniqueKey<ApartmentRecord> getPrimaryKey() {
         return Keys.APARTMENT_PKEY;
     }
@@ -157,7 +163,7 @@ public class Apartment extends TableImpl<ApartmentRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<String, String, String, Short, Short, String, Boolean, String> fieldsRow() {
+    public Row8<Long, String, String, Short, Short, String, Boolean, String> fieldsRow() {
         return (Row8) super.fieldsRow();
     }
 }

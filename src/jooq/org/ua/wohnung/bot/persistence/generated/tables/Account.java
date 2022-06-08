@@ -4,11 +4,9 @@
 package org.ua.wohnung.bot.persistence.generated.tables;
 
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row4;
@@ -50,12 +48,12 @@ public class Account extends TableImpl<AccountRecord> {
     /**
      * The column <code>main.account.id</code>.
      */
-    public final TableField<AccountRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(128).nullable(false), this, "");
+    public final TableField<AccountRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>main.account.chat_id</code>.
      */
-    public final TableField<AccountRecord, String> CHAT_ID = createField(DSL.name("chat_id"), SQLDataType.VARCHAR(128).nullable(false), this, "");
+    public final TableField<AccountRecord, Long> CHAT_ID = createField(DSL.name("chat_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>main.account.username</code>.
@@ -106,13 +104,13 @@ public class Account extends TableImpl<AccountRecord> {
     }
 
     @Override
-    public UniqueKey<AccountRecord> getPrimaryKey() {
-        return Keys.ACCOUNT_PKEY;
+    public Identity<AccountRecord, Long> getIdentity() {
+        return (Identity<AccountRecord, Long>) super.getIdentity();
     }
 
     @Override
-    public List<UniqueKey<AccountRecord>> getUniqueKeys() {
-        return Arrays.asList(Keys.ACCOUNT_CHAT_ID_KEY);
+    public UniqueKey<AccountRecord> getPrimaryKey() {
+        return Keys.ACCOUNT_PKEY;
     }
 
     @Override
@@ -146,7 +144,7 @@ public class Account extends TableImpl<AccountRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<String, String, String, Role> fieldsRow() {
+    public Row4<Long, Long, String, Role> fieldsRow() {
         return (Row4) super.fieldsRow();
     }
 }

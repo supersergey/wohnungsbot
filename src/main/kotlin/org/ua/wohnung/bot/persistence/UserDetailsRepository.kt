@@ -7,11 +7,11 @@ import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 class UserDetailsRepository(private val dslContext: DSLContext) {
     fun save(userDetails: UserDetails) {
         val userDetailsRecord = dslContext
-            .fetchOne(USER_DETAILS, USER_DETAILS.USERNAME.eq(userDetails.username))
+            .fetchOne(USER_DETAILS, USER_DETAILS.ID.eq(userDetails.id))
             ?: dslContext.newRecord(USER_DETAILS)
 
         userDetailsRecord.apply {
-            username = userDetails.username
+            id = userDetails.id
             firstLastName = userDetails.firstLastName
             phone = userDetails.phone
             numberOfTenants = userDetails.numberOfTenants
@@ -21,10 +21,10 @@ class UserDetailsRepository(private val dslContext: DSLContext) {
         userDetailsRecord.store()
     }
 
-    fun findById(username: String): UserDetails? =
-        dslContext.fetchOne(USER_DETAILS, USER_DETAILS.USERNAME.eq(username))?.let {
+    fun findById(id: Long): UserDetails? =
+        dslContext.fetchOne(USER_DETAILS, USER_DETAILS.ID.eq(id))?.let {
             UserDetails(
-                it.username,
+                it.id,
                 it.firstLastName,
                 it.phone,
                 it.numberOfTenants,
@@ -33,7 +33,7 @@ class UserDetailsRepository(private val dslContext: DSLContext) {
             )
         }
 
-    fun deleteById(username: String) {
-        dslContext.deleteFrom(USER_DETAILS).where(USER_DETAILS.USERNAME.eq(username)).execute()
+    fun deleteById(id: Long) {
+        dslContext.deleteFrom(USER_DETAILS).where(USER_DETAILS.ID.eq(id)).execute()
     }
 }

@@ -1,5 +1,5 @@
 create table apartment(
-    id varchar(128) not null primary key unique,
+    id bigserial not null primary key unique,
     city varchar(128) not null,
     bundesland varchar(128) not null,
     min_tenants smallint not null,
@@ -10,6 +10,6 @@ create table apartment(
 );
 
 create table apartment_account(
-    account_id VARCHAR(128) not null references account(id),
-    apartment_id VARCHAR(128) not null references apartment(id)
+    account_id bigserial not null references account(id),
+    apartment_id bigserial not null references apartment(id)
 );

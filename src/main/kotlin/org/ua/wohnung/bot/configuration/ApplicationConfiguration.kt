@@ -26,6 +26,7 @@ import org.ua.wohnung.bot.gateway.MessageFactory
 import org.ua.wohnung.bot.gateway.MessageGateway
 import org.ua.wohnung.bot.gateway.Session
 import org.ua.wohnung.bot.persistence.AccountRepository
+import org.ua.wohnung.bot.persistence.ApartmentRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import org.ua.wohnung.bot.security.Secrets.BOT_API_SECRET
 import org.ua.wohnung.bot.security.Secrets.DRIVER_CLASS_NAME
@@ -47,6 +48,7 @@ val persistenceModule = module {
     datasource()
     jooq()
     single { AccountRepository(get()) }
+    single { ApartmentRepository(get()) }
     single { UserDetailsRepository(get()) }
     single { UserService(get(), get(), get()) }
 }

@@ -11,12 +11,14 @@ import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.core.logger.PrintLogger
 import org.koin.dsl.module
 import org.koin.fileProperties
 import org.koin.java.KoinJavaComponent.inject
 import org.testcontainers.containers.PostgreSQLContainer
 import org.ua.wohnung.bot.persistence.AccountRepository
+import org.ua.wohnung.bot.persistence.ApartmentRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import javax.sql.DataSource
 
@@ -46,6 +48,7 @@ class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
         }
 
         single { AccountRepository(get()) }
+        single { ApartmentRepository(get()) }
         single { UserDetailsRepository(get()) }
     }
 
@@ -58,7 +61,6 @@ class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
             )
             fileProperties("/secrets/secrets-test.properties")
         }
-
         val postgreSQLContainer: PostgreSQLContainer<*> by inject(PostgreSQLContainer::class.java)
         postgreSQLContainer.start()
         runFlyWay(postgreSQLContainer)
@@ -67,6 +69,7 @@ class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
     override fun afterAll(context: ExtensionContext) {
         val postgreSQLContainer: PostgreSQLContainer<*> by inject(PostgreSQLContainer::class.java)
         postgreSQLContainer.stop()
+        stopKoin()
     }
 
     override fun beforeEach(context: ExtensionContext) {

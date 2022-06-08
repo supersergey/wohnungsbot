@@ -13,34 +13,32 @@ class UserService(
     private val userDetailsRepository: UserDetailsRepository,
     private val dslContext: DSLContext
 ) {
-    fun findById(username: String): UserDetails? {
-        return userDetailsRepository.findById(username)
+    fun findById(userId: Long): UserDetails? {
+        return userDetailsRepository.findById(userId)
     }
 
-    fun findUserRoleById(username: String): Role? {
-        return accountRepository.findById(username)?.role
+    fun findUserRoleById(userId: Long): Role? {
+        return accountRepository.findById(userId)?.role
     }
 
     fun createAccount(account: Account) {
         dslContext.transaction { _ ->
-            accountRepository.save(
-                Account(account.username, Role.valueOf(account.role.name))
-            )
+            accountRepository.save(account)
         }
     }
 
     fun updateUserDetails(userDetails: UserDetails) {
         dslContext.transaction { _ ->
-            accountRepository.findById(userDetails.username)
-                ?: throw UserNotFoundException(userDetails.username)
+            accountRepository.findById(userDetails.id)
+                ?: throw UserNotFoundException(userDetails.id)
             userDetailsRepository.save(userDetails)
         }
     }
 
-    fun delete(username: String) {
+    fun delete(userId: Long) {
         dslContext.transaction { _ ->
-            userDetailsRepository.deleteById(username)
-            accountRepository.deleteById(username)
+            userDetailsRepository.deleteById(userId)
+            accountRepository.deleteById(userId)
         }
     }
 }

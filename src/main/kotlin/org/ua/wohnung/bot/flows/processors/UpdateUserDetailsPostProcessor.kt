@@ -2,6 +2,7 @@ package org.ua.wohnung.bot.flows.processors
 
 import org.ua.wohnung.bot.exception.UserInputValidationException
 import org.ua.wohnung.bot.flows.FlowStep
+import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 import org.ua.wohnung.bot.user.UserService
 import org.ua.wohnung.bot.user.model.BundesLand
@@ -9,9 +10,9 @@ import org.ua.wohnung.bot.user.model.BundesLand
 sealed class UpdateUserDetailsPostProcessor(private val userService: UserService) : PostProcessor {
     abstract fun doInvoke(userDetails: UserDetails, input: String)
 
-    override fun invoke(username: String, input: String) {
-        val userDetails = userService.findById(username)
-            ?: UserDetails(username, null, null, null, null, null)
+    override fun invoke(account: Account, input: String) {
+        val userDetails = userService.findById(account.id)
+            ?: UserDetails(account.id, null, null, null, null, null)
         doInvoke(userDetails, input)
         userService.updateUserDetails(userDetails)
     }

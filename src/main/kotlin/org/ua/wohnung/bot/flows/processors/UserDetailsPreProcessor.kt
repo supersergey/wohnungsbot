@@ -9,10 +9,8 @@ sealed class UserDetailsPreProcessor : PreProcessor {
     class BundesLandSelectionPreProcessor(private val userService: UserService) : UserDetailsPreProcessor() {
         override val stepId = FlowStep.BUNDESLAND_SELECTION
 
-        override fun invoke(username: String, input: String) {
-            userService.createAccount(
-                Account(username, Role.USER)
-            )
+        override fun invoke(account: Account, input: String) {
+            userService.createAccount(account.apply { role = Role.USER })
         }
     }
 }

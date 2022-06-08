@@ -15,7 +15,7 @@ public class Apartment implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
+    private Long    id;
     private String  city;
     private String  bundesland;
     private Short   minTenants;
@@ -38,7 +38,7 @@ public class Apartment implements Serializable {
     }
 
     public Apartment(
-        String  id,
+        Long    id,
         String  city,
         String  bundesland,
         Short   minTenants,
@@ -60,14 +60,14 @@ public class Apartment implements Serializable {
     /**
      * Getter for <code>main.apartment.id</code>.
      */
-    public String getId() {
+    public Long getId() {
         return this.id;
     }
 
     /**
      * Setter for <code>main.apartment.id</code>.
      */
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

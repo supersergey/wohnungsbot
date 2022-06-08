@@ -3,7 +3,7 @@ package org.ua.wohnung.bot.exception
 abstract class WohnungsBotException(message: String, cause: Throwable? = null) : Throwable(message, cause)
 
 sealed class ServiceException(message: String, cause: Throwable? = null) : WohnungsBotException(message, cause) {
-    class UserNotFoundException(val userId: String) : ServiceException("User not found: $userId")
+    class UserNotFoundException(val userId: Long) : ServiceException("User not found: $userId")
 }
 
 sealed class UserInputValidationException(message: String, cause: Throwable? = null) : WohnungsBotException(message, cause) {
