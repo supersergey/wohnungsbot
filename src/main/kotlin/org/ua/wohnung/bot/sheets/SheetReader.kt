@@ -13,6 +13,7 @@ class SheetReader(
     private val applicationName = "ua-wohnungs-bot"
     private val httpTransport = GoogleNetHttpTransport.newTrustedTransport()
 
+    @Suppress("UNCHECKED_CAST")
     fun readRows(offset: Int = 0, limit: Int = 1000): List<List<String>> {
         val service = Sheets.Builder(httpTransport, jsonFactory, HttpCredentialsAdapter(credentialsProvider.get()))
             .setApplicationName(applicationName)
