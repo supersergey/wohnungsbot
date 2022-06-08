@@ -15,7 +15,7 @@ public class UserDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String  username;
+    private String  id;
     private String  firstLastName;
     private String  phone;
     private Short   numberOfTenants;
@@ -25,7 +25,7 @@ public class UserDetails implements Serializable {
     public UserDetails() {}
 
     public UserDetails(UserDetails value) {
-        this.username = value.username;
+        this.id = value.id;
         this.firstLastName = value.firstLastName;
         this.phone = value.phone;
         this.numberOfTenants = value.numberOfTenants;
@@ -34,14 +34,14 @@ public class UserDetails implements Serializable {
     }
 
     public UserDetails(
-        String  username,
+        String  id,
         String  firstLastName,
         String  phone,
         Short   numberOfTenants,
         Boolean pets,
         String  bundesland
     ) {
-        this.username = username;
+        this.id = id;
         this.firstLastName = firstLastName;
         this.phone = phone;
         this.numberOfTenants = numberOfTenants;
@@ -50,17 +50,17 @@ public class UserDetails implements Serializable {
     }
 
     /**
-     * Getter for <code>main.user_details.username</code>.
+     * Getter for <code>main.user_details.id</code>.
      */
-    public String getUsername() {
-        return this.username;
+    public String getId() {
+        return this.id;
     }
 
     /**
-     * Setter for <code>main.user_details.username</code>.
+     * Setter for <code>main.user_details.id</code>.
      */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -137,7 +137,7 @@ public class UserDetails implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("UserDetails (");
 
-        sb.append(username);
+        sb.append(id);
         sb.append(", ").append(firstLastName);
         sb.append(", ").append(phone);
         sb.append(", ").append(numberOfTenants);

@@ -5,6 +5,8 @@ package org.ua.wohnung.bot.persistence.generated;
 
 
 import org.ua.wohnung.bot.persistence.generated.tables.Account;
+import org.ua.wohnung.bot.persistence.generated.tables.Apartment;
+import org.ua.wohnung.bot.persistence.generated.tables.ApartmentAccount;
 import org.ua.wohnung.bot.persistence.generated.tables.UserDetails;
 
 
@@ -18,6 +20,16 @@ public class Tables {
      * The table <code>main.account</code>.
      */
     public static final Account ACCOUNT = Account.ACCOUNT;
+
+    /**
+     * The table <code>main.apartment</code>.
+     */
+    public static final Apartment APARTMENT = Apartment.APARTMENT;
+
+    /**
+     * The table <code>main.apartment_account</code>.
+     */
+    public static final ApartmentAccount APARTMENT_ACCOUNT = ApartmentAccount.APARTMENT_ACCOUNT;
 
     /**
      * The table <code>main.user_details</code>.

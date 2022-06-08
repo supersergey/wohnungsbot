@@ -30,7 +30,7 @@ class FlowRegistry(private val userService: UserService, vararg flows: Flow) {
 
     private fun UserDetails?.isComplete(): Boolean =
         listOfNotNull(
-            this?.username,
+            this?.id,
             this?.bundesland,
             this?.phone,
             this?.pets,

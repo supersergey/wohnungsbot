@@ -13,9 +13,6 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.telegram.telegrambots.meta.generics.LongPollingBot
-import org.ua.wohnung.bot.gateway.MessageFactory
-import org.ua.wohnung.bot.gateway.Session
-import org.ua.wohnung.bot.gateway.MessageGateway
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.StepFactory
 import org.ua.wohnung.bot.flows.processors.MessagePreProcessor
@@ -25,6 +22,9 @@ import org.ua.wohnung.bot.flows.processors.UpdateUserDetailsPostProcessor
 import org.ua.wohnung.bot.flows.processors.UserDetailsPreProcessor
 import org.ua.wohnung.bot.flows.registereduser.RegisteredUserFlow
 import org.ua.wohnung.bot.flows.userregistration.UserRegistrationFlow
+import org.ua.wohnung.bot.gateway.MessageFactory
+import org.ua.wohnung.bot.gateway.MessageGateway
+import org.ua.wohnung.bot.gateway.Session
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import org.ua.wohnung.bot.security.Secrets.BOT_API_SECRET

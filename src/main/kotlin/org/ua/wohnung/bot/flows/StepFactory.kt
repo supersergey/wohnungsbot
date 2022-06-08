@@ -41,8 +41,7 @@ class StepFactory(
     private val messageSource: MessageSource,
     private val preProcessors: ProcessorContainer.PreProcessors,
     private val postProcessors: ProcessorContainer.PostProcessors
-    )
-{
+) {
     fun singleReply(
         id: FlowStep,
         next: FlowStep

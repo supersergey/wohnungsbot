@@ -18,8 +18,10 @@ class SheetReader(
         val service = Sheets.Builder(httpTransport, jsonFactory, HttpCredentialsAdapter(credentialsProvider.get()))
             .setApplicationName(applicationName)
             .build()
-        return (service.spreadsheets().values()
-            .get(sheetProperties.spreadsheetId, sheetProperties.range)
-            .execute().getValues() as List<List<String>>).slice(offset..limit)
+        return (
+            service.spreadsheets().values()
+                .get(sheetProperties.spreadsheetId, sheetProperties.range)
+                .execute().getValues() as List<List<String>>
+            ).slice(offset..limit)
     }
 }

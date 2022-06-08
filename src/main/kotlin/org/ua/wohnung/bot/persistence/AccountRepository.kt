@@ -16,9 +16,9 @@ class AccountRepository(private val dslContext: DSLContext) {
         }.store()
     }
 
-    fun findById(username: String): Account? {
-        return dslContext.fetchOne(ACCOUNT, ACCOUNT.USERNAME.eq(username))?.let {
-            Account(it.username, it.role)
+    fun findById(userId: String): Account? {
+        return dslContext.fetchOne(ACCOUNT, ACCOUNT.USERNAME.eq(userId))?.let {
+            Account(it.id, it.chatId, it.username, it.role)
         }
     }
 

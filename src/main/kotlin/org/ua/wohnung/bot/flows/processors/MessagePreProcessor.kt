@@ -12,8 +12,8 @@ sealed class MessagePreProcessor : PreProcessor {
         }
     }
 
-    object Empty: MessagePreProcessor() {
-        override fun invoke(username: String, input: String): String { return input}
+    object Empty : MessagePreProcessor() {
+        override fun invoke(username: String, input: String): String { return input }
 
         override val stepId: FlowStep = FlowStep.CONVERSATION_START
     }

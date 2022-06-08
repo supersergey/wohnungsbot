@@ -15,7 +15,7 @@ sealed class ProcessorContainer<T : Processor>(vararg processors: T) {
     class PostProcessors(vararg postProcessors: PostProcessor) : ProcessorContainer<PostProcessor>(*postProcessors) {
         operator fun get(stepId: FlowStep): PostProcessor = map[stepId] ?: PostProcessor.Empty
     }
-    class MessagePreProcessors(vararg messagePreProcessors: MessagePreProcessor): ProcessorContainer<MessagePreProcessor>(*messagePreProcessors) {
+    class MessagePreProcessors(vararg messagePreProcessors: MessagePreProcessor) : ProcessorContainer<MessagePreProcessor>(*messagePreProcessors) {
         operator fun get(stepId: FlowStep): MessagePreProcessor = map[stepId] ?: MessagePreProcessor.Empty
     }
 }

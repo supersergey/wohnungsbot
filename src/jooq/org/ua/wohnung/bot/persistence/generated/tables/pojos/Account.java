@@ -17,22 +17,58 @@ public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private String id;
+    private String chatId;
     private String username;
     private Role   role;
 
     public Account() {}
 
     public Account(Account value) {
+        this.id = value.id;
+        this.chatId = value.chatId;
         this.username = value.username;
         this.role = value.role;
     }
 
     public Account(
+        String id,
+        String chatId,
         String username,
         Role   role
     ) {
+        this.id = id;
+        this.chatId = chatId;
         this.username = username;
         this.role = role;
+    }
+
+    /**
+     * Getter for <code>main.account.id</code>.
+     */
+    public String getId() {
+        return this.id;
+    }
+
+    /**
+     * Setter for <code>main.account.id</code>.
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * Getter for <code>main.account.chat_id</code>.
+     */
+    public String getChatId() {
+        return this.chatId;
+    }
+
+    /**
+     * Setter for <code>main.account.chat_id</code>.
+     */
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
     }
 
     /**
@@ -67,7 +103,9 @@ public class Account implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("Account (");
 
-        sb.append(username);
+        sb.append(id);
+        sb.append(", ").append(chatId);
+        sb.append(", ").append(username);
         sb.append(", ").append(role);
 
         sb.append(")");

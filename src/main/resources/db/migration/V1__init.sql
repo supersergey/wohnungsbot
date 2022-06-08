@@ -2,6 +2,8 @@ CREATE TYPE role AS ENUM ('OWNER', 'ADMIN', 'USER');
 
 create table account
 (
-    username VARCHAR(128) not null primary key unique,
+    id VARCHAR(128) not null primary key unique,
+    chat_id VARCHAR(128) not null unique,
+    username VARCHAR(128),
     role role not null
 );

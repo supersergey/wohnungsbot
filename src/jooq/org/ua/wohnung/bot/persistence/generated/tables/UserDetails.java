@@ -47,9 +47,9 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     }
 
     /**
-     * The column <code>main.user_details.username</code>.
+     * The column <code>main.user_details.id</code>.
      */
-    public final TableField<UserDetailsRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.VARCHAR(128).nullable(false), this, "");
+    public final TableField<UserDetailsRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(128).nullable(false), this, "");
 
     /**
      * The column <code>main.user_details.first_last_name</code>.
@@ -121,7 +121,7 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
 
     @Override
     public List<ForeignKey<UserDetailsRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.USER_DETAILS__USER_DETAILS_USERNAME_FKEY);
+        return Arrays.asList(Keys.USER_DETAILS__USER_DETAILS_ID_FKEY);
     }
 
     private transient Account _account;
@@ -131,7 +131,7 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
      */
     public Account account() {
         if (_account == null)
-            _account = new Account(this, Keys.USER_DETAILS__USER_DETAILS_USERNAME_FKEY);
+            _account = new Account(this, Keys.USER_DETAILS__USER_DETAILS_ID_FKEY);
 
         return _account;
     }

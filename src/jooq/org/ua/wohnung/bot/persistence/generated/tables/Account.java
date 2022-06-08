@@ -4,11 +4,14 @@
 package org.ua.wohnung.bot.persistence.generated.tables;
 
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row2;
+import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -45,9 +48,19 @@ public class Account extends TableImpl<AccountRecord> {
     }
 
     /**
+     * The column <code>main.account.id</code>.
+     */
+    public final TableField<AccountRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(128).nullable(false), this, "");
+
+    /**
+     * The column <code>main.account.chat_id</code>.
+     */
+    public final TableField<AccountRecord, String> CHAT_ID = createField(DSL.name("chat_id"), SQLDataType.VARCHAR(128).nullable(false), this, "");
+
+    /**
      * The column <code>main.account.username</code>.
      */
-    public final TableField<AccountRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.VARCHAR(128).nullable(false), this, "");
+    public final TableField<AccountRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.VARCHAR(128), this, "");
 
     /**
      * The column <code>main.account.role</code>.
@@ -98,6 +111,11 @@ public class Account extends TableImpl<AccountRecord> {
     }
 
     @Override
+    public List<UniqueKey<AccountRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.ACCOUNT_CHAT_ID_KEY);
+    }
+
+    @Override
     public Account as(String alias) {
         return new Account(DSL.name(alias), this);
     }
@@ -124,11 +142,11 @@ public class Account extends TableImpl<AccountRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row2 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row2<String, Role> fieldsRow() {
-        return (Row2) super.fieldsRow();
+    public Row4<String, String, String, Role> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 }

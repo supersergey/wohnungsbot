@@ -13,13 +13,13 @@ interface Processor {
 }
 
 interface PreProcessor : Processor {
-    object Empty: PreProcessor {
+    object Empty : PreProcessor {
         override val stepId = FlowStep.CONVERSATION_START
         override fun invoke(username: String, input: String) {}
     }
 }
 interface PostProcessor : Processor {
-    object Empty: PostProcessor {
+    object Empty : PostProcessor {
         override val stepId = FlowStep.CONVERSATION_START
         override fun invoke(username: String, input: String) {}
     }

@@ -8,11 +8,11 @@ import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 import org.ua.wohnung.bot.configuration.commonModule
+import org.ua.wohnung.bot.configuration.messageGatewayModule
 import org.ua.wohnung.bot.configuration.persistenceModule
 import org.ua.wohnung.bot.configuration.registeredUserFlow
-import org.ua.wohnung.bot.configuration.userFlowModule
-import org.ua.wohnung.bot.configuration.messageGatewayModule
 import org.ua.wohnung.bot.configuration.sheetReaderModule
+import org.ua.wohnung.bot.configuration.userFlowModule
 
 fun main() {
     startKoin {

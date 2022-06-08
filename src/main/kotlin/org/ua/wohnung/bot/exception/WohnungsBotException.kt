@@ -13,6 +13,6 @@ sealed class UserInputValidationException(message: String, cause: Throwable? = n
 }
 
 sealed class SheetValidationException(message: String, cause: Throwable? = null) : WohnungsBotException(message, cause) {
-    class InvalidBunderLand(val bundesLand: String): SheetValidationException("Invalid Bundesland: $bundesLand")
-    class InvalidTenantsCount(val tenantsCount: String): SheetValidationException("Invalid tenantsCount: $tenantsCount")
+    class InvalidBunderLand(val bundesLand: String) : SheetValidationException("Invalid Bundesland: $bundesLand")
+    class InvalidTenantsCount(val tenantsCount: String) : SheetValidationException("Invalid tenantsCount: $tenantsCount")
 }

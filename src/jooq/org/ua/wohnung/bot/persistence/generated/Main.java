@@ -11,6 +11,8 @@ import org.jooq.Catalog;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
 import org.ua.wohnung.bot.persistence.generated.tables.Account;
+import org.ua.wohnung.bot.persistence.generated.tables.Apartment;
+import org.ua.wohnung.bot.persistence.generated.tables.ApartmentAccount;
 import org.ua.wohnung.bot.persistence.generated.tables.UserDetails;
 
 
@@ -31,6 +33,16 @@ public class Main extends SchemaImpl {
      * The table <code>main.account</code>.
      */
     public final Account ACCOUNT = Account.ACCOUNT;
+
+    /**
+     * The table <code>main.apartment</code>.
+     */
+    public final Apartment APARTMENT = Apartment.APARTMENT;
+
+    /**
+     * The table <code>main.apartment_account</code>.
+     */
+    public final ApartmentAccount APARTMENT_ACCOUNT = ApartmentAccount.APARTMENT_ACCOUNT;
 
     /**
      * The table <code>main.user_details</code>.
@@ -54,6 +66,8 @@ public class Main extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.asList(
             Account.ACCOUNT,
+            Apartment.APARTMENT,
+            ApartmentAccount.APARTMENT_ACCOUNT,
             UserDetails.USER_DETAILS
         );
     }

@@ -21,16 +21,16 @@ public class UserDetailsRecord extends UpdatableRecordImpl<UserDetailsRecord> im
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>main.user_details.username</code>.
+     * Setter for <code>main.user_details.id</code>.
      */
-    public void setUsername(String value) {
+    public void setId(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>main.user_details.username</code>.
+     * Getter for <code>main.user_details.id</code>.
      */
-    public String getUsername() {
+    public String getId() {
         return (String) get(0);
     }
 
@@ -129,7 +129,7 @@ public class UserDetailsRecord extends UpdatableRecordImpl<UserDetailsRecord> im
 
     @Override
     public Field<String> field1() {
-        return UserDetails.USER_DETAILS.USERNAME;
+        return UserDetails.USER_DETAILS.ID;
     }
 
     @Override
@@ -159,7 +159,7 @@ public class UserDetailsRecord extends UpdatableRecordImpl<UserDetailsRecord> im
 
     @Override
     public String component1() {
-        return getUsername();
+        return getId();
     }
 
     @Override
@@ -189,7 +189,7 @@ public class UserDetailsRecord extends UpdatableRecordImpl<UserDetailsRecord> im
 
     @Override
     public String value1() {
-        return getUsername();
+        return getId();
     }
 
     @Override
@@ -219,7 +219,7 @@ public class UserDetailsRecord extends UpdatableRecordImpl<UserDetailsRecord> im
 
     @Override
     public UserDetailsRecord value1(String value) {
-        setUsername(value);
+        setId(value);
         return this;
     }
 
@@ -278,10 +278,10 @@ public class UserDetailsRecord extends UpdatableRecordImpl<UserDetailsRecord> im
     /**
      * Create a detached, initialised UserDetailsRecord
      */
-    public UserDetailsRecord(String username, String firstLastName, String phone, Short numberOfTenants, Boolean pets, String bundesland) {
+    public UserDetailsRecord(String id, String firstLastName, String phone, Short numberOfTenants, Boolean pets, String bundesland) {
         super(UserDetails.USER_DETAILS);
 
-        setUsername(username);
+        setId(id);
         setFirstLastName(firstLastName);
         setPhone(phone);
         setNumberOfTenants(numberOfTenants);
@@ -296,7 +296,7 @@ public class UserDetailsRecord extends UpdatableRecordImpl<UserDetailsRecord> im
         super(UserDetails.USER_DETAILS);
 
         if (value != null) {
-            setUsername(value.getUsername());
+            setId(value.getId());
             setFirstLastName(value.getFirstLastName());
             setPhone(value.getPhone());
             setNumberOfTenants(value.getNumberOfTenants());
