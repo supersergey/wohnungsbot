@@ -1,7 +1,6 @@
 package org.ua.wohnung.bot
 
 import org.koin.core.context.startKoin
-import org.koin.core.logger.PrintLogger
 import org.koin.core.qualifier.named
 import org.koin.fileProperties
 import org.telegram.telegrambots.meta.TelegramBotsApi
@@ -17,7 +16,6 @@ import org.ua.wohnung.bot.configuration.userFlowModule
 fun main() {
     startKoin {
         printLogger()
-        logger(PrintLogger())
         fileProperties("/secrets/secrets.properties")
         modules(
             commonModule,

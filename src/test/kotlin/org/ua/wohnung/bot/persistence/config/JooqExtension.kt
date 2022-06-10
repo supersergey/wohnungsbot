@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.core.logger.PrintLogger
 import org.koin.dsl.module
 import org.koin.fileProperties
 import org.koin.java.KoinJavaComponent.inject
@@ -55,7 +54,6 @@ class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
     override fun beforeAll(context: ExtensionContext) {
         startKoin {
             printLogger()
-            logger(PrintLogger())
             modules(
                 jooqModule
             )

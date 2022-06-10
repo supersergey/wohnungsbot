@@ -37,10 +37,8 @@ dependencies {
     jooqGenerator("jakarta.xml.bind:jakarta.xml.bind-api:3.0.1")
     jooqGenerator("org.postgresql:postgresql:42.3.5")
 
-    implementation("org.slf4j:slf4j-api:1.7.36")
-    implementation("org.slf4j:slf4j-simple:1.7.36")
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.21")
-    implementation("commons-logging:commons-logging:1.2")
+    implementation("ch.qos.logback:logback-classic:1.2.11")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
