@@ -1,7 +1,9 @@
 package org.ua.wohnung.bot.util
 
 import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils
+import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
+import org.ua.wohnung.bot.sheets.PublicationStatus
 import org.ua.wohnung.bot.user.model.BundesLand
 import kotlin.random.Random.Default.nextInt
 import kotlin.random.Random.Default.nextLong
@@ -23,3 +25,16 @@ fun aPartialUserDetails() = UserDetails(
     true,
     null
 )
+
+fun anApartment(): Apartment {
+    return Apartment(
+        nextLong(),
+        "city",
+        "Berlin",
+        1,
+        10,
+        "description",
+        false,
+        PublicationStatus.ACTIVE.name
+    )
+}

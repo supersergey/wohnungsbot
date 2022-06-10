@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.java.KoinJavaComponent
 import org.ua.wohnung.bot.persistence.config.JooqExtension
-import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
-import org.ua.wohnung.bot.sheets.PublicationStatus
-import kotlin.random.Random.Default.nextLong
+import org.ua.wohnung.bot.util.anApartment
 
 @ExtendWith(JooqExtension::class)
 internal class ApartmentRepositoryTest {
@@ -24,16 +22,11 @@ internal class ApartmentRepositoryTest {
         assertThat(saved).usingRecursiveComparison().isEqualTo(anApartment)
     }
 
-    private fun anApartment(): Apartment {
-        return Apartment(
-            nextLong(),
-            "city",
-            "Berlin",
-            1,
-            10,
-            "description",
-            false,
-            PublicationStatus.ACTIVE.name
-        )
+    @Test
+    fun `should save batch of apartment records`() {
+        val apartments = listOf(anApartment(), anApartment())
+        apartmentRepository.saveAll(apartments)
+        apartmentRepository.saveAll(apartments + anApartment())
+        assertThat(apartmentRepository.count()).isEqualTo(3)
     }
 }

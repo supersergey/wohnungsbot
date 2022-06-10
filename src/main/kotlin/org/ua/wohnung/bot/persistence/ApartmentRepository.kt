@@ -35,4 +35,25 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             publicationstatus = apartment.publicationstatus
         }.store()
     }
+
+    fun saveAll(apartments: Collection<Apartment>): Int {
+        return dslContext.batchMerge(
+            apartments.map {
+                ApartmentRecord(
+                    it.id,
+                    it.city,
+                    it.bundesland,
+                    it.minTenants,
+                    it.maxTenants,
+                    it.description,
+                    it.petsAllowed,
+                    it.publicationstatus
+                )
+            }
+        ).execute().size
+    }
+
+    fun count(): Int {
+        return dslContext.fetchCount(APARTMENT)
+    }
 }
