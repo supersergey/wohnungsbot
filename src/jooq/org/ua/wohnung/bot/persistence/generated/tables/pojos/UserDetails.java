@@ -15,7 +15,7 @@ public class UserDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long    id;
+    private Integer id;
     private String  firstLastName;
     private String  phone;
     private Short   numberOfTenants;
@@ -34,7 +34,7 @@ public class UserDetails implements Serializable {
     }
 
     public UserDetails(
-        Long    id,
+        Integer id,
         String  firstLastName,
         String  phone,
         Short   numberOfTenants,
@@ -52,14 +52,14 @@ public class UserDetails implements Serializable {
     /**
      * Getter for <code>main.user_details.id</code>.
      */
-    public Long getId() {
+    public Integer getId() {
         return this.id;
     }
 
     /**
      * Setter for <code>main.user_details.id</code>.
      */
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -14,7 +14,7 @@ class SheetReader(
     private val httpTransport = GoogleNetHttpTransport.newTrustedTransport()
 
     @Suppress("UNCHECKED_CAST")
-    fun readRows(offset: Int = 0, limit: Int = 1000): List<List<String>> {
+    fun readRows(): List<List<String>> {
         val service = Sheets.Builder(httpTransport, jsonFactory, HttpCredentialsAdapter(credentialsProvider.get()))
             .setApplicationName(applicationName)
             .build()
@@ -22,6 +22,6 @@ class SheetReader(
             service.spreadsheets().values()
                 .get(sheetProperties.spreadsheetId, sheetProperties.range)
                 .execute().getValues() as List<List<String>>
-            ).slice(offset..limit)
+            )
     }
 }

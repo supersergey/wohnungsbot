@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row2;
@@ -49,12 +48,12 @@ public class ApartmentAccount extends TableImpl<ApartmentAccountRecord> {
     /**
      * The column <code>main.apartment_account.account_id</code>.
      */
-    public final TableField<ApartmentAccountRecord, Long> ACCOUNT_ID = createField(DSL.name("account_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<ApartmentAccountRecord, Integer> ACCOUNT_ID = createField(DSL.name("account_id"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>main.apartment_account.apartment_id</code>.
      */
-    public final TableField<ApartmentAccountRecord, Long> APARTMENT_ID = createField(DSL.name("apartment_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<ApartmentAccountRecord, String> APARTMENT_ID = createField(DSL.name("apartment_id"), SQLDataType.VARCHAR(128).nullable(false), this, "");
 
     private ApartmentAccount(Name alias, Table<ApartmentAccountRecord> aliased) {
         this(alias, aliased, null);
@@ -92,11 +91,6 @@ public class ApartmentAccount extends TableImpl<ApartmentAccountRecord> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : Main.MAIN;
-    }
-
-    @Override
-    public Identity<ApartmentAccountRecord, Long> getIdentity() {
-        return (Identity<ApartmentAccountRecord, Long>) super.getIdentity();
     }
 
     @Override
@@ -158,7 +152,7 @@ public class ApartmentAccount extends TableImpl<ApartmentAccountRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row2<Long, Long> fieldsRow() {
+    public Row2<Integer, String> fieldsRow() {
         return (Row2) super.fieldsRow();
     }
 }

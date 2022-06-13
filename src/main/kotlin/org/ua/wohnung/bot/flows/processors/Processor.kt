@@ -4,8 +4,8 @@ import org.ua.wohnung.bot.flows.FlowStep
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 
 interface Processor {
-    operator fun invoke(account: Account, input: String): Any
     val stepId: FlowStep
+    operator fun invoke(account: Account, input: String): Any
 
     object Empty : Processor {
         override val stepId = FlowStep.CONVERSATION_START

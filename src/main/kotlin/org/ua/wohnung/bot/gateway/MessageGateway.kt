@@ -4,6 +4,7 @@ import mu.KotlinLogging
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.ua.wohnung.bot.flows.FlowRegistry
+import org.ua.wohnung.bot.flows.Step
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.ProcessorContainer
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
@@ -25,27 +26,27 @@ class MessageGateway(
         logger.info { "Received update, chatId: ${update.message.chatId}" }
         if (update.isProcessable()) {
             val chatMetadata = update.metadata()
-            val flow = flowRegistry.getFlowByUserId(chatMetadata.userId)
-            val currentStep = session.current(chatMetadata.chatId)?.let { stepId ->
-                flow.current(stepId)
-            } ?: flow.first()
+            val currentStep = resolveCurrentStep(chatMetadata)
 
             runCatching {
-                currentStep.postProcessor(Account().apply { id = chatMetadata.userId }, chatMetadata.input)
+                currentStep?.postProcessor?.invoke(chatMetadata.toAccount(), chatMetadata.input)
 
+                val flow = flowRegistry.getFlowByUserId(chatMetadata.userId)
                 val nextStep = flow.next(
-                    currentStep = currentStep.id, userInput = chatMetadata.input
+                    currentStep = currentStep?.id, userInput = chatMetadata.input
                 ) ?: flow.first()
 
                 nextStep.preProcessor.invoke(chatMetadata.toAccount(), chatMetadata.input)
 
                 val sendMessage = messageFactory.newStepMessage(chatMetadata.chatId, nextStep)
-                sendMessage.text = messagePreProcessors[nextStep.id]
+                messagePreProcessors[nextStep.id]
                     .invoke(
                         chatMetadata.toAccount(),
                         sendMessage.text
-                    ) as String
-                execute(sendMessage)
+                    ).forEach {
+                        sendMessage.text = it
+                        execute(sendMessage)
+                    }
                 session.updateState(chatMetadata.chatId, nextStep.id)
             }.onFailure {
                 println(it.stackTraceToString())
@@ -57,14 +58,21 @@ class MessageGateway(
         }
     }
 
+    private fun resolveCurrentStep(chatMetadata: ChatMetadata): Step? {
+        val flow = flowRegistry.getFlowByUserId(chatMetadata.userId)
+        return session.current(chatMetadata.chatId)?.let { stepId ->
+            flow.current(stepId)
+        }
+    }
+
     private fun Update.isProcessable(): Boolean =
         hasMessage() && message.hasText() && message.isUserMessage
 
     private fun Update.metadata(): ChatMetadata =
         ChatMetadata(
-            userId = message.from.id,
+            userId = message.from.id.toInt(),
             username = message.chat.userName,
-            chatId = message.chatId,
+            chatId = message.chatId.toInt(),
             input = message.text
         )
 

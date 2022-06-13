@@ -43,12 +43,7 @@ class UserRegistrationFlow(private val stepFactory: StepFactory) : Flow() {
         ).addSingle()
         stepFactory.multipleReplies(
             id = FlowStep.PETS,
-            *listOf("Так", "Ні").allTo(FlowStep.CONVERSATION_FINISHED_SUCCESS),
-        ).addSingle()
-        stepFactory.multipleReplies(
-            id = FlowStep.CONVERSATION_FINISHED_SUCCESS,
-            "Доступне мені житло" to FlowStep.REGISTERED_USER_LIST_APARTMENTS,
-            "Видаліть мої дані" to FlowStep.CONVERSATION_FINISH_REMOVAL
+            *listOf("Так", "Ні").allTo(FlowStep.REGISTERED_USER_CONVERSATION_START),
         ).addSingle()
         stepFactory.termination(FlowStep.CONVERSATION_FINISHED_DECLINED).addSingle()
     }

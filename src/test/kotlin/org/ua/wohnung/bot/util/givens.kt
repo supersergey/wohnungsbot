@@ -1,6 +1,5 @@
 package org.ua.wohnung.bot.util
 
-import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 import org.ua.wohnung.bot.sheets.PublicationStatus
@@ -26,15 +25,24 @@ fun aPartialUserDetails() = UserDetails(
     null
 )
 
-fun anApartment(): Apartment {
+fun anApartment(
+    id: Long = nextLong(),
+    city: String = "city",
+    bundesLand: BundesLand = BundesLand.values().random(),
+    minTenants: Short = 1,
+    maxTenants: Short = 5,
+    description: String = "description",
+    petsAllowed: Boolean = false,
+    publicationStatus: PublicationStatus = PublicationStatus.ACTIVE
+): Apartment {
     return Apartment(
-        nextLong(),
-        "city",
-        "Berlin",
-        1,
-        10,
-        "description",
-        false,
-        PublicationStatus.ACTIVE.name
+        "$id",
+        city,
+        bundesLand.germanName,
+        minTenants,
+        maxTenants,
+        description,
+        petsAllowed,
+        publicationStatus.name
     )
 }

@@ -7,15 +7,15 @@ import java.util.concurrent.ConcurrentMap
 class Session {
 
     // userId to StepId
-    private val internalMap: ConcurrentMap<Long, FlowStep> = ConcurrentHashMap()
+    private val internalMap: ConcurrentMap<Int, FlowStep> = ConcurrentHashMap()
 
-    fun current(chatId: Long): FlowStep? = internalMap[chatId]
+    fun current(chatId: Int): FlowStep? = internalMap[chatId]
 
-    fun updateState(chatId: Long, state: FlowStep) {
+    fun updateState(chatId: Int, state: FlowStep) {
         internalMap[chatId] = state
     }
 
-    fun dropSession(chatId: Long) {
+    fun dropSession(chatId: Int) {
         internalMap.remove(chatId)
     }
 }

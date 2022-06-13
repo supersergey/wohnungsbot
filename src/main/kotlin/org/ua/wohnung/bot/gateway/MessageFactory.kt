@@ -1,34 +1,38 @@
 package org.ua.wohnung.bot.gateway
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.ua.wohnung.bot.flows.Reply
 import org.ua.wohnung.bot.flows.Step
 
-class MessageFactory() {
-    fun newStepMessage(chatIdentifier: Long, step: Step): SendMessage = SendMessage().apply {
+class MessageFactory {
+    fun newStepMessage(chatIdentifier: Int, step: Step): SendMessage = SendMessage().apply {
         this.chatId = chatIdentifier.toString()
         text = step.caption
-        if (step.reply is Reply.Inline) {
-            replyMarkup = ReplyKeyboardMarkup().apply {
-                oneTimeKeyboard = true
-                keyboard = (step.reply as Reply.Inline).keyboardRows(3)
+        if (step.reply is Reply.WithButtons) {
+            replyMarkup = InlineKeyboardMarkup().apply {
+//                oneTimeKeyboard = true
+                keyboard = (step.reply as Reply.WithButtons).keyboardRows(3)
             }
         }
     }
 
-    fun newCustomMessage(chatIdentifier: Long, message: String): SendMessage = SendMessage().apply {
+    fun newCustomMessage(chatIdentifier: Int, message: String): SendMessage = SendMessage().apply {
         this.chatId = chatIdentifier.toString()
         text = message
     }
 
-    private fun Reply.Inline.keyboardRows(buttonsPerRow: Int): List<KeyboardRow> {
+    private fun Reply.WithButtons.keyboardRows(buttonsPerRow: Int): List<List<InlineKeyboardButton>> {
         return options
             .map { it.key }
-            .map { KeyboardButton(it) }
+            .map {
+                InlineKeyboardButton.builder()
+                    .callbackData("abc")
+                    .text(it)
+                    .build()
+            }
             .chunked(buttonsPerRow)
-            .map { KeyboardRow(it) }
+
     }
 }

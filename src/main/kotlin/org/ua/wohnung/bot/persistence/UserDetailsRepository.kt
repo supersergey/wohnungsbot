@@ -21,7 +21,7 @@ class UserDetailsRepository(private val dslContext: DSLContext) {
         userDetailsRecord.store()
     }
 
-    fun findById(id: Long): UserDetails? =
+    fun findById(id: Int): UserDetails? =
         dslContext.fetchOne(USER_DETAILS, USER_DETAILS.ID.eq(id))?.let {
             UserDetails(
                 it.id,
@@ -33,7 +33,7 @@ class UserDetailsRepository(private val dslContext: DSLContext) {
             )
         }
 
-    fun deleteById(id: Long) {
+    fun deleteById(id: Int) {
         dslContext.deleteFrom(USER_DETAILS).where(USER_DETAILS.ID.eq(id)).execute()
     }
 }

@@ -14,7 +14,7 @@ class FlowRegistry(private val userService: UserService, vararg flows: Flow) {
             .associateBy { it.supportedRole }
     }
 
-    fun getFlowByUserId(userId: Long): Flow {
+    fun getFlowByUserId(userId: Int): Flow {
         val suggestedRole = when (val userRole = userService.findUserRoleById(userId)) {
             null -> Role.GUEST
             org.ua.wohnung.bot.persistence.generated.enums.Role.USER -> {

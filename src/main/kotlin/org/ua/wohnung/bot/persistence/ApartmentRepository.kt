@@ -4,27 +4,60 @@ import org.jooq.DSLContext
 import org.ua.wohnung.bot.persistence.generated.Tables.APARTMENT
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
 import org.ua.wohnung.bot.persistence.generated.tables.records.ApartmentRecord
+import org.ua.wohnung.bot.sheets.PublicationStatus
+import org.ua.wohnung.bot.user.model.BundesLand
 
 class ApartmentRepository(private val dslContext: DSLContext) {
-    fun findById(apartmentId: Long): Apartment? =
+    fun findById(apartmentId: String): Apartment? =
         dslContext.fetchOne(APARTMENT, APARTMENT.ID.eq(apartmentId))?.map {
             it as ApartmentRecord
-            Apartment(
-                it.id,
-                it.city,
-                it.bundesland,
-                it.minTenants,
-                it.maxTenants,
-                it.description,
-                it.petsAllowed,
-                it.publicationstatus
-            )
+            it.toApartment()
         }
 
     fun save(apartment: Apartment) {
         val apartmentRecord = dslContext.fetchOne(APARTMENT, APARTMENT.ID.eq(apartment.id))
             ?: dslContext.newRecord(APARTMENT)
-        apartmentRecord.apply {
+        apartmentRecord.updateWith(apartment).store()
+    }
+
+    fun saveAll(apartments: Collection<Apartment>): Int {
+        return dslContext.batchMerge(
+            apartments.map { it.toRecord() }
+        ).execute().size
+    }
+
+    fun findByCriteria(criteria: ApartmentSearchCriteria): Collection<Apartment> {
+        val criterias = listOfNotNull(
+            criteria.bundesLand?.let { APARTMENT.BUNDESLAND.eq(it.germanName) },
+            criteria.numberOfTenants?.let { APARTMENT.MIN_TENANTS.le(it.toShort()) },
+            criteria.numberOfTenants?.let { APARTMENT.MAX_TENANTS.ge(it.toShort()) },
+            criteria.petsAllowed?.let { APARTMENT.PETS_ALLOWED.eq(it) },
+            criteria.publicationStatus?.let { APARTMENT.PUBLICATIONSTATUS.eq(it.name) }
+        )
+
+        return dslContext.fetch(APARTMENT, criterias).map {
+            it.toApartment()
+        }
+    }
+
+    fun count(): Int {
+        return dslContext.fetchCount(APARTMENT)
+    }
+
+    private fun ApartmentRecord.toApartment(): Apartment =
+        Apartment(
+            id,
+            city,
+            bundesland,
+            minTenants,
+            maxTenants,
+            description,
+            petsAllowed,
+            publicationstatus
+        )
+
+    private fun ApartmentRecord.updateWith(apartment: Apartment): ApartmentRecord =
+        this.apply {
             id = apartment.id
             city = apartment.city
             bundesland = apartment.bundesland
@@ -33,27 +66,24 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             description = apartment.description
             petsAllowed = apartment.petsAllowed
             publicationstatus = apartment.publicationstatus
-        }.store()
-    }
+        }
 
-    fun saveAll(apartments: Collection<Apartment>): Int {
-        return dslContext.batchMerge(
-            apartments.map {
-                ApartmentRecord(
-                    it.id,
-                    it.city,
-                    it.bundesland,
-                    it.minTenants,
-                    it.maxTenants,
-                    it.description,
-                    it.petsAllowed,
-                    it.publicationstatus
-                )
-            }
-        ).execute().size
-    }
-
-    fun count(): Int {
-        return dslContext.fetchCount(APARTMENT)
-    }
+    private fun Apartment.toRecord(): ApartmentRecord =
+        ApartmentRecord(
+            id,
+            city,
+            bundesland,
+            minTenants,
+            maxTenants,
+            description,
+            petsAllowed,
+            publicationstatus
+        )
 }
+
+data class ApartmentSearchCriteria(
+    var bundesLand: BundesLand? = null,
+    var numberOfTenants: Int? = null,
+    var petsAllowed: Boolean? = null,
+    var publicationStatus: PublicationStatus? = null
+)

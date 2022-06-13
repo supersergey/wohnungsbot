@@ -25,7 +25,7 @@ internal class SheetReaderTest {
     fun `should read data from a file`() {
         val mapper = RowMapper()
 
-        sheetReader.readRows(0, 5).mapNotNull { row ->
+        sheetReader.readRows().mapNotNull { row ->
             kotlin.runCatching {
                 mapper(row)
             }.getOrNull()

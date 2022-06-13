@@ -6,7 +6,6 @@ package org.ua.wohnung.bot.persistence.generated.tables;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row4;
@@ -48,12 +47,12 @@ public class Account extends TableImpl<AccountRecord> {
     /**
      * The column <code>main.account.id</code>.
      */
-    public final TableField<AccountRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<AccountRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>main.account.chat_id</code>.
      */
-    public final TableField<AccountRecord, Long> CHAT_ID = createField(DSL.name("chat_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<AccountRecord, Integer> CHAT_ID = createField(DSL.name("chat_id"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>main.account.username</code>.
@@ -104,11 +103,6 @@ public class Account extends TableImpl<AccountRecord> {
     }
 
     @Override
-    public Identity<AccountRecord, Long> getIdentity() {
-        return (Identity<AccountRecord, Long>) super.getIdentity();
-    }
-
-    @Override
     public UniqueKey<AccountRecord> getPrimaryKey() {
         return Keys.ACCOUNT_PKEY;
     }
@@ -144,7 +138,7 @@ public class Account extends TableImpl<AccountRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Long, Long, String, Role> fieldsRow() {
+    public Row4<Integer, Integer, String, Role> fieldsRow() {
         return (Row4) super.fieldsRow();
     }
 }

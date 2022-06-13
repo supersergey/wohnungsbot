@@ -13,14 +13,16 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.telegram.telegrambots.meta.generics.LongPollingBot
+import org.ua.wohnung.bot.apartment.ApartmentService
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.StepFactory
+import org.ua.wohnung.bot.flows.owner.OwnerFlow
+import org.ua.wohnung.bot.flows.owner.OwnerStartPostProcessor
 import org.ua.wohnung.bot.flows.processors.MessagePreProcessor
 import org.ua.wohnung.bot.flows.processors.ProcessorContainer
-import org.ua.wohnung.bot.flows.processors.RegisteredUserPreProcessor
-import org.ua.wohnung.bot.flows.processors.UpdateUserDetailsPostProcessor
-import org.ua.wohnung.bot.flows.processors.UserDetailsPreProcessor
 import org.ua.wohnung.bot.flows.registereduser.RegisteredUserFlow
+import org.ua.wohnung.bot.flows.userregistration.UpdateUserDetailsPostProcessor
+import org.ua.wohnung.bot.flows.userregistration.UserDetailsPreProcessor
 import org.ua.wohnung.bot.flows.userregistration.UserRegistrationFlow
 import org.ua.wohnung.bot.gateway.MessageFactory
 import org.ua.wohnung.bot.gateway.MessageGateway
@@ -34,6 +36,7 @@ import org.ua.wohnung.bot.security.Secrets.JDBC_PASSWORD
 import org.ua.wohnung.bot.security.Secrets.JDBC_URL
 import org.ua.wohnung.bot.security.Secrets.JDBC_USER
 import org.ua.wohnung.bot.sheets.GoogleCredentialsProvider
+import org.ua.wohnung.bot.sheets.RowMapper
 import org.ua.wohnung.bot.sheets.SheetProperties
 import org.ua.wohnung.bot.sheets.SheetReader
 import org.ua.wohnung.bot.user.UserService
@@ -50,15 +53,30 @@ val persistenceModule = module {
     single { AccountRepository(get()) }
     single { ApartmentRepository(get()) }
     single { UserDetailsRepository(get()) }
+}
+
+val servicesModule = module {
     single { UserService(get(), get(), get()) }
+    single { ApartmentService(get(), get(), get(), get()) }
 }
 
 val userFlowModule = module {
     single { UserRegistrationFlow(get()) }
+}
+
+val registeredUserFlow = module {
+    single { RegisteredUserFlow(get()) }
+}
+
+val ownerModule = module {
+    single { OwnerFlow(get()) }
+}
+
+val processorsModule = module {
     single {
         ProcessorContainer.PreProcessors(
             UserDetailsPreProcessor.BundesLandSelectionPreProcessor(get()),
-            RegisteredUserPreProcessor.UserRegistrationFlowConditionsRejectedPreProcessor(get())
+            UserDetailsPreProcessor.UserRegistrationFlowConditionsRejectedPreProcessor(get())
         )
     }
     single {
@@ -67,26 +85,34 @@ val userFlowModule = module {
             UpdateUserDetailsPostProcessor.FamilyCountPostProcessorUpdate(get()),
             UpdateUserDetailsPostProcessor.FirstAndLastNamePostProcessorUpdate(get()),
             UpdateUserDetailsPostProcessor.PhoneNumberPostProcessorUpdate(get()),
-            UpdateUserDetailsPostProcessor.PetsPostProcessorUpdate(get())
+            UpdateUserDetailsPostProcessor.PetsPostProcessorUpdate(get()),
+
+            OwnerStartPostProcessor(get())
         )
     }
     single {
         ProcessorContainer.MessagePreProcessors(
-            MessagePreProcessor.RegisteredUserConversationStartPreProcessor(get())
+            MessagePreProcessor.RegisteredUserConversationStart(get()),
+            MessagePreProcessor.RegisteredUserListApartments(get()),
+            MessagePreProcessor.OwnerStart(get()),
+            MessagePreProcessor.OwnerApartmentsUpdated(get())
         )
     }
 }
 
-val registeredUserFlow = module {
-    single { RegisteredUserFlow(get()) }
-}
-
 val messageGatewayModule = module {
     singleOf(::Session)
-    single() { MessageSource(get(), Path.of("flows", "newUserFlow.yml")) }
+    single { MessageSource(get(), Path.of("flows", "newUserFlow.yml")) }
     single { StepFactory(get(), get(), get()) }
     singleOf(::MessageFactory)
-    single { FlowRegistry(get(), get<UserRegistrationFlow>(), get<RegisteredUserFlow>()) }
+    single {
+        FlowRegistry(
+            get(),
+            get<UserRegistrationFlow>(),
+            get<RegisteredUserFlow>(),
+            get<OwnerFlow>()
+        )
+    }
     single<LongPollingBot>(named("WohnungsBot")) {
         MessageGateway(
             getProperty(BOT_API_SECRET.setting),
@@ -102,6 +128,7 @@ val sheetReaderModule = module {
     single { SheetProperties(get(), Path.of("sheets", "sheet-properties.yml")) }
     singleOf(::GoogleCredentialsProvider)
     single { SheetReader(get(), get()) }
+    singleOf(::RowMapper)
 }
 
 private fun Module.jooq() = single { DSL.using(get<DataSource>(), SQLDialect.POSTGRES) }

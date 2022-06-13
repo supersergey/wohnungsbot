@@ -15,8 +15,8 @@ public class ApartmentAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long accountId;
-    private Long apartmentId;
+    private Integer accountId;
+    private String  apartmentId;
 
     public ApartmentAccount() {}
 
@@ -26,8 +26,8 @@ public class ApartmentAccount implements Serializable {
     }
 
     public ApartmentAccount(
-        Long accountId,
-        Long apartmentId
+        Integer accountId,
+        String  apartmentId
     ) {
         this.accountId = accountId;
         this.apartmentId = apartmentId;
@@ -36,28 +36,28 @@ public class ApartmentAccount implements Serializable {
     /**
      * Getter for <code>main.apartment_account.account_id</code>.
      */
-    public Long getAccountId() {
+    public Integer getAccountId() {
         return this.accountId;
     }
 
     /**
      * Setter for <code>main.apartment_account.account_id</code>.
      */
-    public void setAccountId(Long accountId) {
+    public void setAccountId(Integer accountId) {
         this.accountId = accountId;
     }
 
     /**
      * Getter for <code>main.apartment_account.apartment_id</code>.
      */
-    public Long getApartmentId() {
+    public String getApartmentId() {
         return this.apartmentId;
     }
 
     /**
      * Setter for <code>main.apartment_account.apartment_id</code>.
      */
-    public void setApartmentId(Long apartmentId) {
+    public void setApartmentId(String apartmentId) {
         this.apartmentId = apartmentId;
     }
 

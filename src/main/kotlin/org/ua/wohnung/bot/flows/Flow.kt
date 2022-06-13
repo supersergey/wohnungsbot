@@ -13,9 +13,12 @@ abstract class Flow {
 
     fun current(flowStep: FlowStep): Step = internalMap[flowStep] ?: first()
 
-    fun next(currentStep: FlowStep, userInput: String): Step? {
+    fun next(currentStep: FlowStep?, userInput: String): Step? {
+        if (currentStep == null) {
+            return first
+        }
         return internalMap[currentStep]?.let {
-            val next = if (it.reply is Reply.Inline) {
+            val next = if (it.reply is Reply.WithButtons) {
                 it.reply.options[userInput]
             } else {
                 it.reply.options[Reply.ANY_ANSWER_ACCEPTED]

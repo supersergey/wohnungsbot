@@ -1,7 +1,8 @@
-package org.ua.wohnung.bot.flows.processors
+package org.ua.wohnung.bot.flows.userregistration
 
 import org.ua.wohnung.bot.exception.UserInputValidationException
 import org.ua.wohnung.bot.flows.FlowStep
+import org.ua.wohnung.bot.flows.processors.PostProcessor
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 import org.ua.wohnung.bot.user.UserService
@@ -35,7 +36,7 @@ sealed class UpdateUserDetailsPostProcessor(private val userService: UserService
         override val stepId = FlowStep.FIRSTNAME_AND_LASTNAME
 
         override fun doInvoke(userDetails: UserDetails, input: String) {
-            if (input.length in (5..50)) {
+            if (input.length in (3..50)) {
                 userDetails.firstLastName = input
             } else
                 throw UserInputValidationException.InvalidUserName(input)
