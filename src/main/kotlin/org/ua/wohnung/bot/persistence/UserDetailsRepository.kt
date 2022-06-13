@@ -4,7 +4,6 @@ import org.jooq.DSLContext
 import org.ua.wohnung.bot.persistence.generated.Tables.ACCOUNT
 import org.ua.wohnung.bot.persistence.generated.Tables.USER_DETAILS
 import org.ua.wohnung.bot.persistence.generated.enums.Role
-import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 import org.ua.wohnung.bot.persistence.generated.tables.records.UserDetailsRecord
 

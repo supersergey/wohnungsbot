@@ -2,7 +2,6 @@ package org.ua.wohnung.bot.flows.userregistration
 
 import org.ua.wohnung.bot.flows.Flow
 import org.ua.wohnung.bot.flows.FlowStep
-import org.ua.wohnung.bot.flows.Reply
 import org.ua.wohnung.bot.flows.ReplyOption
 import org.ua.wohnung.bot.flows.StepFactory
 import org.ua.wohnung.bot.user.model.BundesLand

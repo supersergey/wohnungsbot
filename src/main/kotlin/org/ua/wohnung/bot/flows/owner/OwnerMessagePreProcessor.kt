@@ -1,9 +1,7 @@
 package org.ua.wohnung.bot.flows.owner
 
 import org.ua.wohnung.bot.apartment.ApartmentService
-import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.exception.ServiceException.UserNotFoundException
-import org.ua.wohnung.bot.exception.UserInputValidationException
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.FlowStep
 import org.ua.wohnung.bot.flows.processors.MessageMeta
@@ -58,7 +56,7 @@ sealed class OwnerMessagePreProcessor : MessagePreProcessor() {
                     chatId: ${it.chatId}
                     telegramName: ${it.userName}
                     userName: ${it.firstAndLastName}
-                """.trimIndent()
+                    """.trimIndent()
                 }.map { MessageMeta(it) }
         }
     }

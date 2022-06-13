@@ -30,10 +30,11 @@ sealed class Step(
 
 sealed class Reply(val options: Map<String, ReplyOption>) {
     class WithButtons(vararg options: ReplyOption) : Reply(options.associateBy { it.command })
-    class WithInlineButtons(vararg options: ReplyOption): Reply(options.associateBy { it.command })
-    class MultiText(vararg options: ReplyOption)
-        : Reply(options.associateBy { it.command }
-    )
+    class WithInlineButtons(vararg options: ReplyOption) : Reply(options.associateBy { it.command })
+    class MultiText(vararg options: ReplyOption) :
+        Reply(
+            options.associateBy { it.command }
+        )
     class SingleText(nextStep: FlowStep?) : Reply(mapOf(ANY_ANSWER_ACCEPTED to ReplyOption(ANY_ANSWER_ACCEPTED, nextStep)))
 
     companion object {

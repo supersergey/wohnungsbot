@@ -4,8 +4,6 @@ import mu.KotlinLogging
 import org.ua.wohnung.bot.persistence.ApartmentRepository
 import org.ua.wohnung.bot.persistence.ApartmentSearchCriteria
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
-import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
-import org.ua.wohnung.bot.sheets.PublicationStatus
 import org.ua.wohnung.bot.sheets.RowMapper
 import org.ua.wohnung.bot.sheets.SheetReader
 import org.ua.wohnung.bot.user.UserService
@@ -18,7 +16,7 @@ class ApartmentService(
     private val rowMapper: RowMapper
 ) {
 
-    private val logger = KotlinLogging.logger {  }
+    private val logger = KotlinLogging.logger { }
 
     fun update() {
         val apartments = sheetReader.readRows().mapNotNull(rowMapper)

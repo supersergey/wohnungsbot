@@ -2,7 +2,6 @@ package org.ua.wohnung.bot.sheets
 
 import mu.KotlinLogging
 import org.ua.wohnung.bot.exception.SheetValidationException
-import org.ua.wohnung.bot.exception.UserInputValidationException
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
 import org.ua.wohnung.bot.user.model.BundesLand
 
@@ -10,7 +9,7 @@ enum class PublicationStatus { ACTIVE, NOT_ACTIVE }
 
 class RowMapper : (List<String>) -> Apartment? {
 
-    private val logger = KotlinLogging.logger {  }
+    private val logger = KotlinLogging.logger { }
 
     override fun invoke(source: List<String>): Apartment? {
         return kotlin.runCatching {

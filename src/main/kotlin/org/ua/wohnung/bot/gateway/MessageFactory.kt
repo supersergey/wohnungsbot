@@ -2,17 +2,14 @@ package org.ua.wohnung.bot.gateway
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
 import org.ua.wohnung.bot.flows.Reply
 import org.ua.wohnung.bot.flows.Step
-import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.MessageMeta
-import org.ua.wohnung.bot.flows.processors.ProcessorContainer
-import org.ua.wohnung.bot.flows.processors.ProcessorContainer.*
+import org.ua.wohnung.bot.flows.processors.ProcessorContainer.MessagePreProcessors
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 
 class MessageFactory(private val messagePreProcessors: MessagePreProcessors) {
@@ -70,10 +67,11 @@ class MessageFactory(private val messagePreProcessors: MessagePreProcessors) {
         buttonsPerRow: Int
     ): List<List<InlineKeyboardButton>> {
         return this.options
-            .map { InlineKeyboardButton.builder()
-                .text(it.key.format(meta.id))
-                .callbackData(meta.id)
-                .build()
+            .map {
+                InlineKeyboardButton.builder()
+                    .text(it.key.format(meta.id))
+                    .callbackData(meta.id)
+                    .build()
             }
             .chunked(buttonsPerRow)
     }

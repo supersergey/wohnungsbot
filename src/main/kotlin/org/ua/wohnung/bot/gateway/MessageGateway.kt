@@ -6,7 +6,6 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.Step
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.ProcessorContainer
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 
 class MessageGateway(

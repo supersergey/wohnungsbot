@@ -6,7 +6,7 @@ import org.ua.wohnung.bot.flows.ReplyOption
 import org.ua.wohnung.bot.flows.StepFactory
 import org.ua.wohnung.bot.user.model.Role
 
-class AdminFlow(private val stepFactory: StepFactory): Flow() {
+class AdminFlow(private val stepFactory: StepFactory) : Flow() {
     override val supportedRole: Role = Role.ADMIN
 
     override fun initialize() {

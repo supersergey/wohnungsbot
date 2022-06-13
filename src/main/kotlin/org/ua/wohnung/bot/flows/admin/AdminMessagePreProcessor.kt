@@ -1,7 +1,6 @@
 package org.ua.wohnung.bot.flows.admin
 
 import org.ua.wohnung.bot.exception.ServiceException
-import org.ua.wohnung.bot.exception.UserInputValidationException
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.FlowStep
 import org.ua.wohnung.bot.flows.processors.MessageMeta

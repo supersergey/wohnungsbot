@@ -10,9 +10,9 @@ import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.user.UserService
 
-sealed class OwnerPostProcessor(private val userService: UserService): PostProcessor {
+sealed class OwnerPostProcessor(private val userService: UserService) : PostProcessor {
 
-    protected val logger = KotlinLogging.logger {  }
+    protected val logger = KotlinLogging.logger { }
 
     protected fun resolveUserId(input: String): Int {
         return runCatching { input.toInt() }.getOrElse {
@@ -29,7 +29,8 @@ sealed class OwnerPostProcessor(private val userService: UserService): PostProce
 
     class AddAdmin(
         private val accountService: AccountService,
-        userService: UserService): OwnerPostProcessor(userService) {
+        userService: UserService
+    ) : OwnerPostProcessor(userService) {
 
         override val stepId = FlowStep.OWNER_ADD_ADMIN
         override fun invoke(account: Account, input: String) {
@@ -42,7 +43,8 @@ sealed class OwnerPostProcessor(private val userService: UserService): PostProce
 
     class RemoveAdmin(
         private val accountService: AccountService,
-        val userService: UserService): OwnerPostProcessor(userService) {
+        val userService: UserService
+    ) : OwnerPostProcessor(userService) {
 
         override val stepId = FlowStep.OWNER_REMOVE_ADMIN
 
