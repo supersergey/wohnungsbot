@@ -17,6 +17,8 @@ import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.apartment.ApartmentService
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.StepFactory
+import org.ua.wohnung.bot.flows.admin.AdminFlow
+import org.ua.wohnung.bot.flows.admin.AdminMessagePreProcessor
 import org.ua.wohnung.bot.flows.owner.OwnerFlow
 import org.ua.wohnung.bot.flows.owner.OwnerMessagePreProcessor
 import org.ua.wohnung.bot.flows.owner.OwnerPostProcessor
@@ -71,6 +73,10 @@ val registeredUserFlow = module {
     single { RegisteredUserFlow(get()) }
 }
 
+val adminModule = module {
+    single { AdminFlow(get()) }
+}
+
 val ownerModule = module {
     single { OwnerFlow(get()) }
 }
@@ -100,7 +106,9 @@ val processorsModule = module {
             MessagePreProcessor.RegisteredUserListApartments(get()),
             OwnerMessagePreProcessor.OwnerStart(get(), get()),
             OwnerMessagePreProcessor.OwnerApartmentsUpdated(get()),
-            OwnerMessagePreProcessor.OwnerListAdmins(get())
+            OwnerMessagePreProcessor.OwnerListAdmins(get()),
+
+            AdminMessagePreProcessor.AdminStart(get(), get())
         )
     }
 }
@@ -114,8 +122,9 @@ val messageGatewayModule = module {
         FlowRegistry(
             get(),
             get<UserRegistrationFlow>(),
-            get<RegisteredUserFlow>(),
-            get<OwnerFlow>()
+            get<OwnerFlow>(),
+            get<AdminFlow>(),
+            get<RegisteredUserFlow>()
         )
     }
     single<LongPollingBot>(named("WohnungsBot")) {

@@ -23,7 +23,7 @@ class OwnerFlow(private val stepFactory: StepFactory) : Flow() {
         stepFactory.singleReply(FlowStep.OWNER_ADD_ADMIN, FlowStep.OWNER_ADD_ADMIN_DONE).addSingle()
         stepFactory.singleReply(FlowStep.OWNER_REMOVE_ADMIN, FlowStep.OWNER_ADD_ADMIN_DONE).addSingle()
         stepFactory.termination(
-            FlowStep.OWNER_APARTMENTS_LOADED
+            FlowStep.OWNER_ADD_ADMIN_DONE
         ).addSingle()
     }
 }

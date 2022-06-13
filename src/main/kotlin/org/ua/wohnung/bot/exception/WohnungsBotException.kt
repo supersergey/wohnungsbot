@@ -6,7 +6,7 @@ abstract class WohnungsBotException(message: String, cause: Throwable? = null) :
 
 sealed class ServiceException(message: String, cause: Throwable? = null) : WohnungsBotException(message, cause) {
     class UserNotFoundException(val userId: Int) : ServiceException("User not found: $userId")
-    class AccessViolationException(val userId: Int, actualRole: Role?, expectedRole: Role)
+    class AccessViolationException(val userId: Int, actualRole: Role?, vararg expectedRole: Role)
         : ServiceException("User $userId should have $expectedRole, but actual was $actualRole. Operation denied")
 }
 

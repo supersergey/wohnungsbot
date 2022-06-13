@@ -6,6 +6,7 @@ import org.koin.fileProperties
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
+import org.ua.wohnung.bot.configuration.adminModule
 import org.ua.wohnung.bot.configuration.commonModule
 import org.ua.wohnung.bot.configuration.messageGatewayModule
 import org.ua.wohnung.bot.configuration.ownerModule
@@ -25,6 +26,7 @@ fun main() {
             persistenceModule,
             userFlowModule,
             registeredUserFlow,
+            adminModule,
             ownerModule,
             processorsModule,
             messageGatewayModule,
