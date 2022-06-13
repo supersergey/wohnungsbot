@@ -11,5 +11,7 @@ create table apartment(
 
 create table apartment_account(
     account_id integer not null references account(id),
-    apartment_id varchar(128) not null references apartment(id)
+    apartment_id varchar(128) not null references apartment(id),
+    apply_ts timestamptz not null,
+    PRIMARY KEY(account_id, apartment_id)
 );

@@ -5,6 +5,7 @@ package org.ua.wohnung.bot.persistence.generated.tables.pojos;
 
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 
 /**
@@ -15,22 +16,26 @@ public class ApartmentAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer accountId;
-    private String  apartmentId;
+    private Integer        accountId;
+    private String         apartmentId;
+    private OffsetDateTime applyTs;
 
     public ApartmentAccount() {}
 
     public ApartmentAccount(ApartmentAccount value) {
         this.accountId = value.accountId;
         this.apartmentId = value.apartmentId;
+        this.applyTs = value.applyTs;
     }
 
     public ApartmentAccount(
-        Integer accountId,
-        String  apartmentId
+        Integer        accountId,
+        String         apartmentId,
+        OffsetDateTime applyTs
     ) {
         this.accountId = accountId;
         this.apartmentId = apartmentId;
+        this.applyTs = applyTs;
     }
 
     /**
@@ -61,12 +66,27 @@ public class ApartmentAccount implements Serializable {
         this.apartmentId = apartmentId;
     }
 
+    /**
+     * Getter for <code>main.apartment_account.apply_ts</code>.
+     */
+    public OffsetDateTime getApplyTs() {
+        return this.applyTs;
+    }
+
+    /**
+     * Setter for <code>main.apartment_account.apply_ts</code>.
+     */
+    public void setApplyTs(OffsetDateTime applyTs) {
+        this.applyTs = applyTs;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ApartmentAccount (");
 
         sb.append(accountId);
         sb.append(", ").append(apartmentId);
+        sb.append(", ").append(applyTs);
 
         sb.append(")");
         return sb.toString();

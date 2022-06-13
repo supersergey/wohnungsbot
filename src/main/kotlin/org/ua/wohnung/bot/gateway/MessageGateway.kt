@@ -3,6 +3,7 @@ package org.ua.wohnung.bot.gateway
 import mu.KotlinLogging
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
+import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.Step
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
@@ -57,21 +58,25 @@ class MessageGateway(
     }
 
     private fun Update.isProcessable(): Boolean =
-        hasMessage() && message.hasText() && message.isUserMessage
+        hasCallbackQuery() || (hasMessage() && message.hasText() && message.isUserMessage)
 
     private fun Update.metadata(): ChatMetadata =
-        ChatMetadata(
-            userId = message.from.id.toInt(),
-            username = message.chat.userName,
-            chatId = message.chatId.toInt(),
-            input = message.text
-        )
+        if (hasMessage()) {
+            ChatMetadata(
+                userId = message.from.id.toInt(),
+                username = message.chat.userName,
+                chatId = message.chatId.toInt(),
+                input = message.text ?: this.callbackQuery.data
+            )
+        } else if (hasCallbackQuery()) {
+            ChatMetadata(
+                userId = callbackQuery.from.id.toInt(),
+                username = callbackQuery.from.userName,
+                chatId = callbackQuery.message.chatId.toInt(),
+                input = callbackQuery.data
+            )
+        } else throw ServiceException.UnreadableMessage(updateId)
 
-    private fun ChatMetadata.toAccount(): Account {
-        val acc = Account()
-        acc.id = this.userId
-        acc.chatId = this.chatId
-        acc.username = this.username
-        return acc
-    }
+    private fun ChatMetadata.toAccount(): Account =
+        Account(userId, chatId, username, null)
 }

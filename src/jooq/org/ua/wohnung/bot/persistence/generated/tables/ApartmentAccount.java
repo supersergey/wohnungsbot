@@ -4,6 +4,7 @@
 package org.ua.wohnung.bot.persistence.generated.tables;
 
 
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,11 +12,12 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row2;
+import org.jooq.Row3;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -55,6 +57,11 @@ public class ApartmentAccount extends TableImpl<ApartmentAccountRecord> {
      */
     public final TableField<ApartmentAccountRecord, String> APARTMENT_ID = createField(DSL.name("apartment_id"), SQLDataType.VARCHAR(128).nullable(false), this, "");
 
+    /**
+     * The column <code>main.apartment_account.apply_ts</code>.
+     */
+    public final TableField<ApartmentAccountRecord, OffsetDateTime> APPLY_TS = createField(DSL.name("apply_ts"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+
     private ApartmentAccount(Name alias, Table<ApartmentAccountRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -91,6 +98,11 @@ public class ApartmentAccount extends TableImpl<ApartmentAccountRecord> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : Main.MAIN;
+    }
+
+    @Override
+    public UniqueKey<ApartmentAccountRecord> getPrimaryKey() {
+        return Keys.APARTMENT_ACCOUNT_PKEY;
     }
 
     @Override
@@ -148,11 +160,11 @@ public class ApartmentAccount extends TableImpl<ApartmentAccountRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row2 type methods
+    // Row3 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row2<Integer, String> fieldsRow() {
-        return (Row2) super.fieldsRow();
+    public Row3<Integer, String, OffsetDateTime> fieldsRow() {
+        return (Row3) super.fieldsRow();
     }
 }
