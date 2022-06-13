@@ -1,7 +1,7 @@
 package org.ua.wohnung.bot.user
 
 import org.jooq.DSLContext
-import org.ua.wohnung.bot.exception.ServiceException.UserNotFoundException
+import org.ua.wohnung.bot.exception.ServiceException.UserNotFound
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import org.ua.wohnung.bot.persistence.UserInfo
@@ -35,7 +35,7 @@ class UserService(
     fun updateUserDetails(userDetails: UserDetails) {
         dslContext.transaction { _ ->
             accountRepository.findById(userDetails.id)
-                ?: throw UserNotFoundException(userDetails.id)
+                ?: throw UserNotFound(userDetails.id)
             userDetailsRepository.save(userDetails)
         }
     }

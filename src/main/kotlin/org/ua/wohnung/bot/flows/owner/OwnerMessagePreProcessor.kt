@@ -1,7 +1,7 @@
 package org.ua.wohnung.bot.flows.owner
 
 import org.ua.wohnung.bot.apartment.ApartmentService
-import org.ua.wohnung.bot.exception.ServiceException.UserNotFoundException
+import org.ua.wohnung.bot.exception.ServiceException.UserNotFound
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.FlowStep
 import org.ua.wohnung.bot.flows.processors.MessageMeta
@@ -17,7 +17,7 @@ sealed class OwnerMessagePreProcessor : MessagePreProcessor() {
 
         override fun invoke(account: Account, input: String): List<MessageMeta> {
             val user = userService.findById(account.id)
-                ?: throw UserNotFoundException(account.id)
+                ?: throw UserNotFound(account.id)
             val step = flowRegistry.getFlowByUserId(account.id).current(stepId)
             return listOf(
                 MessageMeta(

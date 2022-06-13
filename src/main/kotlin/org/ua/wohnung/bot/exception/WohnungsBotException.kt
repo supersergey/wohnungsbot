@@ -5,8 +5,9 @@ import org.ua.wohnung.bot.persistence.generated.enums.Role
 abstract class WohnungsBotException(message: String, cause: Throwable? = null) : Throwable(message, cause)
 
 sealed class ServiceException(message: String, cause: Throwable? = null) : WohnungsBotException(message, cause) {
-    class UserNotFoundException(val userId: Int) : ServiceException("User not found: $userId")
-    class AccessViolationException(val userId: Int, actualRole: Role?, vararg expectedRole: Role) :
+    class UnreadableMessage(updateId: Int) : ServiceException("Message unreadable, $updateId")
+    class UserNotFound(val userId: Int) : ServiceException("User not found: $userId")
+    class AccessViolation(val userId: Int, actualRole: Role?, vararg expectedRole: Role) :
         ServiceException("User $userId should have $expectedRole, but actual was $actualRole. Operation denied")
 }
 

@@ -14,7 +14,7 @@ sealed class AdminMessagePreProcessor(private val userService: UserService) : Me
     protected fun validateOwnerPermission(userId: Int) { // todo code duplication
         val currentUserRole = userService.findUserRoleById(userId)
         if (currentUserRole != Role.ADMIN && currentUserRole != Role.OWNER) {
-            throw ServiceException.AccessViolationException(userId, currentUserRole, Role.ADMIN, Role.OWNER)
+            throw ServiceException.AccessViolation(userId, currentUserRole, Role.ADMIN, Role.OWNER)
         }
     }
 
@@ -26,7 +26,7 @@ sealed class AdminMessagePreProcessor(private val userService: UserService) : Me
             validateOwnerPermission(account.id)
             val step = flowRegistry.getFlowByUserId(account.id).current(stepId)
             val user = userService.findById(account.id)
-                ?: throw ServiceException.UserNotFoundException(account.id)
+                ?: throw ServiceException.UserNotFound(account.id)
             return listOf(
                 MessageMeta(
                     input.format(user.firstLastName),

@@ -23,7 +23,7 @@ sealed class OwnerPostProcessor(private val userService: UserService) : PostProc
     protected fun validateOwnerPermission(userId: Int) {
         val currentUserRole = userService.findUserRoleById(userId)
         if (currentUserRole != Role.OWNER) {
-            throw ServiceException.AccessViolationException(userId, currentUserRole, Role.OWNER)
+            throw ServiceException.AccessViolation(userId, currentUserRole, Role.OWNER)
         }
     }
 
