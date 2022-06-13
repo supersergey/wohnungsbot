@@ -1,9 +1,12 @@
 package org.ua.wohnung.bot.flows.owner
 
 import org.ua.wohnung.bot.apartment.ApartmentService
+import org.ua.wohnung.bot.exception.ServiceException
+import org.ua.wohnung.bot.exception.ServiceException.UserNotFoundException
 import org.ua.wohnung.bot.exception.UserInputValidationException
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.FlowStep
+import org.ua.wohnung.bot.flows.processors.MessageMeta
 import org.ua.wohnung.bot.flows.processors.MessagePreProcessor
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
@@ -14,14 +17,17 @@ sealed class OwnerMessagePreProcessor : MessagePreProcessor() {
         OwnerMessagePreProcessor() {
         override val stepId = FlowStep.OWNER_START
 
-        override fun invoke(account: Account, input: String): List<String> {
+        override fun invoke(account: Account, input: String): List<MessageMeta> {
             val user = userService.findById(account.id)
+                ?: throw UserNotFoundException(account.id)
             val step = flowRegistry.getFlowByUserId(account.id).current(stepId)
             return listOf(
-                input.format(user?.firstLastName ?: "Невідомий"),
-                step.reply.options
-                    .map { "${it.value.command} ${it.value.description} "}
-                    .joinToString("\n")
+                MessageMeta(
+                    input.format(user.firstLastName),
+                    step.reply.options
+                        .map { "${it.value.command} ${it.value.description} " }
+                        .joinToString("\n")
+                )
             )
         }
     }
@@ -29,11 +35,11 @@ sealed class OwnerMessagePreProcessor : MessagePreProcessor() {
     class OwnerApartmentsUpdated(private val apartmentService: ApartmentService) : OwnerMessagePreProcessor() {
         override val stepId = FlowStep.OWNER_APARTMENTS_LOADED
 
-        override fun invoke(account: Account, input: String): List<String> {
+        override fun invoke(account: Account, input: String): List<MessageMeta> {
             apartmentService.update()
             val count = apartmentService.count()
             return listOf(
-                input.format(count)
+                MessageMeta(input.format(count))
             )
         }
     }
@@ -41,10 +47,10 @@ sealed class OwnerMessagePreProcessor : MessagePreProcessor() {
     class OwnerListAdmins(private val userService: UserService) : OwnerMessagePreProcessor() {
         override val stepId: FlowStep = FlowStep.OWNER_LIST_ADMINS
 
-        override fun invoke(account: Account, input: String): List<String> {
+        override fun invoke(account: Account, input: String): List<MessageMeta> {
             val admins = userService.findByRole(Role.ADMIN)
             return if (admins.isEmpty()) {
-                listOf("Користувачі з ролью ${Role.ADMIN} не знайдені")
+                listOf(MessageMeta("Користувачі з ролью ${Role.ADMIN} не знайдені"))
             } else
                 admins.map {
                     """
@@ -53,7 +59,7 @@ sealed class OwnerMessagePreProcessor : MessagePreProcessor() {
                     telegramName: ${it.userName}
                     userName: ${it.firstAndLastName}
                 """.trimIndent()
-                }
+                }.map { MessageMeta(it) }
         }
     }
 }

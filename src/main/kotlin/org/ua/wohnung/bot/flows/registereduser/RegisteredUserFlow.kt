@@ -17,7 +17,12 @@ class RegisteredUserFlow(private val stepFactory: StepFactory) : Flow() {
             ReplyOption("Видаліть мої дані", FlowStep.CONVERSATION_FINISH_REMOVAL)
         )
             .addSingle()
-        stepFactory.termination(FlowStep.REGISTERED_USER_LIST_APARTMENTS).addSingle()
+        stepFactory.multipleInlineButtons(
+            id = FlowStep.REGISTERED_USER_LIST_APARTMENTS,
+            ReplyOption("Відгукнутись на житло %s", FlowStep.REGISTERED_USER_APPLY_FOR_APARTMENT)
+        ).addSingle()
+        stepFactory.termination(FlowStep.REGISTERED_USER_REQUEST_RECEIVED).addSingle()
+        stepFactory.termination(FlowStep.REGISTERED_USER_REQUEST_DECLINED).addSingle()
         stepFactory.termination(FlowStep.CONVERSATION_FINISH_REMOVAL).addSingle()
     }
 }

@@ -132,7 +132,6 @@ val messageGatewayModule = module {
             getProperty(BOT_API_SECRET.setting),
             get(),
             get(),
-            get(),
             get()
         )
     }

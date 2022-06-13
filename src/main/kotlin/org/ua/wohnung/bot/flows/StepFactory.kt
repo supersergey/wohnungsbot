@@ -30,6 +30,7 @@ sealed class Step(
 
 sealed class Reply(val options: Map<String, ReplyOption>) {
     class WithButtons(vararg options: ReplyOption) : Reply(options.associateBy { it.command })
+    class WithInlineButtons(vararg options: ReplyOption): Reply(options.associateBy { it.command })
     class MultiText(vararg options: ReplyOption)
         : Reply(options.associateBy { it.command }
     )
@@ -56,6 +57,12 @@ class StepFactory(
         vararg replies: ReplyOption
     ): Step.General =
         Step.General(id, messageSource[id], Reply.WithButtons(*replies), preProcessors[id], postProcessors[id])
+
+    fun multipleInlineButtons(
+        id: FlowStep,
+        vararg replies: ReplyOption
+    ): Step.General =
+        Step.General(id, messageSource[id], Reply.WithInlineButtons(*replies), preProcessors[id], postProcessors[id])
 
     fun multipleTextOptions(
         id: FlowStep,

@@ -13,8 +13,7 @@ class MessageGateway(
     private val secret: String,
     private val flowRegistry: FlowRegistry,
     private val session: Session,
-    private val messageFactory: MessageFactory,
-    private val messagePreProcessors: ProcessorContainer.MessagePreProcessors
+    private val messageFactory: MessageFactory
 ) : TelegramLongPollingBot() {
     private val logger = KotlinLogging.logger {}
 
@@ -38,21 +37,14 @@ class MessageGateway(
 
                 nextStep.preProcessor.invoke(chatMetadata.toAccount(), chatMetadata.input)
 
-                val sendMessage = messageFactory.newStepMessage(chatMetadata.chatId, nextStep)
-                messagePreProcessors[nextStep.id]
-                    .invoke(
-                        chatMetadata.toAccount(),
-                        sendMessage.text
-                    ).forEach {
-                        sendMessage.text = it
-                        execute(sendMessage)
-                    }
+                val sendMessages = messageFactory.get(chatMetadata.toAccount(), nextStep)
+                sendMessages.forEach { execute(it) }
                 session.updateState(chatMetadata.chatId, nextStep.id)
             }.onFailure {
                 println(it.stackTraceToString())
                 logger.error { it }
                 val errorMessage = messageFactory
-                    .newCustomMessage(chatMetadata.chatId, "Невірно введені дані, ${it.message}")
+                    .getCustom(chatMetadata.chatId, "Невірно введені дані, ${it.message}")
                 execute(errorMessage)
             }
         }
