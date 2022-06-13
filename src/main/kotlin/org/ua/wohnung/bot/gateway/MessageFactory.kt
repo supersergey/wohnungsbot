@@ -2,7 +2,11 @@ package org.ua.wohnung.bot.gateway
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
 import org.ua.wohnung.bot.flows.Reply
 import org.ua.wohnung.bot.flows.Step
 
@@ -11,10 +15,12 @@ class MessageFactory {
         this.chatId = chatIdentifier.toString()
         text = step.caption
         if (step.reply is Reply.WithButtons) {
-            replyMarkup = InlineKeyboardMarkup().apply {
-//                oneTimeKeyboard = true
+            replyMarkup = ReplyKeyboardMarkup().apply {
+                oneTimeKeyboard = true
                 keyboard = (step.reply as Reply.WithButtons).keyboardRows(3)
             }
+        } else {
+            replyMarkup = null
         }
     }
 
@@ -23,16 +29,11 @@ class MessageFactory {
         text = message
     }
 
-    private fun Reply.WithButtons.keyboardRows(buttonsPerRow: Int): List<List<InlineKeyboardButton>> {
+    private fun Reply.WithButtons.keyboardRows(buttonsPerRow: Int): List<KeyboardRow> {
         return options
             .map { it.key }
-            .map {
-                InlineKeyboardButton.builder()
-                    .callbackData("abc")
-                    .text(it)
-                    .build()
-            }
+            .map { KeyboardButton(it) }
             .chunked(buttonsPerRow)
-
+            .map { KeyboardRow(it) }
     }
 }

@@ -18,12 +18,12 @@ abstract class Flow {
             return first
         }
         return internalMap[currentStep]?.let {
-            val next = if (it.reply is Reply.WithButtons) {
-                it.reply.options[userInput]
-            } else {
-                it.reply.options[Reply.ANY_ANSWER_ACCEPTED]
+            val next = when (it.reply) {
+                is Reply.WithButtons -> it.reply.options[userInput]
+                is Reply.MultiText -> it.reply.options[userInput]
+                else -> it.reply.options[Reply.ANY_ANSWER_ACCEPTED]
             }
-            internalMap[next]
+            internalMap[next?.flowStep]
         }
     }
 
@@ -40,5 +40,6 @@ abstract class Flow {
         add(this)
     }
 
-    protected fun List<String>.allTo(next: FlowStep) = map { it to next }.toTypedArray()
+    protected fun List<String>.allTo(next: FlowStep): Array<ReplyOption> =
+        map { ReplyOption(it, next) }.toTypedArray()
 }

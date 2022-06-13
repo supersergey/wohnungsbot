@@ -27,4 +27,10 @@ class AccountRepository(private val dslContext: DSLContext) {
     fun deleteById(userId: Int) {
         dslContext.fetchOne(ACCOUNT, ACCOUNT.ID.eq(userId))?.delete()
     }
+
+    fun updateUserRole(id: Int, role: Role) {
+        val accountRecord = dslContext.fetchOne(ACCOUNT, ACCOUNT.ID.eq(id)) ?: return
+        accountRecord.role = role
+        accountRecord.update()
+    }
 }

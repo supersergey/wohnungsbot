@@ -13,11 +13,13 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.telegram.telegrambots.meta.generics.LongPollingBot
+import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.apartment.ApartmentService
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.StepFactory
 import org.ua.wohnung.bot.flows.owner.OwnerFlow
-import org.ua.wohnung.bot.flows.owner.OwnerStartPostProcessor
+import org.ua.wohnung.bot.flows.owner.OwnerMessagePreProcessor
+import org.ua.wohnung.bot.flows.owner.OwnerPostProcessor
 import org.ua.wohnung.bot.flows.processors.MessagePreProcessor
 import org.ua.wohnung.bot.flows.processors.ProcessorContainer
 import org.ua.wohnung.bot.flows.registereduser.RegisteredUserFlow
@@ -58,6 +60,7 @@ val persistenceModule = module {
 val servicesModule = module {
     single { UserService(get(), get(), get()) }
     single { ApartmentService(get(), get(), get(), get()) }
+    single { AccountService(get(), get()) }
 }
 
 val userFlowModule = module {
@@ -87,15 +90,17 @@ val processorsModule = module {
             UpdateUserDetailsPostProcessor.PhoneNumberPostProcessorUpdate(get()),
             UpdateUserDetailsPostProcessor.PetsPostProcessorUpdate(get()),
 
-            OwnerStartPostProcessor(get())
+            OwnerPostProcessor.AddAdmin(get(), get()),
+            OwnerPostProcessor.RemoveAdmin(get(), get())
         )
     }
     single {
         ProcessorContainer.MessagePreProcessors(
             MessagePreProcessor.RegisteredUserConversationStart(get()),
             MessagePreProcessor.RegisteredUserListApartments(get()),
-            MessagePreProcessor.OwnerStart(get()),
-            MessagePreProcessor.OwnerApartmentsUpdated(get())
+            OwnerMessagePreProcessor.OwnerStart(get(), get()),
+            OwnerMessagePreProcessor.OwnerApartmentsUpdated(get()),
+            OwnerMessagePreProcessor.OwnerListAdmins(get())
         )
     }
 }

@@ -28,10 +28,12 @@ sealed class Step(
     ) : Step(id, caption, Reply.SingleText(null), preProcessor, postProcessor)
 }
 
-sealed class Reply(val options: Map<String, FlowStep?>) {
-    class WithButtons(vararg options: Pair<String, FlowStep?>) : Reply(options.toMap())
-    class MultiOptionsText(vararg options: Pair<String, FlowStep?>) : Reply(options.toMap())
-    class SingleText(nextStep: FlowStep?) : Reply(mapOf(ANY_ANSWER_ACCEPTED to nextStep))
+sealed class Reply(val options: Map<String, ReplyOption>) {
+    class WithButtons(vararg options: ReplyOption) : Reply(options.associateBy { it.command })
+    class MultiText(vararg options: ReplyOption)
+        : Reply(options.associateBy { it.command }
+    )
+    class SingleText(nextStep: FlowStep?) : Reply(mapOf(ANY_ANSWER_ACCEPTED to ReplyOption(ANY_ANSWER_ACCEPTED, nextStep)))
 
     companion object {
         const val ANY_ANSWER_ACCEPTED = "ANY_ANSWER_ACCEPTED"
@@ -49,14 +51,22 @@ class StepFactory(
     ): Step.General =
         Step.General(id, messageSource[id], Reply.SingleText(next), preProcessors[id], postProcessors[id])
 
-    fun multipleReplies(
+    fun multipleButtons(
         id: FlowStep,
-        vararg replies: Pair<String, FlowStep>
+        vararg replies: ReplyOption
     ): Step.General =
         Step.General(id, messageSource[id], Reply.WithButtons(*replies), preProcessors[id], postProcessors[id])
+
+    fun multipleTextOptions(
+        id: FlowStep,
+        vararg replies: ReplyOption
+    ): Step.General =
+        Step.General(id, messageSource[id], Reply.MultiText(*replies), preProcessors[id], postProcessors[id])
 
     fun termination(
         id: FlowStep,
     ): Step.Termination =
         Step.Termination(id, messageSource[id], preProcessors[id], postProcessors[id])
 }
+
+data class ReplyOption(val command: String, val flowStep: FlowStep?, val description: String = "")

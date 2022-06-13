@@ -1,12 +1,13 @@
 package org.ua.wohnung.bot.flows.processors
 
 import org.ua.wohnung.bot.apartment.ApartmentService
+import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.FlowStep
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.user.UserService
 import java.lang.StringBuilder
 
-sealed class MessagePreProcessor : PreProcessor {
+abstract class MessagePreProcessor : PreProcessor {
 
     abstract override fun invoke(account: Account, input: String): List<String>
 
@@ -16,17 +17,6 @@ sealed class MessagePreProcessor : PreProcessor {
         override fun invoke(account: Account, input: String): List<String> {
             return listOf(
                 input.format(userService.findById(account.id)?.firstLastName ?: "Невідомий")
-            )
-        }
-    }
-
-    class OwnerApartmentsUpdated(private val apartmentService: ApartmentService) : MessagePreProcessor() {
-        override val stepId = FlowStep.OWNER_APARTMENTS_LOADED
-
-        override fun invoke(account: Account, input: String): List<String> {
-            val count = apartmentService.count()
-            return listOf(
-                input.format(count)
             )
         }
     }
@@ -55,17 +45,6 @@ sealed class MessagePreProcessor : PreProcessor {
                         .append("Опис: ").append(it.description)
                         .toString()
                 }
-        }
-    }
-
-    class OwnerStart(private val userService: UserService) : MessagePreProcessor() {
-        override val stepId = FlowStep.OWNER_START
-
-        override fun invoke(account: Account, input: String): List<String> {
-            val user = userService.findById(account.id)
-            return listOf(
-                input.format(user?.firstLastName ?: "Невідомий")
-            )
         }
     }
 

@@ -2,6 +2,8 @@ package org.ua.wohnung.bot.flows.userregistration
 
 import org.ua.wohnung.bot.flows.Flow
 import org.ua.wohnung.bot.flows.FlowStep
+import org.ua.wohnung.bot.flows.Reply
+import org.ua.wohnung.bot.flows.ReplyOption
 import org.ua.wohnung.bot.flows.StepFactory
 import org.ua.wohnung.bot.user.model.BundesLand
 import org.ua.wohnung.bot.user.model.Role
@@ -11,25 +13,25 @@ class UserRegistrationFlow(private val stepFactory: StepFactory) : Flow() {
     override val supportedRole = Role.GUEST
 
     override fun initialize() {
-        stepFactory.multipleReplies(
+        stepFactory.multipleButtons(
             id = FlowStep.CONVERSATION_START,
-            "Зареєструватися" to FlowStep.ACCEPT_POLICIES
+            ReplyOption("Зареєструватися", FlowStep.ACCEPT_POLICIES)
         ).addSingle()
-        stepFactory.multipleReplies(
+        stepFactory.multipleButtons(
             id = FlowStep.ACCEPT_POLICIES,
-            "Так" to FlowStep.PERSONAL_DATA_PROCESSING_APPROVAL,
-            "Ні" to FlowStep.CONVERSATION_FINISHED_DECLINED
+            ReplyOption("Так", FlowStep.PERSONAL_DATA_PROCESSING_APPROVAL),
+            ReplyOption("Ні", FlowStep.CONVERSATION_FINISHED_DECLINED)
         ).addSingle()
-        stepFactory.multipleReplies(
+        stepFactory.multipleButtons(
             id = FlowStep.PERSONAL_DATA_PROCESSING_APPROVAL,
-            "Так" to FlowStep.BUNDESLAND_SELECTION,
-            "Ні" to FlowStep.CONVERSATION_FINISHED_DECLINED
+            ReplyOption("Так", FlowStep.BUNDESLAND_SELECTION),
+            ReplyOption("Ні", FlowStep.CONVERSATION_FINISHED_DECLINED)
         ).addSingle()
-        stepFactory.multipleReplies(
+        stepFactory.multipleButtons(
             id = FlowStep.BUNDESLAND_SELECTION,
             *BundesLand.values().map { it.germanName }.allTo(FlowStep.FAMILY_COUNT)
         ).addSingle()
-        stepFactory.multipleReplies(
+        stepFactory.multipleButtons(
             id = FlowStep.FAMILY_COUNT,
             *(1..8).map { "$it" }.allTo(FlowStep.FIRSTNAME_AND_LASTNAME)
         ).addSingle()
@@ -41,7 +43,7 @@ class UserRegistrationFlow(private val stepFactory: StepFactory) : Flow() {
             id = FlowStep.PHONE_NUMBER,
             next = FlowStep.PETS
         ).addSingle()
-        stepFactory.multipleReplies(
+        stepFactory.multipleButtons(
             id = FlowStep.PETS,
             *listOf("Так", "Ні").allTo(FlowStep.REGISTERED_USER_CONVERSATION_START),
         ).addSingle()

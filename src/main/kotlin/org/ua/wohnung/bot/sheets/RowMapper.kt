@@ -36,8 +36,8 @@ class RowMapper : (List<String>) -> Apartment? {
     private val List<String>.city: String
         get() = this[1]
     private val List<String>.bundesLand: BundesLand
-        get() = BundesLand.values().firstOrNull { it.germanName == this[2] }
-            ?: throw UserInputValidationException.InvalidBundesLand(this[2])
+        get() = BundesLand.values().firstOrNull { it.germanName == this[2].trim() }
+            ?: throw SheetValidationException.InvalidBundesLand(this[2], this[0])
     private val List<String>.minTenants: Short
         get() = runCatching { this[5].toShort() }.getOrDefault(1)
     private val List<String>.maxTenants: Short
@@ -46,7 +46,7 @@ class RowMapper : (List<String>) -> Apartment? {
         get() = listOf(this[7], this[8], this[12]).filterNot { it.isBlank() }.joinToString("\n\n")
     private val List<String>.petsAllowed: Boolean
         get() = runCatching {
-            this[9] == "так" || this[9] == "можливо"
+            this[9].trim() == "так" || this[9].trim() == "можливо"
         }.getOrElse { false }
     private val List<String>.publicationStatus: PublicationStatus
         get() = if (this[17] == "TRUE") PublicationStatus.ACTIVE else PublicationStatus.NOT_ACTIVE

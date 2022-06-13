@@ -4,6 +4,7 @@ import org.jooq.DSLContext
 import org.ua.wohnung.bot.exception.ServiceException.UserNotFoundException
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
+import org.ua.wohnung.bot.persistence.UserInfo
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
@@ -19,6 +20,10 @@ class UserService(
 
     fun findUserRoleById(userId: Int): Role? {
         return accountRepository.findById(userId)?.role
+    }
+
+    fun findByRole(role: Role): List<UserInfo> {
+        return userDetailsRepository.findByRole(role)
     }
 
     fun createAccount(account: Account) {

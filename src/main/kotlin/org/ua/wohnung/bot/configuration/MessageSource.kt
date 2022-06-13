@@ -17,5 +17,5 @@ class MessageSource(objectMapper: ObjectMapper, resourceClassPath: Path) {
     }
 
     operator fun get(id: FlowStep): String =
-        requireNotNull(internalMap[id])
+        requireNotNull(internalMap[id]) { "$id not found" }
 }

@@ -2,6 +2,7 @@ package org.ua.wohnung.bot.flows.registereduser
 
 import org.ua.wohnung.bot.flows.Flow
 import org.ua.wohnung.bot.flows.FlowStep
+import org.ua.wohnung.bot.flows.ReplyOption
 import org.ua.wohnung.bot.flows.StepFactory
 import org.ua.wohnung.bot.user.model.Role
 
@@ -10,10 +11,10 @@ class RegisteredUserFlow(private val stepFactory: StepFactory) : Flow() {
     override val supportedRole = Role.USER
 
     override fun initialize() {
-        stepFactory.multipleReplies(
+        stepFactory.multipleButtons(
             id = FlowStep.REGISTERED_USER_CONVERSATION_START,
-            "Доступне мені житло" to FlowStep.REGISTERED_USER_LIST_APARTMENTS,
-            "Видаліть мої дані" to FlowStep.CONVERSATION_FINISH_REMOVAL
+            ReplyOption("Доступне мені житло", FlowStep.REGISTERED_USER_LIST_APARTMENTS),
+            ReplyOption("Видаліть мої дані", FlowStep.CONVERSATION_FINISH_REMOVAL)
         )
             .addSingle()
         stepFactory.termination(FlowStep.REGISTERED_USER_LIST_APARTMENTS).addSingle()

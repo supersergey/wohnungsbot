@@ -19,5 +19,9 @@ REGISTERED_USER_CONVERSATION_START: "Дякуємо, %s, вашу анкету �
 \n\nБажаєте подивитись житло, яке може вам підійти?"
 REGISTERED_USER_LIST_APARTMENTS: "%s"
 
-OWNER_START: "Привіт, %s"
+OWNER_START: "Привіт, %s. Для власника доступні такі команди:"
 OWNER_APARTMENTS_LOADED: "В базі житла %d записів"
+OWNER_ADD_ADMIN: "Введить userId (дізнатися id можна тут: @userinfobot)"
+OWNER_REMOVE_ADMIN: "Введить userId:"
+OWNER_ADD_ADMIN_DONE: "Операція успішна"
+OWNER_LIST_ADMINS: "%s"

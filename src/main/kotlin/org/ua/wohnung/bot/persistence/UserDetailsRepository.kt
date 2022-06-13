@@ -1,8 +1,12 @@
 package org.ua.wohnung.bot.persistence
 
 import org.jooq.DSLContext
+import org.ua.wohnung.bot.persistence.generated.Tables.ACCOUNT
 import org.ua.wohnung.bot.persistence.generated.Tables.USER_DETAILS
+import org.ua.wohnung.bot.persistence.generated.enums.Role
+import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
+import org.ua.wohnung.bot.persistence.generated.tables.records.UserDetailsRecord
 
 class UserDetailsRepository(private val dslContext: DSLContext) {
     fun save(userDetails: UserDetails) {
@@ -22,18 +26,47 @@ class UserDetailsRepository(private val dslContext: DSLContext) {
     }
 
     fun findById(id: Int): UserDetails? =
-        dslContext.fetchOne(USER_DETAILS, USER_DETAILS.ID.eq(id))?.let {
-            UserDetails(
-                it.id,
-                it.firstLastName,
-                it.phone,
-                it.numberOfTenants,
-                it.pets,
-                it.bundesland
-            )
+        dslContext.fetchOne(USER_DETAILS, USER_DETAILS.ID.eq(id))?.map {
+            it as UserDetailsRecord
+            it.toUserDetails()
         }
 
     fun deleteById(id: Int) {
         dslContext.deleteFrom(USER_DETAILS).where(USER_DETAILS.ID.eq(id)).execute()
     }
+
+    fun findByRole(role: Role): List<UserInfo> {
+        return dslContext.select(
+            USER_DETAILS.ID,
+            ACCOUNT.CHAT_ID,
+            ACCOUNT.USERNAME,
+            USER_DETAILS.FIRST_LAST_NAME,
+            ACCOUNT.ROLE
+        )
+            .from(USER_DETAILS)
+            .join(ACCOUNT)
+            .on(USER_DETAILS.ID.eq(ACCOUNT.ID))
+            .where(ACCOUNT.ROLE.eq(role))
+            .map {
+                UserInfo(it.value1(), it.value2(), it.value3() ?: "невідомо", it.value4(), it.value5())
+            }
+    }
+
+    private fun UserDetailsRecord.toUserDetails(): UserDetails =
+        UserDetails(
+            id,
+            firstLastName,
+            phone,
+            numberOfTenants,
+            pets,
+            bundesland
+        )
 }
+
+data class UserInfo(
+    val userId: Int,
+    val chatId: Int,
+    val userName: String,
+    val firstAndLastName: String,
+    val role: Role
+)
