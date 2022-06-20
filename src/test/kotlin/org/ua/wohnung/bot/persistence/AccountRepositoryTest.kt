@@ -8,7 +8,7 @@ import org.ua.wohnung.bot.persistence.config.JooqExtension
 import org.ua.wohnung.bot.persistence.generated.enums.Role.ADMIN
 import org.ua.wohnung.bot.persistence.generated.enums.Role.USER
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
-import kotlin.random.Random.Default.nextLong
+import kotlin.random.Random.Default.nextInt
 
 @ExtendWith(JooqExtension::class)
 internal class AccountRepositoryTest {
@@ -16,7 +16,7 @@ internal class AccountRepositoryTest {
 
     @Test
     fun `should save the userRecord`() {
-        val accountRecord = Account(nextLong(), nextLong(), "username", ADMIN)
+        val accountRecord = Account(nextInt(), nextInt(), "username", ADMIN)
         accountRepository.save(accountRecord)
         val saved = accountRepository.findById(accountRecord.id)
         assertThat(saved).usingRecursiveComparison().isEqualTo(accountRecord)
@@ -24,10 +24,10 @@ internal class AccountRepositoryTest {
 
     @Test
     fun `should update the userRecord`() {
-        val id = nextLong()
-        val accountRecord = Account(id, nextLong(), "username", ADMIN)
+        val id = nextInt()
+        val accountRecord = Account(id, nextInt(), "username", ADMIN)
         accountRepository.save(accountRecord)
-        val newAccountRecord = Account(id, nextLong(), "username", USER)
+        val newAccountRecord = Account(id, nextInt(), "username", USER)
         accountRepository.save(newAccountRecord)
         val saved = accountRepository.findById(accountRecord.id)
         assertThat(saved).usingRecursiveComparison().isEqualTo(newAccountRecord)

@@ -2,9 +2,9 @@ package org.ua.wohnung.bot.flows.admin
 
 import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.flows.FlowRegistry
-import org.ua.wohnung.bot.flows.FlowStep
 import org.ua.wohnung.bot.flows.processors.MessageMeta
 import org.ua.wohnung.bot.flows.processors.MessagePreProcessor
+import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.user.UserService
@@ -30,7 +30,7 @@ sealed class AdminMessagePreProcessor(private val userService: UserService) : Me
             return listOf(
                 MessageMeta(
                     input.format(user.firstLastName),
-                    step.reply.options
+                    step.reply.options()
                         .map { "${it.value.command} ${it.value.description} " }
                         .joinToString("\n")
                 )

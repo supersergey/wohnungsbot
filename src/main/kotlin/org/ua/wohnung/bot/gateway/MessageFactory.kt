@@ -6,10 +6,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
-import org.ua.wohnung.bot.flows.Reply
-import org.ua.wohnung.bot.flows.Step
 import org.ua.wohnung.bot.flows.processors.MessageMeta
 import org.ua.wohnung.bot.flows.processors.ProcessorContainer.MessagePreProcessors
+import org.ua.wohnung.bot.flows.step.Reply
+import org.ua.wohnung.bot.flows.step.Step
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 
 class MessageFactory(private val messagePreProcessors: MessagePreProcessors) {
@@ -55,7 +55,7 @@ class MessageFactory(private val messagePreProcessors: MessagePreProcessors) {
     }
 
     private fun Reply.WithButtons.keyboardRows(buttonsPerRow: Int): List<KeyboardRow> {
-        return options
+        return options()
             .map { it.key }
             .map { KeyboardButton(it) }
             .chunked(buttonsPerRow)
@@ -66,7 +66,7 @@ class MessageFactory(private val messagePreProcessors: MessagePreProcessors) {
         meta: MessageMeta,
         buttonsPerRow: Int
     ): List<List<InlineKeyboardButton>> {
-        return this.options
+        return this.options()
             .map {
                 InlineKeyboardButton.builder()
                     .text(it.key.format(meta.id))

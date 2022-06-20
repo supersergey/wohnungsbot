@@ -16,7 +16,6 @@ import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.apartment.ApartmentService
 import org.ua.wohnung.bot.flows.FlowRegistry
-import org.ua.wohnung.bot.flows.StepFactory
 import org.ua.wohnung.bot.flows.admin.AdminFlow
 import org.ua.wohnung.bot.flows.admin.AdminMessagePreProcessor
 import org.ua.wohnung.bot.flows.owner.OwnerFlow
@@ -25,6 +24,7 @@ import org.ua.wohnung.bot.flows.owner.OwnerPostProcessor
 import org.ua.wohnung.bot.flows.processors.MessagePreProcessor
 import org.ua.wohnung.bot.flows.processors.ProcessorContainer
 import org.ua.wohnung.bot.flows.registereduser.RegisteredUserFlow
+import org.ua.wohnung.bot.flows.step.StepFactory
 import org.ua.wohnung.bot.flows.userregistration.UpdateUserDetailsPostProcessor
 import org.ua.wohnung.bot.flows.userregistration.UserDetailsPreProcessor
 import org.ua.wohnung.bot.flows.userregistration.UserRegistrationFlow

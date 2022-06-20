@@ -1,7 +1,7 @@
 package org.ua.wohnung.bot.flows.userregistration
 
-import org.ua.wohnung.bot.flows.FlowStep
 import org.ua.wohnung.bot.flows.processors.PreProcessor
+import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.user.UserService

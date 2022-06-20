@@ -1,6 +1,6 @@
 package org.ua.wohnung.bot.flows.processors
 
-import org.ua.wohnung.bot.flows.FlowStep
+import org.ua.wohnung.bot.flows.step.FlowStep
 
 sealed class ProcessorContainer<T : Processor>(vararg processors: T) {
     protected val map: Map<FlowStep, T>

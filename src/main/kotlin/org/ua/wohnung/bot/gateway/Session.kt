@@ -1,6 +1,6 @@
 package org.ua.wohnung.bot.gateway
 
-import org.ua.wohnung.bot.flows.FlowStep
+import org.ua.wohnung.bot.flows.step.FlowStep
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 

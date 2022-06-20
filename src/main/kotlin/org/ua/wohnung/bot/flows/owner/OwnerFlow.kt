@@ -1,9 +1,9 @@
 package org.ua.wohnung.bot.flows.owner
 
 import org.ua.wohnung.bot.flows.Flow
-import org.ua.wohnung.bot.flows.FlowStep
-import org.ua.wohnung.bot.flows.ReplyOption
-import org.ua.wohnung.bot.flows.StepFactory
+import org.ua.wohnung.bot.flows.step.FlowStep
+import org.ua.wohnung.bot.flows.step.ReplyOption
+import org.ua.wohnung.bot.flows.step.StepFactory
 import org.ua.wohnung.bot.user.model.Role
 
 class OwnerFlow(private val stepFactory: StepFactory) : Flow() {

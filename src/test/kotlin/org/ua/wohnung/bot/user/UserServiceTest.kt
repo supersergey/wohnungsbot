@@ -16,7 +16,7 @@ import org.ua.wohnung.bot.persistence.config.JooqExtension
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.util.aFullUserDetails
-import kotlin.random.Random.Default.nextLong
+import kotlin.random.Random.Default.nextInt
 
 @ExtendWith(JooqExtension::class, MockKExtension::class)
 internal class UserServiceTest {
@@ -38,7 +38,7 @@ internal class UserServiceTest {
     @Test
     fun `should not delete a user if user details could not be deleted`() {
         val userDetails = aFullUserDetails()
-        accountRepository.save(Account(userDetails.id, nextLong(), "username", Role.ADMIN))
+        accountRepository.save(Account(userDetails.id, nextInt(), "username", Role.ADMIN))
         userDetailsRepository.save(userDetails)
         every { mockUserDetailsRepository.deleteById(any()) } throws Exception("")
 

@@ -15,7 +15,7 @@ import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 import org.ua.wohnung.bot.util.aFullUserDetails
 import org.ua.wohnung.bot.util.aPartialUserDetails
 import java.util.stream.Stream
-import kotlin.random.Random.Default.nextLong
+import kotlin.random.Random.Default.nextInt
 
 @ExtendWith(JooqExtension::class)
 internal class UserDetailsRepositoryTest {
@@ -27,7 +27,7 @@ internal class UserDetailsRepositoryTest {
     @MethodSource("generateUserDetails")
     fun `should save the user details`(userDetails: UserDetails) {
         accountRepository.save(
-            Account(userDetails.id, nextLong(), "user name", Role.USER)
+            Account(userDetails.id, nextInt(), "user name", Role.USER)
         )
         userDetailsRepository.save(userDetails)
         userDetailsRepository.save(userDetails)
@@ -45,7 +45,7 @@ internal class UserDetailsRepositoryTest {
     @Test
     fun `should delete an entry by id`() {
         val userDetails = aFullUserDetails()
-        accountRepository.save(Account(userDetails.id, nextLong(), "userName", Role.USER))
+        accountRepository.save(Account(userDetails.id, nextInt(), "userName", Role.USER))
         userDetailsRepository.save(userDetails)
         userDetailsRepository.deleteById(userDetails.id)
 

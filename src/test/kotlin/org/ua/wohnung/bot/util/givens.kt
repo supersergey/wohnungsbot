@@ -8,7 +8,7 @@ import kotlin.random.Random.Default.nextInt
 import kotlin.random.Random.Default.nextLong
 
 fun aFullUserDetails() = UserDetails(
-    nextLong(),
+    nextInt(),
     "John Smith",
     "12234",
     nextInt(1, 5).toShort(),
@@ -17,7 +17,7 @@ fun aFullUserDetails() = UserDetails(
 )
 
 fun aPartialUserDetails() = UserDetails(
-    nextLong(),
+    nextInt(),
     null,
     null,
     null,

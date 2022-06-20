@@ -2,7 +2,7 @@ package org.ua.wohnung.bot.configuration
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.ua.wohnung.bot.flows.FlowStep
+import org.ua.wohnung.bot.flows.step.FlowStep
 import java.nio.file.Path
 import kotlin.io.path.pathString
 

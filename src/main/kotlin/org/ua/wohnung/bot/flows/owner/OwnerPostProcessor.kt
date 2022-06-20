@@ -4,8 +4,8 @@ import mu.KotlinLogging
 import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.exception.UserInputValidationException
-import org.ua.wohnung.bot.flows.FlowStep
 import org.ua.wohnung.bot.flows.processors.PostProcessor
+import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.user.UserService
