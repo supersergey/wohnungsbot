@@ -1,6 +1,7 @@
 package org.ua.wohnung.bot.flows.step
 
 import org.ua.wohnung.bot.configuration.MessageSource
+import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.ProcessorContainer
 
 class StepFactory(
@@ -25,6 +26,17 @@ class StepFactory(
         vararg replies: ReplyOption
     ): Step.General =
         Step.General(id, messageSource[id], Reply.WithInlineButtons(*replies), preProcessors[id], postProcessors[id])
+
+    fun multipleDynamicButtons(
+        id: FlowStep,
+        next: FlowStep
+    ): Step.General = Step.General(
+        id,
+        messageSource[id],
+        Reply.WithDynamicButtons(next),
+        preProcessors[id],
+        postProcessors[id]
+    )
 
     fun multipleTextOptions(
         id: FlowStep,

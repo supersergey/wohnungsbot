@@ -23,9 +23,10 @@ abstract class Flow {
         }
         return internalMap[currentStep]?.let {
             val next = when (it.reply) {
-                is Reply.WithButtons -> it.reply.options()[userInput]
-                is Reply.MultiText -> it.reply.options()[userInput]
-                else -> it.reply.options()[Reply.ANY_ANSWER_ACCEPTED]
+                is Reply.WithButtons -> it.reply.options[userInput]
+                is Reply.MultiText -> it.reply.options[userInput]
+                is Reply.WithDynamicButtons -> it.reply.options[Reply.ANY_ANSWER_ACCEPTED]
+                else -> it.reply.options[Reply.ANY_ANSWER_ACCEPTED]
             }
             internalMap[next?.flowStep]
         }

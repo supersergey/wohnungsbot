@@ -6,14 +6,13 @@ import org.ua.wohnung.bot.persistence.generated.tables.records.ApartmentAccountR
 import java.time.OffsetDateTime
 
 class ApartmentAccountRepository(private val jooq: DSLContext) {
-    fun findLatestApplyTs(userId: Int): OffsetDateTime? {
+    fun findLatestApplyTs(userId: Int, limit: Int = 2): List<OffsetDateTime> {
         return jooq.select()
             .from(APARTMENT_ACCOUNT)
             .where(APARTMENT_ACCOUNT.ACCOUNT_ID.eq(userId))
             .orderBy(APARTMENT_ACCOUNT.APPLY_TS.desc())
-            .limit(1).fetch()
-            .firstOrNull()
-            ?.map {
+            .limit(limit).fetch()
+            .map {
                 it as ApartmentAccountRecord
                 it.applyTs
             }

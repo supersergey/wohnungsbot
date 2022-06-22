@@ -1,12 +1,15 @@
 package org.ua.wohnung.bot.flows.registereduser
 
+import org.ua.wohnung.bot.flows.DynamicButtonsProducer
 import org.ua.wohnung.bot.flows.Flow
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.flows.step.ReplyOption
 import org.ua.wohnung.bot.flows.step.StepFactory
 import org.ua.wohnung.bot.user.model.Role
 
-class RegisteredUserFlow(private val stepFactory: StepFactory) : Flow() {
+class RegisteredUserFlow(
+    private val stepFactory: StepFactory
+) : Flow() {
 
     override val supportedRole = Role.USER
 
@@ -17,9 +20,9 @@ class RegisteredUserFlow(private val stepFactory: StepFactory) : Flow() {
             ReplyOption("Видаліть мої дані", FlowStep.CONVERSATION_FINISH_REMOVAL)
         )
             .addSingle()
-        stepFactory.multipleInlineButtons(
+        stepFactory.multipleDynamicButtons(
             id = FlowStep.REGISTERED_USER_LIST_APARTMENTS,
-            ReplyOption("Відгукнутись на житло %s", FlowStep.REGISTERED_USER_APPLY_FOR_APARTMENT)
+            next = FlowStep.REGISTERED_USER_REQUEST_RECEIVED
         ).addSingle()
         stepFactory.termination(FlowStep.REGISTERED_USER_REQUEST_RECEIVED).addSingle()
         stepFactory.termination(FlowStep.REGISTERED_USER_REQUEST_DECLINED).addSingle()

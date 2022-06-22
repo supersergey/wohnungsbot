@@ -21,8 +21,8 @@ sealed class OwnerMessagePreProcessor : MessagePreProcessor() {
             val step = flowRegistry.getFlowByUserId(account.id).current(stepId)
             return listOf(
                 MessageMeta(
-                    input.format(user.firstLastName),
-                    step.reply.options()
+                    input.format(user.firstLastName) + "\n" +
+                    step.reply.options
                         .map { "${it.value.command} ${it.value.description} " }
                         .joinToString("\n")
                 )

@@ -9,6 +9,7 @@ sealed class Step(
     open val reply: Reply,
     open val preProcessor: PreProcessor,
     open val postProcessor: PostProcessor,
+    open val userIdResolver: () -> Int
 ) {
     class General internal constructor(
         override val id: FlowStep,
@@ -16,26 +17,28 @@ sealed class Step(
         override val reply: Reply,
         override val preProcessor: PreProcessor,
         override val postProcessor: PostProcessor,
-    ) : Step(id, caption, reply, preProcessor, postProcessor)
+        override val userIdResolver: () -> Int = {0}
+    ) : Step(id, caption, reply, preProcessor, postProcessor, userIdResolver)
 
     class Termination internal constructor(
         override val id: FlowStep,
         override val caption: String,
         override val preProcessor: PreProcessor,
         override val postProcessor: PostProcessor,
-    ) : Step(id, caption, Reply.SingleText(null), preProcessor, postProcessor)
+        override val userIdResolver: () -> Int = {0}
+    ) : Step(id, caption, Reply.SingleText(null), preProcessor, postProcessor, userIdResolver)
 }
 
-sealed class Reply(val options: () -> Map<String, ReplyOption>) {
-    class WithButtons(vararg options: ReplyOption) : Reply({ options.associateBy { it.command } })
-    class WithInlineButtons(vararg options: ReplyOption) : Reply({ options.associateBy { it.command } })
-    class WithDynamicButtons(block: () -> Map<String, ReplyOption>) : Reply(block)
+sealed class Reply(val options: Map<String, ReplyOption>) {
+    class WithButtons(vararg options: ReplyOption) : Reply(options.associateBy { it.command })
+    class WithInlineButtons(vararg options: ReplyOption) : Reply(options.associateBy { it.command })
+    class WithDynamicButtons(val nextStep: FlowStep) : Reply(
+        mapOf(ANY_ANSWER_ACCEPTED to ReplyOption(ANY_ANSWER_ACCEPTED, nextStep))
+    )
     class MultiText(vararg options: ReplyOption) :
-        Reply(
-            { options.associateBy { it.command } }
-        )
+        Reply(options.associateBy { it.command })
     class SingleText(nextStep: FlowStep?) : Reply(
-        { mapOf(ANY_ANSWER_ACCEPTED to ReplyOption(ANY_ANSWER_ACCEPTED, nextStep)) }
+        mapOf(ANY_ANSWER_ACCEPTED to ReplyOption(ANY_ANSWER_ACCEPTED, nextStep))
     )
 
     companion object {

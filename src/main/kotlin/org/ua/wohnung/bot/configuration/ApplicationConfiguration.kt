@@ -15,6 +15,8 @@ import org.koin.dsl.module
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.apartment.ApartmentService
+import org.ua.wohnung.bot.flows.DynamicButtonProducersRegistry
+import org.ua.wohnung.bot.flows.DynamicButtonsProducerImpl
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.admin.AdminFlow
 import org.ua.wohnung.bot.flows.admin.AdminMessagePreProcessor
@@ -24,6 +26,7 @@ import org.ua.wohnung.bot.flows.owner.OwnerPostProcessor
 import org.ua.wohnung.bot.flows.processors.MessagePreProcessor
 import org.ua.wohnung.bot.flows.processors.ProcessorContainer
 import org.ua.wohnung.bot.flows.registereduser.RegisteredUserFlow
+import org.ua.wohnung.bot.flows.registereduser.RegisteredUserPostProcessor
 import org.ua.wohnung.bot.flows.step.StepFactory
 import org.ua.wohnung.bot.flows.userregistration.UpdateUserDetailsPostProcessor
 import org.ua.wohnung.bot.flows.userregistration.UserDetailsPreProcessor
@@ -32,6 +35,7 @@ import org.ua.wohnung.bot.gateway.MessageFactory
 import org.ua.wohnung.bot.gateway.MessageGateway
 import org.ua.wohnung.bot.gateway.Session
 import org.ua.wohnung.bot.persistence.AccountRepository
+import org.ua.wohnung.bot.persistence.ApartmentAccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import org.ua.wohnung.bot.security.Secrets.BOT_API_SECRET
@@ -57,12 +61,13 @@ val persistenceModule = module {
     single { AccountRepository(get()) }
     single { ApartmentRepository(get()) }
     single { UserDetailsRepository(get()) }
+    single { ApartmentAccountRepository(get()) }
 }
 
 val servicesModule = module {
     single { UserService(get(), get(), get()) }
-    single { ApartmentService(get(), get(), get(), get()) }
-    single { AccountService(get(), get()) }
+    singleOf(::ApartmentService)
+    singleOf(::AccountService)
 }
 
 val userFlowModule = module {
@@ -70,6 +75,11 @@ val userFlowModule = module {
 }
 
 val registeredUserFlow = module {
+    single {
+        DynamicButtonProducersRegistry(
+            DynamicButtonsProducerImpl(get())
+        )
+    }
     single { RegisteredUserFlow(get()) }
 }
 
@@ -96,6 +106,8 @@ val processorsModule = module {
             UpdateUserDetailsPostProcessor.PhoneNumberPostProcessorUpdate(get()),
             UpdateUserDetailsPostProcessor.PetsPostProcessorUpdate(get()),
 
+            RegisteredUserPostProcessor.RegisteredUserRequestReceived(get()),
+
             OwnerPostProcessor.AddAdmin(get(), get()),
             OwnerPostProcessor.RemoveAdmin(get(), get())
         )
@@ -104,6 +116,7 @@ val processorsModule = module {
         ProcessorContainer.MessagePreProcessors(
             MessagePreProcessor.RegisteredUserConversationStart(get()),
             MessagePreProcessor.RegisteredUserListApartments(get()),
+
             OwnerMessagePreProcessor.OwnerStart(get(), get()),
             OwnerMessagePreProcessor.OwnerApartmentsUpdated(get()),
             OwnerMessagePreProcessor.OwnerListAdmins(get()),

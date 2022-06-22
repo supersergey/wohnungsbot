@@ -30,7 +30,7 @@ sealed class AdminMessagePreProcessor(private val userService: UserService) : Me
             return listOf(
                 MessageMeta(
                     input.format(user.firstLastName),
-                    step.reply.options()
+                    step.reply.options
                         .map { "${it.value.command} ${it.value.description} " }
                         .joinToString("\n")
                 )

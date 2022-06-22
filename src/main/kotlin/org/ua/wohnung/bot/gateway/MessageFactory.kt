@@ -6,21 +6,25 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
+import org.ua.wohnung.bot.flows.DynamicButtonProducersRegistry
 import org.ua.wohnung.bot.flows.processors.MessageMeta
 import org.ua.wohnung.bot.flows.processors.ProcessorContainer.MessagePreProcessors
 import org.ua.wohnung.bot.flows.step.Reply
+import org.ua.wohnung.bot.flows.step.ReplyOption
 import org.ua.wohnung.bot.flows.step.Step
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 
-class MessageFactory(private val messagePreProcessors: MessagePreProcessors) {
+class MessageFactory(
+    private val messagePreProcessors: MessagePreProcessors,
+    private val dynamicButtonsProducersRegistry: DynamicButtonProducersRegistry
+) {
     fun get(account: Account, step: Step): List<SendMessage> {
         val messages: List<MessageMeta> = messagePreProcessors[step.id].invoke(account, step.caption)
         return messages.map { messageMeta ->
             SendMessage.builder()
                 .chatId(account.chatId.toString())
                 .text(messageMeta.payload)
-                .withMarkup(step, messageMeta)
-                .build()
+                .withMarkup(account, step, messageMeta)
         }
     }
 
@@ -30,17 +34,30 @@ class MessageFactory(private val messagePreProcessors: MessagePreProcessors) {
     }
 
     private fun SendMessage.SendMessageBuilder.withMarkup(
+        account: Account,
         step: Step,
         messageMeta: MessageMeta
-    ): SendMessage.SendMessageBuilder {
+    ): SendMessage {
         this.replyMarkup(
             when (step.reply) {
                 is Reply.WithButtons -> {
                     ReplyKeyboardMarkup.builder()
                         .oneTimeKeyboard(true)
                         .keyboard(
-                            (step.reply as Reply.WithButtons).keyboardRows(3)
+                            (step.reply as Reply.WithButtons).options.keyboardRows(3)
                         ).build()
+                }
+                is Reply.WithDynamicButtons -> {
+                    dynamicButtonsProducersRegistry[step.id]?.let { buttonsProducer ->
+                        buttonsProducer(account, (step.reply as Reply.WithDynamicButtons).nextStep)
+                            .associateBy { it.command }
+                            .keyboardRows(3)
+                    }.takeIf { !it.isNullOrEmpty() }?.let {
+                        ReplyKeyboardMarkup.builder()
+                            .oneTimeKeyboard(true)
+                            .keyboard(it)
+                            .build()
+                    }
                 }
                 is Reply.WithInlineButtons -> {
                     InlineKeyboardMarkup.builder()
@@ -51,11 +68,11 @@ class MessageFactory(private val messagePreProcessors: MessagePreProcessors) {
                 else -> ReplyKeyboardMarkup.builder().clearKeyboard().build()
             }
         )
-        return this
+        return this.build()
     }
 
-    private fun Reply.WithButtons.keyboardRows(buttonsPerRow: Int): List<KeyboardRow> {
-        return options()
+    private fun Map<String, ReplyOption>.keyboardRows(buttonsPerRow: Int): List<KeyboardRow> {
+        return this
             .map { it.key }
             .map { KeyboardButton(it) }
             .chunked(buttonsPerRow)
@@ -66,7 +83,7 @@ class MessageFactory(private val messagePreProcessors: MessagePreProcessors) {
         meta: MessageMeta,
         buttonsPerRow: Int
     ): List<List<InlineKeyboardButton>> {
-        return this.options()
+        return this.options
             .map {
                 InlineKeyboardButton.builder()
                     .text(it.key.format(meta.id))
