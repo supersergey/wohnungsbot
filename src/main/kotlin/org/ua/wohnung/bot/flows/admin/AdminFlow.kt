@@ -16,10 +16,10 @@ class AdminFlow(private val stepFactory: StepFactory) : Flow() {
         ).addSingle()
         stepFactory.singleReply(
             FlowStep.ADMIN_WHO_IS_INTERESTED_ASK_APARTMENT_ID,
-            FlowStep.ADMIN_WHO_IS_INTERESTED
+            FlowStep.ADMIN_LIST_APPLICANTS
         ).addSingle()
         stepFactory.termination(
-            FlowStep.ADMIN_WHO_IS_INTERESTED
-        )
+            FlowStep.ADMIN_LIST_APPLICANTS
+        ).addSingle()
     }
 }

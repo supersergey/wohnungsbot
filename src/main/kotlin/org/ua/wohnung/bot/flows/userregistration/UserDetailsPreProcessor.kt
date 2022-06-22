@@ -1,5 +1,6 @@
 package org.ua.wohnung.bot.flows.userregistration
 
+import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.PreProcessor
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.persistence.generated.enums.Role
@@ -10,16 +11,19 @@ sealed class UserDetailsPreProcessor : PreProcessor {
     class BundesLandSelectionPreProcessor(private val userService: UserService) : UserDetailsPreProcessor() {
         override val stepId = FlowStep.BUNDESLAND_SELECTION
 
-        override fun invoke(account: Account, input: String) {
-            userService.createAccount(account.apply { role = Role.USER })
+        override fun invoke(chatMetadata: ChatMetadata, input: String) {
+            userService.createAccount(chatMetadata.toAccount().apply { role = Role.USER })
         }
+
+        private fun ChatMetadata.toAccount(): Account =
+            Account(userId, chatId, username, null)
     }
 
     class UserRegistrationFlowConditionsRejectedPreProcessor(private val userService: UserService) : UserDetailsPreProcessor() {
         override val stepId = FlowStep.CONVERSATION_FINISH_REMOVAL
 
-        override fun invoke(account: Account, input: String) {
-            userService.delete(account.id)
+        override fun invoke(chatMetadata: ChatMetadata, input: String) {
+            userService.delete(chatMetadata.userId)
         }
     }
 }

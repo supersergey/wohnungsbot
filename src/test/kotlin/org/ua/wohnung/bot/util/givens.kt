@@ -1,5 +1,7 @@
 package org.ua.wohnung.bot.util
 
+import org.ua.wohnung.bot.persistence.generated.enums.Role
+import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 import org.ua.wohnung.bot.sheets.PublicationStatus
@@ -7,17 +9,27 @@ import org.ua.wohnung.bot.user.model.BundesLand
 import kotlin.random.Random.Default.nextInt
 import kotlin.random.Random.Default.nextLong
 
-fun aFullUserDetails() = UserDetails(
-    nextInt(),
+fun anAccount() = Account(
+    nextInt(1, 100),
+    nextInt(1, 100),
+    "userName",
+    Role.USER
+)
+
+fun aFullUserDetails(
+    id: Int = nextInt(),
+    bundesLand: BundesLand = BundesLand.values().random()
+) = UserDetails(
+    id,
     "John Smith",
     "12234",
     nextInt(1, 5).toShort(),
     true,
-    BundesLand.values().random().germanName
+    bundesLand.germanName
 )
 
-fun aPartialUserDetails() = UserDetails(
-    nextInt(),
+fun aPartialUserDetails(id: Int = nextInt()) = UserDetails(
+    id,
     null,
     null,
     null,

@@ -15,8 +15,8 @@ import org.koin.dsl.module
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.apartment.ApartmentService
-import org.ua.wohnung.bot.flows.DynamicButtonProducersRegistry
-import org.ua.wohnung.bot.flows.DynamicButtonsProducerImpl
+import org.ua.wohnung.bot.flows.dynamicbuttons.DynamicButtonProducersRegistry
+import org.ua.wohnung.bot.flows.dynamicbuttons.DynamicButtonsProducerImpl
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.admin.AdminFlow
 import org.ua.wohnung.bot.flows.admin.AdminMessagePreProcessor
@@ -65,7 +65,7 @@ val persistenceModule = module {
 }
 
 val servicesModule = module {
-    single { UserService(get(), get(), get()) }
+    singleOf(::UserService)
     singleOf(::ApartmentService)
     singleOf(::AccountService)
 }
@@ -121,13 +121,14 @@ val processorsModule = module {
             OwnerMessagePreProcessor.OwnerApartmentsUpdated(get()),
             OwnerMessagePreProcessor.OwnerListAdmins(get()),
 
-            AdminMessagePreProcessor.AdminStart(get(), get())
+            AdminMessagePreProcessor.AdminStart(get(), get()),
+            AdminMessagePreProcessor.AdminWhoIsInterested(get(), get())
         )
     }
 }
 
 val messageGatewayModule = module {
-    singleOf(::Session)
+    single { Session() }
     single { MessageSource(get(), Path.of("flows", "newUserFlow.yml")) }
     single { StepFactory(get(), get(), get()) }
     singleOf(::MessageFactory)

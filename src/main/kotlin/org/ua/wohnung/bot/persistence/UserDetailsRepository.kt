@@ -7,11 +7,11 @@ import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 import org.ua.wohnung.bot.persistence.generated.tables.records.UserDetailsRecord
 
-class UserDetailsRepository(private val dslContext: DSLContext) {
+class UserDetailsRepository(private val jooq: DSLContext) {
     fun save(userDetails: UserDetails) {
-        val userDetailsRecord = dslContext
+        val userDetailsRecord = jooq
             .fetchOne(USER_DETAILS, USER_DETAILS.ID.eq(userDetails.id))
-            ?: dslContext.newRecord(USER_DETAILS)
+            ?: jooq.newRecord(USER_DETAILS)
 
         userDetailsRecord.apply {
             id = userDetails.id
@@ -25,17 +25,17 @@ class UserDetailsRepository(private val dslContext: DSLContext) {
     }
 
     fun findById(id: Int): UserDetails? =
-        dslContext.fetchOne(USER_DETAILS, USER_DETAILS.ID.eq(id))?.map {
+        jooq.fetchOne(USER_DETAILS, USER_DETAILS.ID.eq(id))?.map {
             it as UserDetailsRecord
             it.toUserDetails()
         }
 
-    fun deleteById(id: Int) {
+    fun deleteById(id: Int, dslContext: DSLContext = jooq) {
         dslContext.deleteFrom(USER_DETAILS).where(USER_DETAILS.ID.eq(id)).execute()
     }
 
     fun findByRole(role: Role): List<UserInfo> {
-        return dslContext.select(
+        return jooq.select(
             USER_DETAILS.ID,
             ACCOUNT.CHAT_ID,
             ACCOUNT.USERNAME,

@@ -31,4 +31,4 @@ OWNER_LIST_ADMINS: "%s"
 
 ADMIN_START: "Привіт, %s. Ви - адмін. Для вас доступні такі команди:"
 ADMIN_WHO_IS_INTERESTED_ASK_APARTMENT_ID: "Введить номер помешкання:"
-ADMIN_WHO_IS_INTERESTED: "%s"
+ADMIN_LIST_APPLICANTS: "%s"

@@ -4,6 +4,7 @@ import mu.KotlinLogging
 import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentAccountRepository
+import org.ua.wohnung.bot.persistence.ApartmentApplication
 import org.ua.wohnung.bot.persistence.ApartmentRepository
 import org.ua.wohnung.bot.persistence.ApartmentSearchCriteria
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
@@ -56,6 +57,10 @@ class ApartmentService(
             .findLatestApplyTs(userId)
             .assertUserApplicationRateLimit(userId)
         apartmentAccountRepository.save(apartmentId, userId)
+    }
+
+    fun findApplicantsByApartmentId(apartmentId: String): List<ApartmentApplication> {
+        return apartmentAccountRepository.findAccountsByApartmentId(apartmentId)
     }
 
     private fun List<OffsetDateTime>.assertUserApplicationRateLimit(

@@ -4,6 +4,7 @@ import mu.KotlinLogging
 import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.exception.UserInputValidationException
+import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.PostProcessor
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.persistence.generated.enums.Role
@@ -33,8 +34,8 @@ sealed class OwnerPostProcessor(private val userService: UserService) : PostProc
     ) : OwnerPostProcessor(userService) {
 
         override val stepId = FlowStep.OWNER_ADD_ADMIN
-        override fun invoke(account: Account, input: String) {
-            validateOwnerPermission(account.id)
+        override fun invoke(chatMetadata: ChatMetadata, input: String) {
+            validateOwnerPermission(chatMetadata.userId)
             val userId = resolveUserId(input)
             accountService.updateUserRole(userId, Role.ADMIN)
             logger.info { "User $userId has been granted ADMIN privileges" }
@@ -48,8 +49,8 @@ sealed class OwnerPostProcessor(private val userService: UserService) : PostProc
 
         override val stepId = FlowStep.OWNER_REMOVE_ADMIN
 
-        override fun invoke(account: Account, input: String) {
-            validateOwnerPermission(account.id)
+        override fun invoke(chatMetadata: ChatMetadata, input: String) {
+            validateOwnerPermission(chatMetadata.userId)
             val userId = resolveUserId(input)
             accountService.updateUserRole(userId, Role.USER)
             logger.info { "User $userId has been granted USER privileges" }

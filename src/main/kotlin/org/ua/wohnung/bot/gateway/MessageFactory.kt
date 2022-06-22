@@ -6,7 +6,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
-import org.ua.wohnung.bot.flows.DynamicButtonProducersRegistry
+import org.ua.wohnung.bot.flows.dto.ChatMetadata
+import org.ua.wohnung.bot.flows.dynamicbuttons.DynamicButtonProducersRegistry
 import org.ua.wohnung.bot.flows.processors.MessageMeta
 import org.ua.wohnung.bot.flows.processors.ProcessorContainer.MessagePreProcessors
 import org.ua.wohnung.bot.flows.step.Reply
@@ -18,13 +19,13 @@ class MessageFactory(
     private val messagePreProcessors: MessagePreProcessors,
     private val dynamicButtonsProducersRegistry: DynamicButtonProducersRegistry
 ) {
-    fun get(account: Account, step: Step): List<SendMessage> {
-        val messages: List<MessageMeta> = messagePreProcessors[step.id].invoke(account, step.caption)
+    fun get(chatMeta: ChatMetadata, step: Step): List<SendMessage> {
+        val messages: List<MessageMeta> = messagePreProcessors[step.id].invoke(chatMeta, step.caption)
         return messages.map { messageMeta ->
             SendMessage.builder()
-                .chatId(account.chatId.toString())
+                .chatId(chatMeta.chatId.toString())
                 .text(messageMeta.payload)
-                .withMarkup(account, step, messageMeta)
+                .withMarkup(chatMeta, step, messageMeta)
         }
     }
 
@@ -34,7 +35,7 @@ class MessageFactory(
     }
 
     private fun SendMessage.SendMessageBuilder.withMarkup(
-        account: Account,
+        chatMeta: ChatMetadata,
         step: Step,
         messageMeta: MessageMeta
     ): SendMessage {
@@ -49,7 +50,7 @@ class MessageFactory(
                 }
                 is Reply.WithDynamicButtons -> {
                     dynamicButtonsProducersRegistry[step.id]?.let { buttonsProducer ->
-                        buttonsProducer(account, (step.reply as Reply.WithDynamicButtons).nextStep)
+                        buttonsProducer(chatMeta, (step.reply as Reply.WithDynamicButtons).nextStep)
                             .associateBy { it.command }
                             .keyboardRows(3)
                     }.takeIf { !it.isNullOrEmpty() }?.let {

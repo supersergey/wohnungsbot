@@ -7,7 +7,6 @@ import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.step.Step
-import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 
 class MessageGateway(
     private val secret: String,
@@ -28,20 +27,20 @@ class MessageGateway(
             val currentStep = resolveCurrentStep(chatMetadata)
 
             runCatching {
-                currentStep?.postProcessor?.invoke(chatMetadata.toAccount(), chatMetadata.input)
+                currentStep?.postProcessor?.invoke(chatMetadata, chatMetadata.input)
 
                 val flow = flowRegistry.getFlowByUserId(chatMetadata.userId)
                 val nextStep = flow.next(
                     currentStep = currentStep?.id, userInput = chatMetadata.input
                 ) ?: flow.first()
 
-                nextStep.preProcessor.invoke(chatMetadata.toAccount(), chatMetadata.input)
+                nextStep.preProcessor.invoke(chatMetadata, chatMetadata.input)
 
-                val sendMessages = messageFactory.get(chatMetadata.toAccount(), nextStep)
+                val sendMessages = messageFactory.get(chatMetadata, nextStep)
                 sendMessages.forEach { execute(it) }
                 session.updateState(chatMetadata.chatId, nextStep.id)
             }.onFailure {
-                logger.error { it }
+                logger.error(it) { "Something went wrong" }
                 val userMessage = if (it is ServiceException && it.userMessage.isNotEmpty())
                     it.userMessage
                 else
@@ -81,7 +80,4 @@ class MessageGateway(
                 input = callbackQuery.data
             )
         } else throw ServiceException.UnreadableMessage(updateId)
-
-    private fun ChatMetadata.toAccount(): Account =
-        Account(userId, chatId, username, null)
 }

@@ -1,4 +1,4 @@
-package org.ua.wohnung.bot.flows
+package org.ua.wohnung.bot.flows.dynamicbuttons
 
 import org.ua.wohnung.bot.flows.step.FlowStep
 

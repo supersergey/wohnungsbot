@@ -5,11 +5,11 @@ import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.Account.ACCOUNT
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 
-class AccountRepository(private val dslContext: DSLContext) {
+class AccountRepository(private val jooq: DSLContext) {
 
     fun save(account: Account) {
         val accountRecord =
-            dslContext.fetchOne(ACCOUNT, ACCOUNT.USERNAME.eq(account.username)) ?: dslContext.newRecord(ACCOUNT)
+            jooq.fetchOne(ACCOUNT, ACCOUNT.USERNAME.eq(account.username)) ?: jooq.newRecord(ACCOUNT)
         accountRecord.apply {
             id = account.id
             chatId = account.chatId
@@ -19,17 +19,17 @@ class AccountRepository(private val dslContext: DSLContext) {
     }
 
     fun findById(userId: Int): Account? {
-        return dslContext.fetchOne(ACCOUNT, ACCOUNT.ID.eq(userId))?.let {
+        return jooq.fetchOne(ACCOUNT, ACCOUNT.ID.eq(userId))?.let {
             Account(it.id, it.chatId, it.username, it.role)
         }
     }
 
-    fun deleteById(userId: Int) {
+    fun deleteById(userId: Int, dslContext: DSLContext = jooq) {
         dslContext.fetchOne(ACCOUNT, ACCOUNT.ID.eq(userId))?.delete()
     }
 
     fun updateUserRole(id: Int, role: Role) {
-        val accountRecord = dslContext.fetchOne(ACCOUNT, ACCOUNT.ID.eq(id)) ?: return
+        val accountRecord = jooq.fetchOne(ACCOUNT, ACCOUNT.ID.eq(id)) ?: return
         accountRecord.role = role
         accountRecord.update()
     }

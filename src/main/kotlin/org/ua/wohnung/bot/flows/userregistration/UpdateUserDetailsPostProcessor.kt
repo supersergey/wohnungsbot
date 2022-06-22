@@ -1,6 +1,7 @@
 package org.ua.wohnung.bot.flows.userregistration
 
 import org.ua.wohnung.bot.exception.UserInputValidationException
+import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.PostProcessor
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
@@ -11,9 +12,9 @@ import org.ua.wohnung.bot.user.model.BundesLand
 sealed class UpdateUserDetailsPostProcessor(private val userService: UserService) : PostProcessor {
     abstract fun doInvoke(userDetails: UserDetails, input: String)
 
-    override fun invoke(account: Account, input: String) {
-        val userDetails = userService.findById(account.id)
-            ?: UserDetails(account.id, null, null, null, null, null)
+    override fun invoke(chatMetadata: ChatMetadata, input: String) {
+        val userDetails = userService.findById(chatMetadata.userId)
+            ?: UserDetails(chatMetadata.userId, null, null, null, null, null)
         doInvoke(userDetails, input)
         userService.updateUserDetails(userDetails)
     }
