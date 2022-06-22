@@ -1,6 +1,5 @@
 package org.ua.wohnung.bot.flows.registereduser
 
-import org.ua.wohnung.bot.flows.DynamicButtonsProducer
 import org.ua.wohnung.bot.flows.Flow
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.flows.step.ReplyOption

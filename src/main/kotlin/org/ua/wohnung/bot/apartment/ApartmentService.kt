@@ -13,7 +13,6 @@ import org.ua.wohnung.bot.sheets.RowMapper
 import org.ua.wohnung.bot.sheets.SheetReader
 import org.ua.wohnung.bot.user.model.BundesLand
 import java.time.Duration
-import java.time.Instant
 import java.time.OffsetDateTime
 
 class ApartmentService(

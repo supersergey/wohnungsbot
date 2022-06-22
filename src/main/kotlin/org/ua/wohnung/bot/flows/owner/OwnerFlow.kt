@@ -17,6 +17,7 @@ class OwnerFlow(private val stepFactory: StepFactory) : Flow() {
             ReplyOption("/addAdmin", FlowStep.OWNER_ADD_ADMIN, "(призначити користувача адміном)"),
             ReplyOption("/removeAdmin", FlowStep.OWNER_REMOVE_ADMIN, "видалити користувача з адмінів")
         ).addSingle()
+        stepFactory.termination(FlowStep.OWNER_APARTMENTS_LOADED).addSingle()
         stepFactory.termination(
             FlowStep.OWNER_LIST_ADMINS
         ).addSingle()

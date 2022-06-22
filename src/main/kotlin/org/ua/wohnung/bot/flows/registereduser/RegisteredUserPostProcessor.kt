@@ -7,7 +7,7 @@ import org.ua.wohnung.bot.flows.processors.PostProcessor
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 
-sealed class RegisteredUserPostProcessor: PostProcessor {
+sealed class RegisteredUserPostProcessor : PostProcessor {
     class RegisteredUserRequestReceived(
         private val apartmentService: ApartmentService,
     ) : RegisteredUserPostProcessor() {

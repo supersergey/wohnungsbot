@@ -1,7 +1,6 @@
 package org.ua.wohnung.bot.flows.step
 
 import org.ua.wohnung.bot.configuration.MessageSource
-import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.ProcessorContainer
 
 class StepFactory(

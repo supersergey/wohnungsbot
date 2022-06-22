@@ -22,9 +22,9 @@ sealed class OwnerMessagePreProcessor : MessagePreProcessor() {
             return listOf(
                 MessageMeta(
                     input.format(user.firstLastName) + "\n" +
-                    step.reply.options
-                        .map { "${it.value.command} ${it.value.description} " }
-                        .joinToString("\n")
+                        step.reply.options
+                            .map { "${it.value.command} ${it.value.description} " }
+                            .joinToString("\n")
                 )
             )
         }

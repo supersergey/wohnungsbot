@@ -17,7 +17,7 @@ sealed class Step(
         override val reply: Reply,
         override val preProcessor: PreProcessor,
         override val postProcessor: PostProcessor,
-        override val userIdResolver: () -> Int = {0}
+        override val userIdResolver: () -> Int = { 0 }
     ) : Step(id, caption, reply, preProcessor, postProcessor, userIdResolver)
 
     class Termination internal constructor(
@@ -25,7 +25,7 @@ sealed class Step(
         override val caption: String,
         override val preProcessor: PreProcessor,
         override val postProcessor: PostProcessor,
-        override val userIdResolver: () -> Int = {0}
+        override val userIdResolver: () -> Int = { 0 }
     ) : Step(id, caption, Reply.SingleText(null), preProcessor, postProcessor, userIdResolver)
 }
 
