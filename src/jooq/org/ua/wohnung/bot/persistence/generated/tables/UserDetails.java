@@ -49,7 +49,7 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     /**
      * The column <code>main.user_details.id</code>.
      */
-    public final TableField<UserDetailsRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<UserDetailsRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>main.user_details.first_last_name</code>.
@@ -167,7 +167,7 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Integer, String, String, Short, Boolean, String> fieldsRow() {
+    public Row6<Long, String, String, Short, Boolean, String> fieldsRow() {
         return (Row6) super.fieldsRow();
     }
 }

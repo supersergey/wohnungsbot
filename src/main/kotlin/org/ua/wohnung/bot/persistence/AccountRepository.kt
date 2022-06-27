@@ -18,17 +18,17 @@ class AccountRepository(private val jooq: DSLContext) {
         }.store()
     }
 
-    fun findById(userId: Int): Account? {
+    fun findById(userId: Long): Account? {
         return jooq.fetchOne(ACCOUNT, ACCOUNT.ID.eq(userId))?.let {
             Account(it.id, it.chatId, it.username, it.role)
         }
     }
 
-    fun deleteById(userId: Int, dslContext: DSLContext = jooq) {
+    fun deleteById(userId: Long, dslContext: DSLContext = jooq) {
         dslContext.fetchOne(ACCOUNT, ACCOUNT.ID.eq(userId))?.delete()
     }
 
-    fun updateUserRole(id: Int, role: Role) {
+    fun updateUserRole(id: Long, role: Role) {
         val accountRecord = jooq.fetchOne(ACCOUNT, ACCOUNT.ID.eq(id)) ?: return
         accountRecord.role = role
         accountRecord.update()

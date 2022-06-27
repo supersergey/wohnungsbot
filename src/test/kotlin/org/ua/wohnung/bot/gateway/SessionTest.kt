@@ -4,7 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.ua.wohnung.bot.flows.step.FlowStep
 import java.time.Duration
-import kotlin.random.Random.Default.nextInt
+import kotlin.random.Random.Default.nextLong
 
 internal class SessionTest {
 
@@ -12,9 +12,9 @@ internal class SessionTest {
 
     @Test
     fun `should expire old sessions`() {
-        val expiredChatId1 = nextInt()
-        val expiredChatId2 = nextInt()
-        val notExpiredChatId = nextInt()
+        val expiredChatId1 = nextLong()
+        val expiredChatId2 = nextLong()
+        val notExpiredChatId = nextLong()
         session.updateState(expiredChatId1, FlowStep.ADMIN_START)
         session.updateState(expiredChatId2, FlowStep.ADMIN_START)
         assertThat(session.current(expiredChatId1)).isNotNull

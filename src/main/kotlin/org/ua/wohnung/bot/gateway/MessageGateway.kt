@@ -67,16 +67,16 @@ class MessageGateway(
     private fun Update.metadata(): ChatMetadata =
         if (hasMessage()) {
             ChatMetadata(
-                userId = message.from.id.toInt(),
+                userId = message.from.id,
                 username = message.chat.userName,
-                chatId = message.chatId.toInt(),
+                chatId = message.chatId,
                 input = message.text ?: this.callbackQuery.data
             )
         } else if (hasCallbackQuery()) {
             ChatMetadata(
-                userId = callbackQuery.from.id.toInt(),
+                userId = callbackQuery.from.id,
                 username = callbackQuery.from.userName,
-                chatId = callbackQuery.message.chatId.toInt(),
+                chatId = callbackQuery.message.chatId,
                 input = callbackQuery.data
             )
         } else throw ServiceException.UnreadableMessage(updateId)

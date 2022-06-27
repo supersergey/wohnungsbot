@@ -11,12 +11,13 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.java.KoinJavaComponent.inject
 import org.ua.wohnung.bot.persistence.AccountRepository
+import org.ua.wohnung.bot.persistence.ApartmentAccountRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import org.ua.wohnung.bot.persistence.config.JooqExtension
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.util.aFullUserDetails
-import kotlin.random.Random.Default.nextInt
+import kotlin.random.Random.Default.nextLong
 
 @ExtendWith(JooqExtension::class, MockKExtension::class)
 internal class UserServiceTest {
@@ -28,17 +29,25 @@ internal class UserServiceTest {
     @MockK
     private lateinit var mockUserDetailsRepository: UserDetailsRepository
 
+    @MockK
+    private lateinit var mockApartmentAccountRepository: ApartmentAccountRepository
+
     private lateinit var userService: UserService
 
     @BeforeEach
     internal fun setUp() {
-        userService = UserService(accountRepository, mockUserDetailsRepository, jooq)
+        userService = UserService(
+            accountRepository,
+            mockUserDetailsRepository,
+            mockApartmentAccountRepository,
+            jooq
+        )
     }
 
     @Test
     fun `should not delete a user if user details could not be deleted`() {
         val userDetails = aFullUserDetails()
-        accountRepository.save(Account(userDetails.id, nextInt(), "username", Role.ADMIN))
+        accountRepository.save(Account(userDetails.id, nextLong(), "username", Role.ADMIN))
         userDetailsRepository.save(userDetails)
         every { mockUserDetailsRepository.deleteById(any()) } throws Exception("")
 

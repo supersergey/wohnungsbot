@@ -1,5 +1,5 @@
 create table user_details(
-    id integer not null primary key unique references account(id),
+    id bigint not null primary key unique references account(id),
     first_last_name VARCHAR(128),
     phone VARCHAR(128),
     number_of_tenants SMALLINT,

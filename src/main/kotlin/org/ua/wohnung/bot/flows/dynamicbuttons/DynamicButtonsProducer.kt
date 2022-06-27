@@ -4,7 +4,6 @@ import org.ua.wohnung.bot.apartment.ApartmentService
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.flows.step.ReplyOption
-import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 
 interface DynamicButtonsProducer : (ChatMetadata, FlowStep) -> List<ReplyOption> {
     val supportedStep: FlowStep

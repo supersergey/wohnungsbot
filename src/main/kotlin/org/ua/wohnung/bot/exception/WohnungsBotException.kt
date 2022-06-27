@@ -7,17 +7,17 @@ abstract class WohnungsBotException(message: String, cause: Throwable? = null) :
 sealed class ServiceException(message: String, val userMessage: String = "", val finishSession: Boolean = true, cause: Throwable? = null) :
     WohnungsBotException(message, cause) {
     class UnreadableMessage(updateId: Int) : ServiceException("Message unreadable, $updateId")
-    class UserNotFound(val userId: Int) : ServiceException("User not found: $userId")
+    class UserNotFound(val userId: Long) : ServiceException("User not found: $userId")
     class ApartmentNotFound(apartmentId: String) :
         ServiceException("Apartment not found: $apartmentId", "Помешкання не знайдено")
 
-    class AccessViolation(val userId: Int, actualRole: Role?, vararg expectedRole: Role) :
+    class AccessViolation(val userId: Long, actualRole: Role?, vararg expectedRole: Role) :
         ServiceException(
             "User $userId should have $expectedRole, but actual was $actualRole. Operation denied",
             "Доступ заборонено"
         )
 
-    class UserApplicationRateExceeded(userId: Int, maxAttempts: Int) : ServiceException(
+    class UserApplicationRateExceeded(userId: Long, maxAttempts: Int) : ServiceException(
         "Too many application attempts, userId: $userId",
         "Протягом доби можна подати заявку на $maxAttempts помешкань. Спробуйте пізніше"
     )

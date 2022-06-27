@@ -9,12 +9,11 @@ import org.ua.wohnung.bot.flows.processors.MessagePreProcessor
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.persistence.ApartmentApplication
 import org.ua.wohnung.bot.persistence.generated.enums.Role
-import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.user.UserService
 
 sealed class AdminMessagePreProcessor(private val userService: UserService) : MessagePreProcessor() {
 
-    protected fun validateOwnerPermission(userId: Int) { // todo code duplication
+    protected fun validateOwnerPermission(userId: Long) { // todo code duplication
         val currentUserRole = userService.findUserRoleById(userId)
         if (currentUserRole != Role.ADMIN && currentUserRole != Role.OWNER) {
             throw ServiceException.AccessViolation(userId, currentUserRole, Role.ADMIN, Role.OWNER)
@@ -33,9 +32,9 @@ sealed class AdminMessagePreProcessor(private val userService: UserService) : Me
             return listOf(
                 MessageMeta(
                     input.format(user.firstLastName) +
-                            step.reply.options
-                                .map { "${it.value.command} ${it.value.description} " }
-                                .joinToString("\n")
+                        step.reply.options
+                            .map { "${it.value.command} ${it.value.description} " }
+                            .joinToString("\n")
                 )
             )
         }
@@ -50,11 +49,11 @@ sealed class AdminMessagePreProcessor(private val userService: UserService) : Me
         override fun invoke(chatMetadata: ChatMetadata, input: String): List<MessageMeta> {
             validateOwnerPermission(chatMetadata.userId)
             return (
-                    apartmentService.findApplicantsByApartmentId(chatMetadata.input)
-                        .stringify()
-                        .takeIf { it.isNotEmpty() }
-                        ?: listOf("Апліканти не знайдені")
-                    )
+                apartmentService.findApplicantsByApartmentId(chatMetadata.input)
+                    .stringify()
+                    .takeIf { it.isNotEmpty() }
+                    ?: listOf("Апліканти не знайдені")
+                )
                 .map {
                     MessageMeta(payload = it)
                 }

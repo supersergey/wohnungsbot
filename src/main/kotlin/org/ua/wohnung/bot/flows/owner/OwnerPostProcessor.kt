@@ -8,20 +8,19 @@ import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.PostProcessor
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.persistence.generated.enums.Role
-import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.user.UserService
 
 sealed class OwnerPostProcessor(private val userService: UserService) : PostProcessor {
 
     protected val logger = KotlinLogging.logger { }
 
-    protected fun resolveUserId(input: String): Int {
-        return runCatching { input.toInt() }.getOrElse {
+    protected fun resolveUserId(input: String): Long {
+        return runCatching { input.toLong() }.getOrElse {
             throw UserInputValidationException.InvalidUserId(input)
         }
     }
 
-    protected fun validateOwnerPermission(userId: Int) {
+    protected fun validateOwnerPermission(userId: Long) {
         val currentUserRole = userService.findUserRoleById(userId)
         if (currentUserRole != Role.OWNER) {
             throw ServiceException.AccessViolation(userId, currentUserRole, Role.OWNER)

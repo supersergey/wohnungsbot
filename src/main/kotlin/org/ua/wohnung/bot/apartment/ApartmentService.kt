@@ -34,7 +34,7 @@ class ApartmentService(
 
     fun count(): Int = apartmentRepository.count()
 
-    fun findByUserDetails(userId: Int): List<Apartment> {
+    fun findByUserDetails(userId: Long): List<Apartment> {
         val userDetails = userDetailsRepository.findById(userId) ?: run {
             logger.warn { "$userId not found" }
             return emptyList()
@@ -49,7 +49,7 @@ class ApartmentService(
         ).toList()
     }
 
-    fun acceptUserApartmentRequest(userId: Int, apartmentId: String) {
+    fun acceptUserApartmentRequest(userId: Long, apartmentId: String) {
         val account = accountRepository.findById(userId) ?: throw ServiceException.UserNotFound(userId)
         if (account.role != Role.USER) throw ServiceException.AccessViolation(userId, account.role, Role.USER)
         apartmentRepository.findById(apartmentId) ?: throw ServiceException.ApartmentNotFound(apartmentId)
@@ -64,7 +64,7 @@ class ApartmentService(
     }
 
     private fun List<OffsetDateTime>.assertUserApplicationRateLimit(
-        userId: Int,
+        userId: Long,
         limit: Int = 2,
         duration: Duration = Duration.ofDays(1)
     ): List<OffsetDateTime> {

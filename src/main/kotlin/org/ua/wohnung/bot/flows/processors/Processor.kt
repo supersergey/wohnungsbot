@@ -2,7 +2,6 @@ package org.ua.wohnung.bot.flows.processors
 
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.step.FlowStep
-import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 
 interface Processor {
     val stepId: FlowStep

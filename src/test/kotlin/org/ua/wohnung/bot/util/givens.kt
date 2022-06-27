@@ -10,14 +10,14 @@ import kotlin.random.Random.Default.nextInt
 import kotlin.random.Random.Default.nextLong
 
 fun anAccount() = Account(
-    nextInt(1, 100),
-    nextInt(1, 100),
+    nextLong(1, 100),
+    nextLong(1, 100),
     "userName",
     Role.USER
 )
 
 fun aFullUserDetails(
-    id: Int = nextInt(),
+    id: Long = nextLong(),
     bundesLand: BundesLand = BundesLand.values().random()
 ) = UserDetails(
     id,
@@ -28,7 +28,7 @@ fun aFullUserDetails(
     bundesLand.germanName
 )
 
-fun aPartialUserDetails(id: Int = nextInt()) = UserDetails(
+fun aPartialUserDetails(id: Long = nextLong()) = UserDetails(
     id,
     null,
     null,

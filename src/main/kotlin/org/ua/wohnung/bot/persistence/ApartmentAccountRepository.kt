@@ -10,7 +10,7 @@ import org.ua.wohnung.bot.persistence.generated.tables.records.ApartmentAccountR
 import java.time.OffsetDateTime
 
 class ApartmentAccountRepository(private val jooq: DSLContext) {
-    fun findLatestApplyTs(userId: Int, limit: Int = 2): List<OffsetDateTime> {
+    fun findLatestApplyTs(userId: Long, limit: Int = 2): List<OffsetDateTime> {
         return jooq.select()
             .from(APARTMENT_ACCOUNT)
             .where(APARTMENT_ACCOUNT.ACCOUNT_ID.eq(userId))
@@ -22,7 +22,7 @@ class ApartmentAccountRepository(private val jooq: DSLContext) {
             }
     }
 
-    fun save(apartmentId: String, userId: Int) {
+    fun save(apartmentId: String, userId: Long) {
         jooq.newRecord(APARTMENT_ACCOUNT).apply {
             this.apartmentId = apartmentId
             this.accountId = userId
@@ -57,7 +57,7 @@ class ApartmentAccountRepository(private val jooq: DSLContext) {
             }
     }
 
-    fun deleteByUserId(userId: Int, dslContext: DSLContext = jooq) {
+    fun deleteByUserId(userId: Long, dslContext: DSLContext = jooq) {
         dslContext.deleteFrom(APARTMENT_ACCOUNT).where(APARTMENT_ACCOUNT.ACCOUNT_ID.eq(userId)).execute()
     }
 }

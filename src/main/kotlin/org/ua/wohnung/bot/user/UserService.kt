@@ -16,11 +16,11 @@ class UserService(
     private val apartmentAccountRepository: ApartmentAccountRepository,
     private val dslContext: DSLContext
 ) {
-    fun findById(userId: Int): UserDetails? {
+    fun findById(userId: Long): UserDetails? {
         return userDetailsRepository.findById(userId)
     }
 
-    fun findUserRoleById(userId: Int): Role? {
+    fun findUserRoleById(userId: Long): Role? {
         return accountRepository.findById(userId)?.role
     }
 
@@ -42,7 +42,7 @@ class UserService(
         }
     }
 
-    fun delete(userId: Int) {
+    fun delete(userId: Long) {
         dslContext.transaction { ctx ->
             apartmentAccountRepository.deleteByUserId(userId, ctx.dsl())
             userDetailsRepository.deleteById(userId, ctx.dsl())

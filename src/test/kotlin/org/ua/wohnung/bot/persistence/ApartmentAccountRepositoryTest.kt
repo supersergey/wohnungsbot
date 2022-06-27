@@ -2,8 +2,6 @@ package org.ua.wohnung.bot.persistence
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.java.KoinJavaComponent.inject
 import org.ua.wohnung.bot.persistence.config.JooqExtension

@@ -24,13 +24,13 @@ class UserDetailsRepository(private val jooq: DSLContext) {
         userDetailsRecord.store()
     }
 
-    fun findById(id: Int): UserDetails? =
+    fun findById(id: Long): UserDetails? =
         jooq.fetchOne(USER_DETAILS, USER_DETAILS.ID.eq(id))?.map {
             it as UserDetailsRecord
             it.toUserDetails()
         }
 
-    fun deleteById(id: Int, dslContext: DSLContext = jooq) {
+    fun deleteById(id: Long, dslContext: DSLContext = jooq) {
         dslContext.deleteFrom(USER_DETAILS).where(USER_DETAILS.ID.eq(id)).execute()
     }
 
@@ -63,8 +63,8 @@ class UserDetailsRepository(private val jooq: DSLContext) {
 }
 
 data class UserInfo(
-    val userId: Int,
-    val chatId: Int,
+    val userId: Long,
+    val chatId: Long,
     val userName: String,
     val firstAndLastName: String,
     val role: Role

@@ -50,7 +50,7 @@ public class ApartmentAccount extends TableImpl<ApartmentAccountRecord> {
     /**
      * The column <code>main.apartment_account.account_id</code>.
      */
-    public final TableField<ApartmentAccountRecord, Integer> ACCOUNT_ID = createField(DSL.name("account_id"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<ApartmentAccountRecord, Long> ACCOUNT_ID = createField(DSL.name("account_id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>main.apartment_account.apartment_id</code>.
@@ -164,7 +164,7 @@ public class ApartmentAccount extends TableImpl<ApartmentAccountRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<Integer, String, OffsetDateTime> fieldsRow() {
+    public Row3<Long, String, OffsetDateTime> fieldsRow() {
         return (Row3) super.fieldsRow();
     }
 }

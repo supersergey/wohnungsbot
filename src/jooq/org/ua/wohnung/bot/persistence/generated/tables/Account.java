@@ -47,12 +47,12 @@ public class Account extends TableImpl<AccountRecord> {
     /**
      * The column <code>main.account.id</code>.
      */
-    public final TableField<AccountRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<AccountRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>main.account.chat_id</code>.
      */
-    public final TableField<AccountRecord, Integer> CHAT_ID = createField(DSL.name("chat_id"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<AccountRecord, Long> CHAT_ID = createField(DSL.name("chat_id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>main.account.username</code>.
@@ -138,7 +138,7 @@ public class Account extends TableImpl<AccountRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Integer, Integer, String, Role> fieldsRow() {
+    public Row4<Long, Long, String, Role> fieldsRow() {
         return (Row4) super.fieldsRow();
     }
 }

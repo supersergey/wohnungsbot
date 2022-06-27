@@ -15,11 +15,11 @@ import org.koin.dsl.module
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.apartment.ApartmentService
-import org.ua.wohnung.bot.flows.dynamicbuttons.DynamicButtonProducersRegistry
-import org.ua.wohnung.bot.flows.dynamicbuttons.DynamicButtonsProducerImpl
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.admin.AdminFlow
 import org.ua.wohnung.bot.flows.admin.AdminMessagePreProcessor
+import org.ua.wohnung.bot.flows.dynamicbuttons.DynamicButtonProducersRegistry
+import org.ua.wohnung.bot.flows.dynamicbuttons.DynamicButtonsProducerImpl
 import org.ua.wohnung.bot.flows.owner.OwnerFlow
 import org.ua.wohnung.bot.flows.owner.OwnerMessagePreProcessor
 import org.ua.wohnung.bot.flows.owner.OwnerPostProcessor

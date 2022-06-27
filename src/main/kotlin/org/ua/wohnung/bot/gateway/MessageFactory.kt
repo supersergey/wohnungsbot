@@ -13,7 +13,6 @@ import org.ua.wohnung.bot.flows.processors.ProcessorContainer.MessagePreProcesso
 import org.ua.wohnung.bot.flows.step.Reply
 import org.ua.wohnung.bot.flows.step.ReplyOption
 import org.ua.wohnung.bot.flows.step.Step
-import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 
 class MessageFactory(
     private val messagePreProcessors: MessagePreProcessors,
@@ -29,7 +28,7 @@ class MessageFactory(
         }
     }
 
-    fun getCustom(chatIdentifier: Int, message: String): SendMessage = SendMessage().apply {
+    fun getCustom(chatIdentifier: Long, message: String): SendMessage = SendMessage().apply {
         this.chatId = chatIdentifier.toString()
         text = message
     }

@@ -16,7 +16,7 @@ public class ApartmentAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer        accountId;
+    private Long           accountId;
     private String         apartmentId;
     private OffsetDateTime applyTs;
 
@@ -29,7 +29,7 @@ public class ApartmentAccount implements Serializable {
     }
 
     public ApartmentAccount(
-        Integer        accountId,
+        Long           accountId,
         String         apartmentId,
         OffsetDateTime applyTs
     ) {
@@ -41,14 +41,14 @@ public class ApartmentAccount implements Serializable {
     /**
      * Getter for <code>main.apartment_account.account_id</code>.
      */
-    public Integer getAccountId() {
+    public Long getAccountId() {
         return this.accountId;
     }
 
     /**
      * Setter for <code>main.apartment_account.account_id</code>.
      */
-    public void setAccountId(Integer accountId) {
+    public void setAccountId(Long accountId) {
         this.accountId = accountId;
     }
 

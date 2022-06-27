@@ -4,7 +4,6 @@ import org.ua.wohnung.bot.exception.UserInputValidationException
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.PostProcessor
 import org.ua.wohnung.bot.flows.step.FlowStep
-import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 import org.ua.wohnung.bot.user.UserService
 import org.ua.wohnung.bot.user.model.BundesLand

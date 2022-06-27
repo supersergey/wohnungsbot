@@ -8,7 +8,7 @@ class AccountService(
     private val accountRepository: AccountRepository,
     private val jooq: DSLContext
 ) {
-    fun updateUserRole(id: Int, role: Role) {
+    fun updateUserRole(id: Long, role: Role) {
         jooq.transaction { _ ->
             val user = accountRepository.findById(id) ?: return@transaction
             if (user.role != Role.OWNER) {
