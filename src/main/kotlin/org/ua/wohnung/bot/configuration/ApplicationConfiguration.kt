@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import org.flywaydb.core.Flyway
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
 import org.koin.core.module.Module

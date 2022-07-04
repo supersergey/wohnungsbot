@@ -1,5 +1,7 @@
 package org.ua.wohnung.bot
 
+import org.flywaydb.core.Flyway
+import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
 import org.koin.fileProperties
@@ -33,8 +35,19 @@ fun main() {
             sheetReaderModule,
             servicesModule,
         )
+        flywayMigrate()
         koin.get<LongPollingBot>(named("WohnungsBot")).let { bot ->
             TelegramBotsApi(DefaultBotSession::class.java).registerBot(bot)
         }
     }
+}
+
+private fun KoinApplication.flywayMigrate() {
+    Flyway.configure().dataSource(koin.get())
+        .schemas("main")
+        .createSchemas(true)
+        .load()
+        .run {
+            migrate()
+        }
 }
