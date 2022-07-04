@@ -19,7 +19,7 @@ class DynamicButtonsProducerImpl(
             .findByUserDetails(chatMetadata.userId)
             .map {
                 ReplyOption(
-                    "Відгукнутись на житло: ${it.id}",
+                    "Відгукнутись: ${it.id}",
                     FlowStep.REGISTERED_USER_REQUEST_RECEIVED
                 )
             }
