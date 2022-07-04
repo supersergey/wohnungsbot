@@ -15,7 +15,8 @@ class OwnerFlow(private val stepFactory: StepFactory) : Flow() {
             ReplyOption("/updateTable", FlowStep.OWNER_APARTMENTS_LOADED, "(оновити таблицю)"),
             ReplyOption("/listAdmins", FlowStep.OWNER_LIST_ADMINS, "(подивитись список адмінів)"),
             ReplyOption("/addAdmin", FlowStep.OWNER_ADD_ADMIN, "(призначити користувача адміном)"),
-            ReplyOption("/removeAdmin", FlowStep.OWNER_REMOVE_ADMIN, "видалити користувача з адмінів")
+            ReplyOption("/removeAdmin", FlowStep.OWNER_REMOVE_ADMIN, "видалити користувача з адмінів"),
+            ReplyOption("/whoIsInterested", FlowStep.ADMIN_WHO_IS_INTERESTED_ASK_APARTMENT_ID, "Хто цікавиться житлом")
         ).addSingle()
         stepFactory.termination(FlowStep.OWNER_APARTMENTS_LOADED).addSingle()
         stepFactory.termination(
@@ -25,6 +26,13 @@ class OwnerFlow(private val stepFactory: StepFactory) : Flow() {
         stepFactory.singleReply(FlowStep.OWNER_REMOVE_ADMIN, FlowStep.OWNER_ADD_ADMIN_DONE).addSingle()
         stepFactory.termination(
             FlowStep.OWNER_ADD_ADMIN_DONE
+        ).addSingle()
+        stepFactory.singleReply(
+            FlowStep.ADMIN_WHO_IS_INTERESTED_ASK_APARTMENT_ID,
+            FlowStep.ADMIN_LIST_APPLICANTS
+        ).addSingle()
+        stepFactory.termination(
+            FlowStep.ADMIN_LIST_APPLICANTS
         ).addSingle()
     }
 }
