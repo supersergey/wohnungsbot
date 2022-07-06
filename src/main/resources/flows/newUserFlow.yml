@@ -24,11 +24,11 @@ REGISTERED_USER_REQUEST_DECLINED: "Ви вже надіслали декільк
 
 OWNER_START: "Привіт, %s. Для власника доступні такі команди:"
 OWNER_APARTMENTS_LOADED: "В базі житла %d записів"
-OWNER_ADD_ADMIN: "Введить userId (дізнатися id можна тут: @userinfobot)"
-OWNER_REMOVE_ADMIN: "Введить userId:"
+OWNER_ADD_ADMIN: "Введіть userId (дізнатися id можна тут: @userinfobot)"
+OWNER_REMOVE_ADMIN: "Введіть userId:"
 OWNER_ADD_ADMIN_DONE: "Операція успішна"
 OWNER_LIST_ADMINS: "%s"
 
 ADMIN_START: "Привіт, %s. Ви - адмін. Для вас доступні такі команди:"
-ADMIN_WHO_IS_INTERESTED_ASK_APARTMENT_ID: "Введить номер помешкання:"
+ADMIN_WHO_IS_INTERESTED_ASK_APARTMENT_ID: "Введіть номер помешкання:"
 ADMIN_LIST_APPLICANTS: "%s"
