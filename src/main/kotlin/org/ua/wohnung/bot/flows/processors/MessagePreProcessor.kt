@@ -29,7 +29,7 @@ abstract class MessagePreProcessor : PreProcessor {
             val apartments = apartmentService.findByUserDetails(chatMetadata.userId)
             return if (apartments.isEmpty())
                 listOf(
-                    MessageMeta("Нажаль, наразі ми не маємо пропозицій, які вам підходять. Якщо щось з'явиться, ви отримаєте повідомлення.")
+                    MessageMeta("На жаль, наразі ми не маємо пропозицій, які вам підходять. Якщо щось з'явиться, ви отримаєте повідомлення.")
                 )
             else
                 apartments.map {
