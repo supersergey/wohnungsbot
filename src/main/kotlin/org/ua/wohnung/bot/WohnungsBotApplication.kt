@@ -22,7 +22,7 @@ import org.ua.wohnung.bot.configuration.userFlowModule
 fun main() {
     startKoin {
         printLogger()
-        fileProperties("/secrets/secrets.properties")
+        fileProperties("/secrets/secrets-prod.properties")
         modules(
             commonModule,
             persistenceModule,
