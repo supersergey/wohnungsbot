@@ -31,7 +31,7 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             criteria.bundesLand?.let { APARTMENT.BUNDESLAND.eq(it.germanName) },
             criteria.numberOfTenants?.let { APARTMENT.MIN_TENANTS.le(it.toShort()) },
             criteria.numberOfTenants?.let { APARTMENT.MAX_TENANTS.ge(it.toShort()) },
-            criteria.petsAllowed?.let { APARTMENT.PETS_ALLOWED.eq(it) },
+            criteria.petsAllowed?.let { APARTMENT.PETS_ALLOWED.eq(true) },
             criteria.publicationStatus?.let { APARTMENT.PUBLICATIONSTATUS.eq(it.name) }
         )
 

@@ -10,6 +10,7 @@ import org.ua.wohnung.bot.persistence.ApartmentSearchCriteria
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
+import org.ua.wohnung.bot.sheets.PublicationStatus
 import org.ua.wohnung.bot.sheets.RowMapper
 import org.ua.wohnung.bot.sheets.SheetReader
 import org.ua.wohnung.bot.user.model.BundesLand
@@ -43,8 +44,8 @@ class ApartmentService(
             ApartmentSearchCriteria(
                 bundesLand = BundesLand.values().firstOrNull { it.germanName == userDetails.bundesland },
                 numberOfTenants = userDetails.numberOfTenants.toInt(),
-                petsAllowed = userDetails.pets,
-//                publicationStatus = PublicationStatus.ACTIVE // todo
+                petsAllowed = if (!userDetails.pets) null else true,
+                publicationStatus = PublicationStatus.ACTIVE
             )
         ).toList()
     }
@@ -52,11 +53,15 @@ class ApartmentService(
     fun acceptUserApartmentRequest(userId: Long, apartmentId: String) {
         val account = accountRepository.findById(userId) ?: throw ServiceException.UserNotFound(userId)
         if (account.role != Role.USER) throw ServiceException.AccessViolation(userId, account.role, Role.USER)
-        apartmentRepository.findById(apartmentId) ?: throw ServiceException.ApartmentNotFound(apartmentId)
+        apartmentRepository.findById(apartmentId)?.takeIf {
+            PublicationStatus.valueOf(it.publicationstatus) == PublicationStatus.ACTIVE
+        } ?: throw ServiceException.ApartmentNotFound(apartmentId)
         apartmentAccountRepository
             .findLatestApplyTs(userId)
             .assertUserApplicationRateLimit(userId)
-        apartmentAccountRepository.save(apartmentId, userId)
+        if (apartmentAccountRepository.findAccountsByApartmentId(apartmentId).none { it.account.id == userId }) {
+            apartmentAccountRepository.save(apartmentId, userId)
+        }
     }
 
     fun findApplicantsByApartmentId(apartmentId: String): List<ApartmentApplication> {
