@@ -89,6 +89,26 @@ tasks.withType<Jar> {
     })
 }
 
+tasks.register("dockerBuild") {
+    group = "docker"
+    dependsOn.add("build")
+    doLast {
+        exec {
+            commandLine("sh", "build-docker.sh")
+        }
+    }
+}
+
+tasks.register("dockerPublish") {
+    group = "docker"
+    dependsOn.add("dockerBuild")
+    doLast {
+        exec {
+            commandLine("sh", "publish-docker.sh")
+        }
+    }
+}
+
 flyway {
     url = secrets["jdbc_url"] as String
     user = secrets["jdbc_user"] as String
