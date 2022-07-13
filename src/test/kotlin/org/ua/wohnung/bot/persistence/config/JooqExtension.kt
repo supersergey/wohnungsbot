@@ -54,6 +54,7 @@ class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
     }
 
     override fun beforeAll(context: ExtensionContext) {
+        stopKoin()
         startKoin {
             printLogger()
             modules(
