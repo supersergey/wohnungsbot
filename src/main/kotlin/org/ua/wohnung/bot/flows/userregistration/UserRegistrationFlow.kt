@@ -28,11 +28,19 @@ class UserRegistrationFlow(private val stepFactory: StepFactory) : Flow() {
         ).addSingle()
         stepFactory.multipleButtons(
             id = FlowStep.BUNDESLAND_SELECTION,
-            *BundesLand.values().map { it.germanName }.allTo(FlowStep.FAMILY_COUNT)
+            *BundesLand.values().map { it.germanName }.allTo(FlowStep.DISTRICT_SELECTION)
+        ).addSingle()
+        stepFactory.singleReply(
+            id = FlowStep.DISTRICT_SELECTION,
+            next = FlowStep.FAMILY_COUNT
         ).addSingle()
         stepFactory.multipleButtons(
             id = FlowStep.FAMILY_COUNT,
-            *(1..8).map { "$it" }.allTo(FlowStep.FIRSTNAME_AND_LASTNAME)
+            *(1..8).map { "$it" }.allTo(FlowStep.FAMILY_MEMBERS)
+        ).addSingle()
+        stepFactory.singleReply(
+            id = FlowStep.FAMILY_MEMBERS,
+            next = FlowStep.FIRSTNAME_AND_LASTNAME
         ).addSingle()
         stepFactory.singleReply(
             id = FlowStep.FIRSTNAME_AND_LASTNAME,
@@ -44,7 +52,19 @@ class UserRegistrationFlow(private val stepFactory: StepFactory) : Flow() {
         ).addSingle()
         stepFactory.multipleButtons(
             id = FlowStep.PETS,
-            *listOf("Так", "Ні").allTo(FlowStep.REGISTERED_USER_CONVERSATION_START),
+            *listOf("Так", "Ні").allTo(FlowStep.FOREIGN_LANGUAGES)
+        ).addSingle()
+        stepFactory.singleReply(
+            id = FlowStep.FOREIGN_LANGUAGES,
+            next = FlowStep.READY_TO_MOVE
+        ).addSingle()
+        stepFactory.multipleButtons(
+            id = FlowStep.READY_TO_MOVE,
+            *listOf("Так", "Ні").allTo(FlowStep.ILLNESS)
+        ).addSingle()
+        stepFactory.singleReply(
+            id = FlowStep.ILLNESS,
+            next = FlowStep.REGISTERED_USER_CONVERSATION_START
         ).addSingle()
         stepFactory.termination(FlowStep.CONVERSATION_FINISHED_DECLINED).addSingle()
     }
