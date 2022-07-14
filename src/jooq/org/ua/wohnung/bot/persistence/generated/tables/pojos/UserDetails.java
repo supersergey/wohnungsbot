@@ -25,6 +25,7 @@ public class UserDetails implements Serializable {
     private Boolean readyToMove;
     private String  foreignLanguages;
     private String  allergies;
+    private String  district;
 
     public UserDetails() {}
 
@@ -39,6 +40,7 @@ public class UserDetails implements Serializable {
         this.readyToMove = value.readyToMove;
         this.foreignLanguages = value.foreignLanguages;
         this.allergies = value.allergies;
+        this.district = value.district;
     }
 
     public UserDetails(
@@ -51,7 +53,8 @@ public class UserDetails implements Serializable {
         String  familyMembers,
         Boolean readyToMove,
         String  foreignLanguages,
-        String  allergies
+        String  allergies,
+        String  district
     ) {
         this.id = id;
         this.firstLastName = firstLastName;
@@ -63,6 +66,7 @@ public class UserDetails implements Serializable {
         this.readyToMove = readyToMove;
         this.foreignLanguages = foreignLanguages;
         this.allergies = allergies;
+        this.district = district;
     }
 
     /**
@@ -205,6 +209,20 @@ public class UserDetails implements Serializable {
         this.allergies = allergies;
     }
 
+    /**
+     * Getter for <code>main.user_details.district</code>.
+     */
+    public String getDistrict() {
+        return this.district;
+    }
+
+    /**
+     * Setter for <code>main.user_details.district</code>.
+     */
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("UserDetails (");
@@ -219,6 +237,7 @@ public class UserDetails implements Serializable {
         sb.append(", ").append(readyToMove);
         sb.append(", ").append(foreignLanguages);
         sb.append(", ").append(allergies);
+        sb.append(", ").append(district);
 
         sb.append(")");
         return sb.toString();

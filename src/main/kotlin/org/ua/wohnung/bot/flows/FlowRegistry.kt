@@ -35,6 +35,11 @@ class FlowRegistry(private val userService: UserService, vararg flows: Flow) {
             this?.phone,
             this?.pets,
             this?.firstLastName,
-            this?.numberOfTenants
-        ).size == 6
+            this?.numberOfTenants,
+            this?.district,
+            this?.familyMembers,
+            this?.allergies,
+            this?.foreignLanguages,
+            this?.readyToMove
+        ).size == 11
 }

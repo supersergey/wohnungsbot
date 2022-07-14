@@ -20,6 +20,11 @@ class UserDetailsRepository(private val jooq: DSLContext) {
             numberOfTenants = userDetails.numberOfTenants
             pets = userDetails.pets
             bundesland = userDetails.bundesland
+            familyMembers = userDetails.familyMembers
+            readyToMove = userDetails.readyToMove
+            foreignLanguages = userDetails.foreignLanguages
+            district = userDetails.district
+            allergies = userDetails.allergies
         }
         userDetailsRecord.store()
     }
@@ -58,7 +63,12 @@ class UserDetailsRepository(private val jooq: DSLContext) {
             phone,
             numberOfTenants,
             pets,
-            bundesland
+            bundesland,
+            familyMembers,
+            readyToMove,
+            foreignLanguages,
+            allergies,
+            district
         )
 }
 

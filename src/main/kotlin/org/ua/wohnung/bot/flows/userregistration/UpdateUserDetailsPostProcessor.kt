@@ -13,7 +13,9 @@ sealed class UpdateUserDetailsPostProcessor(private val userService: UserService
 
     override fun invoke(chatMetadata: ChatMetadata, input: String) {
         val userDetails = userService.findById(chatMetadata.userId)
-            ?: UserDetails(chatMetadata.userId, null, null, null, null, null)
+            ?: UserDetails().apply {
+                this.id = chatMetadata.userId
+            }
         doInvoke(userDetails, input)
         userService.updateUserDetails(userDetails)
     }

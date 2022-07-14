@@ -66,8 +66,13 @@ sealed class AdminMessagePreProcessor(private val userService: UserService) : Me
                     .append("Прізвище: ${it.userDetails.firstLastName}").append("\n")
                     .append("Телефон: ${it.userDetails.phone}").append("\n")
                     .append("Кількість людей в родині: ${it.userDetails.numberOfTenants}").append("\n")
+                    .append("Склад сімʼї: ${it.userDetails.familyMembers}").append("\n")
                     .append("Чи є тварини: ${if (it.userDetails.pets) "так" else "ні"}").append("\n")
                     .append("Де зареєстрований: ${it.userDetails.bundesland}").append("\n")
+                    .append("Район: ${it.userDetails.district}").append("\n")
+                    .append("Чи готові до переїзду: ${if (it.userDetails.readyToMove) "так" else "ні"}").append("\n")
+                    .append("Іноземні мови: ${it.userDetails.foreignLanguages}").append("\n")
+                    .append("Алергії: ${it.userDetails.allergies}").append("\n")
                     .toString()
             }
     }

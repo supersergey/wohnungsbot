@@ -15,7 +15,7 @@ class AccountRepository(private val jooq: DSLContext) {
             chatId = account.chatId
             username = account.username
             role = Role.valueOf(account.role.toString())
-        }.store()
+        }.merge()
     }
 
     fun findById(userId: Long): Account? {
