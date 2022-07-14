@@ -75,4 +75,47 @@ sealed class UpdateUserDetailsPostProcessor(private val userService: UserService
             userDetails.numberOfTenants = Integer.parseInt(input).toShort()
         }
     }
+
+    class FamilyMembersPostProcessorUpdate(userService: UserService) : UpdateUserDetailsPostProcessor(userService) {
+        override val stepId = FlowStep.FAMILY_MEMBERS
+
+        override fun doInvoke(userDetails: UserDetails, input: String) {
+            userDetails.familyMembers = input
+        }
+    }
+
+    class ReadyToMovePostProcessorUpdate(userService: UserService) : UpdateUserDetailsPostProcessor(userService) {
+        override val stepId = FlowStep.READY_TO_MOVE
+
+        override fun doInvoke(userDetails: UserDetails, input: String) {
+            userDetails.readyToMove = when (input) {
+                "Так" -> true
+                else -> false
+            }
+        }
+    }
+
+    class DistrictSelectionPostProcessorUpdate(userService: UserService) : UpdateUserDetailsPostProcessor(userService) {
+        override val stepId = FlowStep.DISTRICT_SELECTION
+
+        override fun doInvoke(userDetails: UserDetails, input: String) {
+            userDetails.district = input
+        }
+    }
+
+    class ForeignLanguagesPostProcessorUpdate(userService: UserService) : UpdateUserDetailsPostProcessor(userService) {
+        override val stepId = FlowStep.FOREIGN_LANGUAGES
+
+        override fun doInvoke(userDetails: UserDetails, input: String) {
+            userDetails.foreignLanguages = input
+        }
+    }
+
+    class AllergiesPostProcessorUpdate(userService: UserService) : UpdateUserDetailsPostProcessor(userService) {
+        override val stepId = FlowStep.ALLERGIES
+
+        override fun doInvoke(userDetails: UserDetails, input: String) {
+            userDetails.allergies = input
+        }
+    }
 }

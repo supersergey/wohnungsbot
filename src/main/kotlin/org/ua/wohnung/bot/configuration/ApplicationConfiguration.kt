@@ -101,10 +101,15 @@ val processorsModule = module {
     single {
         ProcessorContainer.PostProcessors(
             UpdateUserDetailsPostProcessor.Bundesland(get()),
+            UpdateUserDetailsPostProcessor.DistrictSelectionPostProcessorUpdate(get()),
             UpdateUserDetailsPostProcessor.FamilyCountPostProcessorUpdate(get()),
+            UpdateUserDetailsPostProcessor.FamilyMembersPostProcessorUpdate(get()),
             UpdateUserDetailsPostProcessor.FirstAndLastNamePostProcessorUpdate(get()),
             UpdateUserDetailsPostProcessor.PhoneNumberPostProcessorUpdate(get()),
             UpdateUserDetailsPostProcessor.PetsPostProcessorUpdate(get()),
+            UpdateUserDetailsPostProcessor.ForeignLanguagesPostProcessorUpdate(get()),
+            UpdateUserDetailsPostProcessor.AllergiesPostProcessorUpdate(get()),
+            UpdateUserDetailsPostProcessor.ReadyToMovePostProcessorUpdate(get()),
 
             RegisteredUserPostProcessor.RegisteredUserRequestReceived(get()),
 

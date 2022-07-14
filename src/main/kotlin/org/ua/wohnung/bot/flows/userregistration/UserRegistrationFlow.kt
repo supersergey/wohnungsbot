@@ -60,10 +60,10 @@ class UserRegistrationFlow(private val stepFactory: StepFactory) : Flow() {
         ).addSingle()
         stepFactory.multipleButtons(
             id = FlowStep.READY_TO_MOVE,
-            *listOf("Так", "Ні").allTo(FlowStep.ILLNESS)
+            *listOf("Так", "Ні").allTo(FlowStep.ALLERGIES)
         ).addSingle()
         stepFactory.singleReply(
-            id = FlowStep.ILLNESS,
+            id = FlowStep.ALLERGIES,
             next = FlowStep.REGISTERED_USER_CONVERSATION_START
         ).addSingle()
         stepFactory.termination(FlowStep.CONVERSATION_FINISHED_DECLINED).addSingle()

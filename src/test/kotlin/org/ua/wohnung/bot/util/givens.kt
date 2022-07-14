@@ -25,7 +25,12 @@ fun aFullUserDetails(
     "12234",
     nextInt(1, 5).toShort(),
     true,
-    bundesLand.germanName
+    bundesLand.germanName,
+    "family members",
+    true,
+    "foreign languages",
+    "allergies",
+    "district"
 )
 
 fun aPartialUserDetails(id: Long = nextLong()) = UserDetails(
@@ -34,6 +39,11 @@ fun aPartialUserDetails(id: Long = nextLong()) = UserDetails(
     null,
     null,
     true,
+    null,
+    null,
+    false,
+    null,
+    null,
     null
 )
 

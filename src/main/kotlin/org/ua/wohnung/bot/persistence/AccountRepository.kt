@@ -9,13 +9,13 @@ class AccountRepository(private val jooq: DSLContext) {
 
     fun save(account: Account) {
         val accountRecord =
-            jooq.fetchOne(ACCOUNT, ACCOUNT.USERNAME.eq(account.username)) ?: jooq.newRecord(ACCOUNT)
+            jooq.fetchOne(ACCOUNT, ACCOUNT.ID.eq(account.id)) ?: jooq.newRecord(ACCOUNT)
         accountRecord.apply {
             id = account.id
             chatId = account.chatId
             username = account.username
             role = Role.valueOf(account.role.toString())
-        }.merge()
+        }.store()
     }
 
     fun findById(userId: Long): Account? {

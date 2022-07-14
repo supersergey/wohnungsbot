@@ -38,7 +38,8 @@ class RowMapper : (List<String>) -> Apartment? {
     private val List<String>.city: String
         get() = this[columnsMap.getValue(APARTMENT.CITY)].trim()
     private val List<String>.bundesLand: BundesLand
-        get() = BundesLand.values().firstOrNull { it.germanName == this[columnsMap.getValue(APARTMENT.BUNDESLAND)].trim() }
+        get() = BundesLand.values()
+            .firstOrNull { it.germanName == this[columnsMap.getValue(APARTMENT.BUNDESLAND)].trim() }
             ?: throw SheetValidationException.InvalidBundesLand(
                 this[columnsMap.getValue(APARTMENT.BUNDESLAND)],
                 this[columnsMap.getValue(APARTMENT.ID)]
@@ -50,30 +51,33 @@ class RowMapper : (List<String>) -> Apartment? {
         get() = runCatching { this[columnsMap.getValue(APARTMENT.MAX_TENANTS)].parseTenantsNum().second }
             .getOrDefault(10)
     private val List<String>.description: String
-        get() = listOf(this[6], this[7], this[8], this[11]).filterNot { it.isBlank() }.joinToString("\n\n")
+        get() = listOf(this[5], this[6], this[8]).filterNot { it.isBlank() }.joinToString("\n\n")
     private val List<String>.petsAllowed: Boolean
         get() = runCatching {
-            this[9].trim().lowercase() == "так" || this[9].trim() == "за домовленістю"
+            this[columnsMap.getValue(APARTMENT.PETS_ALLOWED)].trim().lowercase() == "так" ||
+                this[columnsMap.getValue(APARTMENT.PETS_ALLOWED)].trim() == "за домовленістю"
         }.getOrElse { false }
     private val List<String>.publicationStatus: PublicationStatus
-        get() = if (this[16].trim().uppercase() == "TRUE") PublicationStatus.ACTIVE else PublicationStatus.NOT_ACTIVE
+        get() = if (this[columnsMap.getValue(APARTMENT.PUBLICATIONSTATUS)].trim()
+            .uppercase() == "TRUE"
+        ) PublicationStatus.ACTIVE else PublicationStatus.NOT_ACTIVE
 
     private val columnsMap: Map<TableField<ApartmentRecord, out Any>, Int> = mapOf(
         APARTMENT.ID to 0,
         APARTMENT.CITY to 1,
-        APARTMENT.BUNDESLAND to 3,
-        APARTMENT.MIN_TENANTS to 5,
-        APARTMENT.MAX_TENANTS to 5,
-        APARTMENT.PETS_ALLOWED to 9,
-        APARTMENT.PUBLICATIONSTATUS to 16
+        APARTMENT.BUNDESLAND to 2,
+        APARTMENT.MIN_TENANTS to 4,
+        APARTMENT.MAX_TENANTS to 4,
+        APARTMENT.PETS_ALLOWED to 7,
+        APARTMENT.PUBLICATIONSTATUS to 12
     )
 
     private fun String.parseTenantsNum(): Pair<Short, Short> {
-        val cleaned = this.filter { it.isDigit() || it == '-' }.split("-")
-        return if (cleaned.size != 2) {
-            1.toShort() to 10.toShort()
-        } else {
-            cleaned.first().toShort() to cleaned.last().toShort()
+        val cleaned = this.filter { it.isDigit() || it == '-' }.split("-").map { it.toShort() }
+        return when (cleaned.size) {
+            1 -> cleaned.first() to cleaned.first()
+            2 -> cleaned.first() to cleaned.last()
+            else -> 1.toShort() to 10.toShort()
         }
     }
 }
