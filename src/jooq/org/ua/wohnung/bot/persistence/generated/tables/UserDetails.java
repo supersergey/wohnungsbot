@@ -11,7 +11,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -75,6 +75,26 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
      * The column <code>main.user_details.bundesland</code>.
      */
     public final TableField<UserDetailsRecord, String> BUNDESLAND = createField(DSL.name("bundesland"), SQLDataType.VARCHAR(128), this, "");
+
+    /**
+     * The column <code>main.user_details.family_members</code>.
+     */
+    public final TableField<UserDetailsRecord, String> FAMILY_MEMBERS = createField(DSL.name("family_members"), SQLDataType.CLOB.nullable(false).defaultValue(DSL.field("''::text", SQLDataType.CLOB)), this, "");
+
+    /**
+     * The column <code>main.user_details.ready_to_move</code>.
+     */
+    public final TableField<UserDetailsRecord, Boolean> READY_TO_MOVE = createField(DSL.name("ready_to_move"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("true", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>main.user_details.foreign_languages</code>.
+     */
+    public final TableField<UserDetailsRecord, String> FOREIGN_LANGUAGES = createField(DSL.name("foreign_languages"), SQLDataType.CLOB.nullable(false).defaultValue(DSL.field("''::text", SQLDataType.CLOB)), this, "");
+
+    /**
+     * The column <code>main.user_details.allergies</code>.
+     */
+    public final TableField<UserDetailsRecord, String> ALLERGIES = createField(DSL.name("allergies"), SQLDataType.CLOB.nullable(false).defaultValue(DSL.field("''::text", SQLDataType.CLOB)), this, "");
 
     private UserDetails(Name alias, Table<UserDetailsRecord> aliased) {
         this(alias, aliased, null);
@@ -163,11 +183,11 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Long, String, String, Short, Boolean, String> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row10<Long, String, String, Short, Boolean, String, String, Boolean, String, String> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 }

@@ -21,6 +21,10 @@ public class UserDetails implements Serializable {
     private Short   numberOfTenants;
     private Boolean pets;
     private String  bundesland;
+    private String  familyMembers;
+    private Boolean readyToMove;
+    private String  foreignLanguages;
+    private String  allergies;
 
     public UserDetails() {}
 
@@ -31,6 +35,10 @@ public class UserDetails implements Serializable {
         this.numberOfTenants = value.numberOfTenants;
         this.pets = value.pets;
         this.bundesland = value.bundesland;
+        this.familyMembers = value.familyMembers;
+        this.readyToMove = value.readyToMove;
+        this.foreignLanguages = value.foreignLanguages;
+        this.allergies = value.allergies;
     }
 
     public UserDetails(
@@ -39,7 +47,11 @@ public class UserDetails implements Serializable {
         String  phone,
         Short   numberOfTenants,
         Boolean pets,
-        String  bundesland
+        String  bundesland,
+        String  familyMembers,
+        Boolean readyToMove,
+        String  foreignLanguages,
+        String  allergies
     ) {
         this.id = id;
         this.firstLastName = firstLastName;
@@ -47,6 +59,10 @@ public class UserDetails implements Serializable {
         this.numberOfTenants = numberOfTenants;
         this.pets = pets;
         this.bundesland = bundesland;
+        this.familyMembers = familyMembers;
+        this.readyToMove = readyToMove;
+        this.foreignLanguages = foreignLanguages;
+        this.allergies = allergies;
     }
 
     /**
@@ -133,6 +149,62 @@ public class UserDetails implements Serializable {
         this.bundesland = bundesland;
     }
 
+    /**
+     * Getter for <code>main.user_details.family_members</code>.
+     */
+    public String getFamilyMembers() {
+        return this.familyMembers;
+    }
+
+    /**
+     * Setter for <code>main.user_details.family_members</code>.
+     */
+    public void setFamilyMembers(String familyMembers) {
+        this.familyMembers = familyMembers;
+    }
+
+    /**
+     * Getter for <code>main.user_details.ready_to_move</code>.
+     */
+    public Boolean getReadyToMove() {
+        return this.readyToMove;
+    }
+
+    /**
+     * Setter for <code>main.user_details.ready_to_move</code>.
+     */
+    public void setReadyToMove(Boolean readyToMove) {
+        this.readyToMove = readyToMove;
+    }
+
+    /**
+     * Getter for <code>main.user_details.foreign_languages</code>.
+     */
+    public String getForeignLanguages() {
+        return this.foreignLanguages;
+    }
+
+    /**
+     * Setter for <code>main.user_details.foreign_languages</code>.
+     */
+    public void setForeignLanguages(String foreignLanguages) {
+        this.foreignLanguages = foreignLanguages;
+    }
+
+    /**
+     * Getter for <code>main.user_details.allergies</code>.
+     */
+    public String getAllergies() {
+        return this.allergies;
+    }
+
+    /**
+     * Setter for <code>main.user_details.allergies</code>.
+     */
+    public void setAllergies(String allergies) {
+        this.allergies = allergies;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("UserDetails (");
@@ -143,6 +215,10 @@ public class UserDetails implements Serializable {
         sb.append(", ").append(numberOfTenants);
         sb.append(", ").append(pets);
         sb.append(", ").append(bundesland);
+        sb.append(", ").append(familyMembers);
+        sb.append(", ").append(readyToMove);
+        sb.append(", ").append(foreignLanguages);
+        sb.append(", ").append(allergies);
 
         sb.append(")");
         return sb.toString();
