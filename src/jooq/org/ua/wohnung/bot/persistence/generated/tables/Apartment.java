@@ -8,7 +8,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -83,6 +83,16 @@ public class Apartment extends TableImpl<ApartmentRecord> {
      */
     public final TableField<ApartmentRecord, String> PUBLICATIONSTATUS = createField(DSL.name("publicationstatus"), SQLDataType.VARCHAR(128).nullable(false), this, "");
 
+    /**
+     * The column <code>main.apartment.etage</code>.
+     */
+    public final TableField<ApartmentRecord, String> ETAGE = createField(DSL.name("etage"), SQLDataType.VARCHAR(1024), this, "");
+
+    /**
+     * The column <code>main.apartment.map_location</code>.
+     */
+    public final TableField<ApartmentRecord, String> MAP_LOCATION = createField(DSL.name("map_location"), SQLDataType.VARCHAR(1024), this, "");
+
     private Apartment(Name alias, Table<ApartmentRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -153,11 +163,11 @@ public class Apartment extends TableImpl<ApartmentRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<String, String, String, Short, Short, String, Boolean, String> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row10<String, String, String, Short, Short, String, Boolean, String, String, String> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 }

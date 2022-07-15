@@ -19,7 +19,6 @@ import org.ua.wohnung.bot.configuration.registeredUserFlow
 import org.ua.wohnung.bot.configuration.servicesModule
 import org.ua.wohnung.bot.configuration.sheetReaderModule
 import org.ua.wohnung.bot.configuration.userFlowModule
-import kotlin.math.log
 
 private val logger = KotlinLogging.logger {}
 

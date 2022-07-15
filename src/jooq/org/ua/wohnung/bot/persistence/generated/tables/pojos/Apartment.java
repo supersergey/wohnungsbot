@@ -23,6 +23,8 @@ public class Apartment implements Serializable {
     private String  description;
     private Boolean petsAllowed;
     private String  publicationstatus;
+    private String  etage;
+    private String  mapLocation;
 
     public Apartment() {}
 
@@ -35,6 +37,8 @@ public class Apartment implements Serializable {
         this.description = value.description;
         this.petsAllowed = value.petsAllowed;
         this.publicationstatus = value.publicationstatus;
+        this.etage = value.etage;
+        this.mapLocation = value.mapLocation;
     }
 
     public Apartment(
@@ -45,7 +49,9 @@ public class Apartment implements Serializable {
         Short   maxTenants,
         String  description,
         Boolean petsAllowed,
-        String  publicationstatus
+        String  publicationstatus,
+        String  etage,
+        String  mapLocation
     ) {
         this.id = id;
         this.city = city;
@@ -55,6 +61,8 @@ public class Apartment implements Serializable {
         this.description = description;
         this.petsAllowed = petsAllowed;
         this.publicationstatus = publicationstatus;
+        this.etage = etage;
+        this.mapLocation = mapLocation;
     }
 
     /**
@@ -169,6 +177,34 @@ public class Apartment implements Serializable {
         this.publicationstatus = publicationstatus;
     }
 
+    /**
+     * Getter for <code>main.apartment.etage</code>.
+     */
+    public String getEtage() {
+        return this.etage;
+    }
+
+    /**
+     * Setter for <code>main.apartment.etage</code>.
+     */
+    public void setEtage(String etage) {
+        this.etage = etage;
+    }
+
+    /**
+     * Getter for <code>main.apartment.map_location</code>.
+     */
+    public String getMapLocation() {
+        return this.mapLocation;
+    }
+
+    /**
+     * Setter for <code>main.apartment.map_location</code>.
+     */
+    public void setMapLocation(String mapLocation) {
+        this.mapLocation = mapLocation;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Apartment (");
@@ -181,6 +217,8 @@ public class Apartment implements Serializable {
         sb.append(", ").append(description);
         sb.append(", ").append(petsAllowed);
         sb.append(", ").append(publicationstatus);
+        sb.append(", ").append(etage);
+        sb.append(", ").append(mapLocation);
 
         sb.append(")");
         return sb.toString();

@@ -64,11 +64,11 @@ class UserDetailsRepository(private val jooq: DSLContext) {
             numberOfTenants,
             pets,
             bundesland,
+            district,
             familyMembers,
             readyToMove,
             foreignLanguages,
-            allergies,
-            district
+            allergies
         )
 }
 

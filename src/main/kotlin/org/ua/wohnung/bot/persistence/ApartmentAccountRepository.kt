@@ -52,11 +52,11 @@ class ApartmentAccountRepository(private val jooq: DSLContext) {
                         it[USER_DETAILS.NUMBER_OF_TENANTS],
                         it[USER_DETAILS.PETS],
                         it[USER_DETAILS.BUNDESLAND],
+                        it[USER_DETAILS.DISTRICT],
                         it[USER_DETAILS.FAMILY_MEMBERS],
                         it[USER_DETAILS.READY_TO_MOVE],
                         it[USER_DETAILS.FOREIGN_LANGUAGES],
-                        it[USER_DETAILS.ALLERGIES],
-                        it[USER_DETAILS.DISTRICT]
+                        it[USER_DETAILS.ALLERGIES]
                     )
                 )
             }

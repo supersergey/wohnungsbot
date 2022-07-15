@@ -77,6 +77,11 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     public final TableField<UserDetailsRecord, String> BUNDESLAND = createField(DSL.name("bundesland"), SQLDataType.VARCHAR(128), this, "");
 
     /**
+     * The column <code>main.user_details.district</code>.
+     */
+    public final TableField<UserDetailsRecord, String> DISTRICT = createField(DSL.name("district"), SQLDataType.CLOB, this, "");
+
+    /**
      * The column <code>main.user_details.family_members</code>.
      */
     public final TableField<UserDetailsRecord, String> FAMILY_MEMBERS = createField(DSL.name("family_members"), SQLDataType.CLOB, this, "");
@@ -95,11 +100,6 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
      * The column <code>main.user_details.allergies</code>.
      */
     public final TableField<UserDetailsRecord, String> ALLERGIES = createField(DSL.name("allergies"), SQLDataType.CLOB, this, "");
-
-    /**
-     * The column <code>main.user_details.district</code>.
-     */
-    public final TableField<UserDetailsRecord, String> DISTRICT = createField(DSL.name("district"), SQLDataType.CLOB, this, "");
 
     private UserDetails(Name alias, Table<UserDetailsRecord> aliased) {
         this(alias, aliased, null);
@@ -192,7 +192,7 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row11<Long, String, String, Short, Boolean, String, String, Boolean, String, String, String> fieldsRow() {
+    public Row11<Long, String, String, Short, Boolean, String, String, String, Boolean, String, String> fieldsRow() {
         return (Row11) super.fieldsRow();
     }
 }

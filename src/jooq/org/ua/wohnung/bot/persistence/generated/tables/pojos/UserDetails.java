@@ -21,11 +21,11 @@ public class UserDetails implements Serializable {
     private Short   numberOfTenants;
     private Boolean pets;
     private String  bundesland;
+    private String  district;
     private String  familyMembers;
     private Boolean readyToMove;
     private String  foreignLanguages;
     private String  allergies;
-    private String  district;
 
     public UserDetails() {}
 
@@ -36,11 +36,11 @@ public class UserDetails implements Serializable {
         this.numberOfTenants = value.numberOfTenants;
         this.pets = value.pets;
         this.bundesland = value.bundesland;
+        this.district = value.district;
         this.familyMembers = value.familyMembers;
         this.readyToMove = value.readyToMove;
         this.foreignLanguages = value.foreignLanguages;
         this.allergies = value.allergies;
-        this.district = value.district;
     }
 
     public UserDetails(
@@ -50,11 +50,11 @@ public class UserDetails implements Serializable {
         Short   numberOfTenants,
         Boolean pets,
         String  bundesland,
+        String  district,
         String  familyMembers,
         Boolean readyToMove,
         String  foreignLanguages,
-        String  allergies,
-        String  district
+        String  allergies
     ) {
         this.id = id;
         this.firstLastName = firstLastName;
@@ -62,11 +62,11 @@ public class UserDetails implements Serializable {
         this.numberOfTenants = numberOfTenants;
         this.pets = pets;
         this.bundesland = bundesland;
+        this.district = district;
         this.familyMembers = familyMembers;
         this.readyToMove = readyToMove;
         this.foreignLanguages = foreignLanguages;
         this.allergies = allergies;
-        this.district = district;
     }
 
     /**
@@ -154,6 +154,20 @@ public class UserDetails implements Serializable {
     }
 
     /**
+     * Getter for <code>main.user_details.district</code>.
+     */
+    public String getDistrict() {
+        return this.district;
+    }
+
+    /**
+     * Setter for <code>main.user_details.district</code>.
+     */
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    /**
      * Getter for <code>main.user_details.family_members</code>.
      */
     public String getFamilyMembers() {
@@ -209,20 +223,6 @@ public class UserDetails implements Serializable {
         this.allergies = allergies;
     }
 
-    /**
-     * Getter for <code>main.user_details.district</code>.
-     */
-    public String getDistrict() {
-        return this.district;
-    }
-
-    /**
-     * Setter for <code>main.user_details.district</code>.
-     */
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("UserDetails (");
@@ -233,11 +233,11 @@ public class UserDetails implements Serializable {
         sb.append(", ").append(numberOfTenants);
         sb.append(", ").append(pets);
         sb.append(", ").append(bundesland);
+        sb.append(", ").append(district);
         sb.append(", ").append(familyMembers);
         sb.append(", ").append(readyToMove);
         sb.append(", ").append(foreignLanguages);
         sb.append(", ").append(allergies);
-        sb.append(", ").append(district);
 
         sb.append(")");
         return sb.toString();

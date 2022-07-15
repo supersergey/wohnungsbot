@@ -24,7 +24,9 @@ class RowMapper : (List<String>) -> Apartment? {
                 source.maxTenants,
                 source.description,
                 source.petsAllowed,
-                source.publicationStatus.name
+                source.publicationStatus.name,
+                source.etage,
+                source.mapLocation
             )
         }.getOrElse {
             logger.info { "Invalid spreadsheet entry, ${it.message}" }
@@ -44,14 +46,18 @@ class RowMapper : (List<String>) -> Apartment? {
                 this[columnsMap.getValue(APARTMENT.BUNDESLAND)],
                 this[columnsMap.getValue(APARTMENT.ID)]
             )
+    private val List<String>.etage: String
+        get() = kotlin.runCatching { this[columnsMap.getValue(APARTMENT.ETAGE)] }.getOrDefault("Не вказано")
     private val List<String>.minTenants: Short
         get() = runCatching { this[columnsMap.getValue(APARTMENT.MIN_TENANTS)].parseTenantsNum().first }
             .getOrDefault(1)
     private val List<String>.maxTenants: Short
         get() = runCatching { this[columnsMap.getValue(APARTMENT.MAX_TENANTS)].parseTenantsNum().second }
             .getOrDefault(10)
+    private val List<String>.mapLocation: String
+        get() = kotlin.runCatching { this[columnsMap.getValue(APARTMENT.MAP_LOCATION)] }.getOrDefault("Не вказано")
     private val List<String>.description: String
-        get() = listOf(this[5], this[6], this[8]).filterNot { it.isBlank() }.joinToString("\n\n")
+        get() = listOf(this[5], this[8]).filterNot { it.isBlank() }.joinToString("\n\n")
     private val List<String>.petsAllowed: Boolean
         get() = runCatching {
             this[columnsMap.getValue(APARTMENT.PETS_ALLOWED)].trim().lowercase() == "так" ||
@@ -66,8 +72,10 @@ class RowMapper : (List<String>) -> Apartment? {
         APARTMENT.ID to 0,
         APARTMENT.CITY to 1,
         APARTMENT.BUNDESLAND to 2,
+        APARTMENT.MAP_LOCATION to 3,
         APARTMENT.MIN_TENANTS to 4,
         APARTMENT.MAX_TENANTS to 4,
+        APARTMENT.ETAGE to 6,
         APARTMENT.PETS_ALLOWED to 7,
         APARTMENT.PUBLICATIONSTATUS to 12
     )

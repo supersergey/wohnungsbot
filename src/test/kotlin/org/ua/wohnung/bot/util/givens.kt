@@ -27,10 +27,10 @@ fun aFullUserDetails(
     true,
     bundesLand.germanName,
     "family members",
+    "district",
     true,
     "foreign languages",
-    "allergies",
-    "district"
+    "allergies"
 )
 
 fun aPartialUserDetails(id: Long = nextLong()) = UserDetails(
@@ -41,8 +41,8 @@ fun aPartialUserDetails(id: Long = nextLong()) = UserDetails(
     true,
     null,
     null,
-    false,
     null,
+    false,
     null,
     null
 )
@@ -55,7 +55,9 @@ fun anApartment(
     maxTenants: Short = 5,
     description: String = "description",
     petsAllowed: Boolean = false,
-    publicationStatus: PublicationStatus = PublicationStatus.ACTIVE
+    publicationStatus: PublicationStatus = PublicationStatus.ACTIVE,
+    etage: String = "1",
+    mapLocation: String = ""
 ): Apartment {
     return Apartment(
         "$id",
@@ -65,6 +67,8 @@ fun anApartment(
         maxTenants,
         description,
         petsAllowed,
-        publicationStatus.name
+        publicationStatus.name,
+        etage,
+        mapLocation
     )
 }
