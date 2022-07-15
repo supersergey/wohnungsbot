@@ -71,7 +71,7 @@ tasks.withType<Test> {
 }
 
 val secrets = Properties().apply {
-    load(FileInputStream(File(rootProject.rootDir, "src/main/resources/secrets/secrets.properties")))
+    load(FileInputStream(File(rootProject.rootDir, "src/main/resources/secrets/secrets-dev.properties")))
 }
 
 tasks.withType<Jar> {

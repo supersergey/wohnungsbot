@@ -1,5 +1,6 @@
 package org.ua.wohnung.bot
 
+import mu.KotlinLogging
 import org.flywaydb.core.Flyway
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -18,11 +19,15 @@ import org.ua.wohnung.bot.configuration.registeredUserFlow
 import org.ua.wohnung.bot.configuration.servicesModule
 import org.ua.wohnung.bot.configuration.sheetReaderModule
 import org.ua.wohnung.bot.configuration.userFlowModule
+import kotlin.math.log
 
-fun main() {
+private val logger = KotlinLogging.logger {}
+
+fun main(args: Array<String>) {
     startKoin {
         printLogger()
-        fileProperties("/secrets/secrets.properties")
+        logger.info { "Running with ${args[0]} profile" }
+        fileProperties("/secrets/secrets-${args[0]}.properties")
         modules(
             commonModule,
             persistenceModule,
