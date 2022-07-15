@@ -59,7 +59,18 @@ class ApartmentRepository(private val dslContext: DSLContext) {
         )
 
     private fun ApartmentRecord.updateWith(apartment: Apartment): ApartmentRecord =
-        apartment.toRecord()
+        this.apply {
+            id = apartment.id
+            city = apartment.city
+            bundesland = apartment.bundesland
+            minTenants = apartment.minTenants
+            maxTenants = apartment.maxTenants
+            description = apartment.description
+            petsAllowed = apartment.petsAllowed
+            publicationstatus = apartment.publicationstatus
+            etage = apartment.etage
+            mapLocation = apartment.mapLocation
+        }
 
     private fun Apartment.toRecord(): ApartmentRecord =
         ApartmentRecord(
