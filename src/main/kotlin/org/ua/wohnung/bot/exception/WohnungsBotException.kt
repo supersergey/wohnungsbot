@@ -4,7 +4,12 @@ import org.ua.wohnung.bot.persistence.generated.enums.Role
 
 abstract class WohnungsBotException(message: String, cause: Throwable? = null) : Throwable(message, cause)
 
-sealed class ServiceException(message: String, val userMessage: String = "", val finishSession: Boolean = true, cause: Throwable? = null) :
+sealed class ServiceException(
+    message: String,
+    val userMessage: String = "",
+    val finishSession: Boolean = true,
+    cause: Throwable? = null
+) :
     WohnungsBotException(message, cause) {
     class UnreadableMessage(updateId: Int) : ServiceException("Message unreadable, $updateId")
     class UserNotFound(val userId: Long) : ServiceException("User not found: $userId")
@@ -20,6 +25,11 @@ sealed class ServiceException(message: String, val userMessage: String = "", val
     class UserApplicationRateExceeded(userId: Long, maxAttempts: Int) : ServiceException(
         "Too many application attempts, userId: $userId",
         "Протягом доби можна подати заявку на $maxAttempts помешкань. Спробуйте пізніше"
+    )
+
+    object MatchingApartmentNotFoundException : ServiceException(
+        message = "Suitable apartments not found",
+        userMessage = "\uD83C\uDFE0 На жаль, наразі ми не маємо пропозицій, які вам підходять. Якщо щось з'явиться, ви отримаєте повідомлення."
     )
 }
 

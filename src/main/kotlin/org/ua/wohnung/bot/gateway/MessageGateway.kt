@@ -40,16 +40,20 @@ class MessageGateway(
                 sendMessages.forEach { execute(it) }
                 session.updateState(chatMetadata.chatId, nextStep.id)
             }.onFailure {
-                logger.error(it) { "Something went wrong" }
                 val userMessage = if (it is ServiceException && it.userMessage.isNotEmpty())
                     it.userMessage
-                else
+                else {
+                    logger.error(it) { it.message }
                     "Невірно введені дані, ${it.message}"
+                }
                 val errorMessage = messageFactory
                     .getCustom(chatMetadata.chatId, userMessage)
                 execute(errorMessage)
                 if (it is ServiceException && it.finishSession)
-                    session.dropSession(chatMetadata.chatId)
+                    session.updateState(
+                        chatId = chatMetadata.chatId,
+                        state = flowRegistry.getFlowByUserId(chatMetadata.userId).first().id
+                    )
             }
         }
     }

@@ -55,7 +55,9 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             petsAllowed,
             publicationstatus,
             etage,
-            mapLocation
+            mapLocation,
+            livingPeriod,
+            showingDate
         )
 
     private fun ApartmentRecord.updateWith(apartment: Apartment): ApartmentRecord =
@@ -70,6 +72,8 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             publicationstatus = apartment.publicationstatus
             etage = apartment.etage
             mapLocation = apartment.mapLocation
+            livingPeriod = apartment.livingPeriod
+            showingDate = apartment.showingDate
         }
 
     private fun Apartment.toRecord(): ApartmentRecord =
@@ -83,7 +87,9 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             petsAllowed,
             publicationstatus,
             etage,
-            mapLocation
+            mapLocation,
+            livingPeriod,
+            showingDate
         )
 }
 

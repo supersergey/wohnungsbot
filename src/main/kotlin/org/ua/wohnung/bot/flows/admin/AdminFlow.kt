@@ -18,8 +18,9 @@ class AdminFlow(private val stepFactory: StepFactory) : Flow() {
             FlowStep.ADMIN_WHO_IS_INTERESTED_ASK_APARTMENT_ID,
             FlowStep.ADMIN_LIST_APPLICANTS
         ).addSingle()
-        stepFactory.termination(
-            FlowStep.ADMIN_LIST_APPLICANTS
+        stepFactory.multipleTextOptions(
+            FlowStep.ADMIN_LIST_APPLICANTS,
+            ReplyOption("/whoIsInterested", FlowStep.ADMIN_WHO_IS_INTERESTED_ASK_APARTMENT_ID, "Хто цікавиться житлом")
         ).addSingle()
     }
 }

@@ -57,7 +57,9 @@ fun anApartment(
     petsAllowed: Boolean = false,
     publicationStatus: PublicationStatus = PublicationStatus.ACTIVE,
     etage: String = "1",
-    mapLocation: String = ""
+    mapLocation: String = "",
+    livingPeriod: String = "",
+    showingDate: String = ""
 ): Apartment {
     return Apartment(
         "$id",
@@ -69,6 +71,8 @@ fun anApartment(
         petsAllowed,
         publicationStatus.name,
         etage,
-        mapLocation
+        mapLocation,
+        livingPeriod,
+        showingDate
     )
 }

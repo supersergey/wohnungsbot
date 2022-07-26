@@ -23,7 +23,11 @@ class RegisteredUserFlow(
             id = FlowStep.REGISTERED_USER_LIST_APARTMENTS,
             next = FlowStep.REGISTERED_USER_REQUEST_RECEIVED
         ).addSingle()
-        stepFactory.termination(FlowStep.REGISTERED_USER_REQUEST_RECEIVED).addSingle()
+        stepFactory.multipleButtons(
+            id = FlowStep.REGISTERED_USER_REQUEST_RECEIVED,
+            ReplyOption("Доступне мені житло", FlowStep.REGISTERED_USER_LIST_APARTMENTS),
+            ReplyOption("Видаліть мої дані", FlowStep.CONVERSATION_FINISH_REMOVAL)
+        ).addSingle()
         stepFactory.termination(FlowStep.REGISTERED_USER_REQUEST_DECLINED).addSingle()
         stepFactory.termination(FlowStep.CONVERSATION_FINISH_REMOVAL).addSingle()
     }
