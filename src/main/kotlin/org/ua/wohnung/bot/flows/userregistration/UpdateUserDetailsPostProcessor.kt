@@ -72,7 +72,16 @@ sealed class UpdateUserDetailsPostProcessor(private val userService: UserService
         override val stepId = FlowStep.FAMILY_COUNT
 
         override fun doInvoke(userDetails: UserDetails, input: String) {
-            userDetails.numberOfTenants = Integer.parseInt(input).toShort()
+            runCatching {
+                val numberOfTenants = Integer.parseInt(input.trim()).toShort()
+                if (numberOfTenants in (1..12)) {
+                    userDetails.numberOfTenants = numberOfTenants
+                } else {
+                    throw Exception()
+                }
+            }.onFailure {
+                throw UserInputValidationException.InvalidFamilyCount(input)
+            }
         }
     }
 

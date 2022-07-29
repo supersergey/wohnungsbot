@@ -2,7 +2,7 @@ package org.ua.wohnung.bot.exception
 
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 
-abstract class WohnungsBotException(message: String, cause: Throwable? = null) : Throwable(message, cause)
+abstract class WohnungsBotException(message: String, userMessage: String = "", cause: Throwable? = null) : Throwable(message, cause)
 
 sealed class ServiceException(
     message: String,
@@ -10,11 +10,11 @@ sealed class ServiceException(
     val finishSession: Boolean = true,
     cause: Throwable? = null
 ) :
-    WohnungsBotException(message, cause) {
+    WohnungsBotException(message, userMessage, cause) {
     class UnreadableMessage(updateId: Int) : ServiceException("Message unreadable, $updateId")
-    class UserNotFound(val userId: Long) : ServiceException("User not found: $userId")
+    class UserNotFound(val userId: Long) : ServiceException("User not found: $userId", "Користувач не знайдений: $userId")
     class ApartmentNotFound(apartmentId: String) :
-        ServiceException("Apartment not found: $apartmentId", "Помешкання не знайдено")
+        ServiceException("Apartment not found: $apartmentId", "Помешкання не знайдено: $apartmentId")
 
     class AccessViolation(val userId: Long, actualRole: Role?, vararg expectedRole: Role) :
         ServiceException(
@@ -33,18 +33,29 @@ sealed class ServiceException(
     )
 }
 
-sealed class UserInputValidationException(message: String, cause: Throwable? = null) :
-    WohnungsBotException(message, cause) {
-    class InvalidBundesLand(val bundesLand: String) : UserInputValidationException("Bundesland not found: $bundesLand")
+sealed class UserInputValidationException(message: String, userMessage: String = "", cause: Throwable? = null) :
+    WohnungsBotException(message, userMessage, cause) {
+    class InvalidBundesLand(val bundesLand: String) : UserInputValidationException(
+        "Bundesland not found: $bundesLand",
+        "Такої Федеральної Землі немає: $bundesLand. Виберіть землю, натиснувши кнопку внизу. Не друкуйте назву вручну!"
+    )
     class InvalidPhoneNumber(val phoneNumber: String) :
-        UserInputValidationException("Invalid phone number: $phoneNumber")
+        UserInputValidationException(
+            "Invalid phone number: $phoneNumber",
+            "Цей номер $phoneNumber неправльний, введіть номер правильно"
+        )
 
     class InvalidUserName(val userName: String) : UserInputValidationException("Invalid user name: $userName")
     class InvalidUserId(input: String) : UserInputValidationException("User id not found: $input")
+
+    class InvalidFamilyCount(val count: String): UserInputValidationException(
+        "Invalid family member count: $count",
+        "Неправильне значення: $count. Виберіть кількість членів родини, натиснувши кнопку внизу. Не друкуйте значення вручну!"
+    )
 }
 
 sealed class SheetValidationException(message: String, cause: Throwable? = null) :
-    WohnungsBotException(message, cause) {
+    WohnungsBotException(message, "", cause) {
     class InvalidApartmentId(val id: String) : SheetValidationException("Invalid apartment id: $id")
     class InvalidBundesLand(val bundesLand: String, val rowId: String) :
         SheetValidationException("Invalid Bundesland: $bundesLand, rowId: $rowId")

@@ -149,8 +149,8 @@ val messageGatewayModule = module {
     }
     single<LongPollingBot>(named("WohnungsBot")) {
         MessageGateway(
-            getProperty(Secrets.BOT_NAME.setting),
             getProperty(BOT_API_SECRET.setting),
+            getProperty(Secrets.BOT_NAME.setting),
             get(),
             get(),
             get()
