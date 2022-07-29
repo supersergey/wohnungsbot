@@ -11,6 +11,7 @@ import org.ua.wohnung.bot.flows.step.Step
 
 class MessageGateway(
     private val secret: String,
+    private val botName: String,
     private val flowRegistry: FlowRegistry,
     private val session: Session,
     private val messageFactory: MessageFactory
@@ -19,7 +20,7 @@ class MessageGateway(
 
     override fun getBotToken(): String = secret
 
-    override fun getBotUsername(): String = "UA_Wohnung_Bot"
+    override fun getBotUsername(): String = botName
 
     override fun onUpdateReceived(update: Update) {
         logger.info { "Received update, chatId: ${update.message.chatId}" }

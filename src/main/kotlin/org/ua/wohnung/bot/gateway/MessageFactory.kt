@@ -28,7 +28,7 @@ class MessageFactory(
         }
     }
 
-    fun getCustom(chatIdentifier: Long, message: String): SendMessage = SendMessage().apply {
+    fun getCustom(chatIdentifier: Long?, message: String): SendMessage = SendMessage().apply {
         this.chatId = chatIdentifier.toString()
         text = message
     }

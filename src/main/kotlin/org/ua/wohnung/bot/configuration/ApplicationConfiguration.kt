@@ -38,6 +38,7 @@ import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentAccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
+import org.ua.wohnung.bot.security.Secrets
 import org.ua.wohnung.bot.security.Secrets.BOT_API_SECRET
 import org.ua.wohnung.bot.security.Secrets.DRIVER_CLASS_NAME
 import org.ua.wohnung.bot.security.Secrets.JDBC_PASSWORD
@@ -148,6 +149,7 @@ val messageGatewayModule = module {
     }
     single<LongPollingBot>(named("WohnungsBot")) {
         MessageGateway(
+            getProperty(Secrets.BOT_NAME.setting),
             getProperty(BOT_API_SECRET.setting),
             get(),
             get(),
