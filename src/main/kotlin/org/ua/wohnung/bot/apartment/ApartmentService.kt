@@ -1,6 +1,7 @@
 package org.ua.wohnung.bot.apartment
 
 import mu.KotlinLogging
+import org.jooq.DSLContext
 import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentAccountRepository
@@ -18,6 +19,7 @@ import java.time.Duration
 import java.time.OffsetDateTime
 
 class ApartmentService(
+    private val dslContext: DSLContext,
     private val accountRepository: AccountRepository,
     private val userDetailsRepository: UserDetailsRepository,
     private val apartmentRepository: ApartmentRepository,
@@ -29,8 +31,17 @@ class ApartmentService(
     private val logger = KotlinLogging.logger { }
 
     fun update() {
-        val apartments = sheetReader.readRows().mapNotNull(rowMapper)
-        apartmentRepository.saveAll(apartments)
+        val incomingApartments = sheetReader.readRows().mapNotNull(rowMapper)
+        dslContext.transaction { ctx ->
+            val activeApartments = apartmentRepository
+                .findByCriteria(ApartmentSearchCriteria(publicationStatus = PublicationStatus.ACTIVE))
+            val incomingApartmentsIds = incomingApartments.map { it.id }
+            val inactiveApartments = activeApartments
+                .filterNot { it.id in incomingApartmentsIds }
+                .onEach { it.publicationstatus = PublicationStatus.NOT_ACTIVE.name }
+            apartmentRepository.saveAll(ctx.dsl(), incomingApartments)
+            apartmentRepository.saveAll(ctx.dsl(), inactiveApartments)
+        }
     }
 
     fun count(): Int = apartmentRepository.count()
@@ -73,7 +84,7 @@ class ApartmentService(
         limit: Int = 2,
         duration: Duration = Duration.ofDays(1)
     ): List<OffsetDateTime> {
-        if (this.size == limit && Duration.between(this.first(), OffsetDateTime.now()) < duration) {
+        if (this.size == limit && Duration.between(this.last(), OffsetDateTime.now()) < duration) {
             throw ServiceException.UserApplicationRateExceeded(userId, limit)
         }
         return this

@@ -20,8 +20,8 @@ class ApartmentRepository(private val dslContext: DSLContext) {
         apartmentRecord.updateWith(apartment).store()
     }
 
-    fun saveAll(apartments: Collection<Apartment>): Int {
-        return dslContext.batchMerge(
+    fun saveAll(ctx: DSLContext, apartments: Collection<Apartment>): Int {
+        return ctx.batchMerge(
             apartments.map { it.toRecord() }
         ).execute().size
     }

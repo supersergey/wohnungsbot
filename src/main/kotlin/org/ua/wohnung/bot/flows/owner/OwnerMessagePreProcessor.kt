@@ -51,10 +51,11 @@ sealed class OwnerMessagePreProcessor : MessagePreProcessor() {
                 listOf(MessageMeta("Користувачі з ролью ${Role.ADMIN} не знайдені"))
             } else
                 admins.map {
+                    val userName = if (it.userName.isBlank()) { "Прихований" } else "https://t.me/${it.userName}"
                     """
                     userId: ${it.userId}
                     chatId: ${it.chatId}
-                    telegramName: ${it.userName}
+                    telegramName: $userName
                     userName: ${it.firstAndLastName}
                     """.trimIndent()
                 }.map { MessageMeta(it) }

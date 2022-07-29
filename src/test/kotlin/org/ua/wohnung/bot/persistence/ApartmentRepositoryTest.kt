@@ -1,6 +1,7 @@
 package org.ua.wohnung.bot.persistence
 
 import org.assertj.core.api.Assertions.assertThat
+import org.jooq.DSLContext
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.java.KoinJavaComponent
@@ -13,6 +14,7 @@ import org.ua.wohnung.bot.util.anApartment
 internal class ApartmentRepositoryTest {
 
     private val apartmentRepository: ApartmentRepository by KoinJavaComponent.inject(ApartmentRepository::class.java)
+    private val dslContext: DSLContext by KoinJavaComponent.inject(DSLContext::class.java)
 
     @Test
     fun `should save and update the apartment record`() {
@@ -29,8 +31,8 @@ internal class ApartmentRepositoryTest {
     @Test
     fun `should save batch of apartment records`() {
         val apartments = listOf(anApartment(), anApartment())
-        apartmentRepository.saveAll(apartments)
-        apartmentRepository.saveAll(apartments + anApartment())
+        apartmentRepository.saveAll(dslContext, apartments)
+        apartmentRepository.saveAll(dslContext, apartments + anApartment())
         assertThat(apartmentRepository.count()).isEqualTo(3)
     }
 
@@ -42,7 +44,7 @@ internal class ApartmentRepositoryTest {
             expected,
             anApartment()
         )
-        apartmentRepository.saveAll(apartments)
+        apartmentRepository.saveAll(dslContext, apartments)
 
         val actual = apartmentRepository.findByCriteria(
             ApartmentSearchCriteria(bundesLand = BundesLand.BERLIN, numberOfTenants = 3, petsAllowed = true, publicationStatus = PublicationStatus.ACTIVE)

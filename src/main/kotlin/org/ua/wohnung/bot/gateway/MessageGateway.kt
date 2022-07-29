@@ -2,6 +2,7 @@ package org.ua.wohnung.bot.gateway
 
 import mu.KotlinLogging
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.flows.FlowRegistry
@@ -37,7 +38,10 @@ class MessageGateway(
                 nextStep.preProcessor.invoke(chatMetadata, chatMetadata.input)
 
                 val sendMessages = messageFactory.get(chatMetadata, nextStep)
-                sendMessages.forEach { execute(it) }
+                sendMessages.forEach {
+                    execute(it)
+                    Thread.sleep(1000)
+                }
                 session.updateState(chatMetadata.chatId, nextStep.id)
             }.onFailure {
                 val userMessage = if (it is ServiceException && it.userMessage.isNotEmpty())
@@ -56,6 +60,10 @@ class MessageGateway(
                     )
             }
         }
+    }
+
+    fun execute(message: SendMessage) {
+        super.execute(message)
     }
 
     private fun resolveCurrentStep(chatMetadata: ChatMetadata): Step? {

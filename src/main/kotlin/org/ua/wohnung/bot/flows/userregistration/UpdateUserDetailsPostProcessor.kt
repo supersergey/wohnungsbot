@@ -49,11 +49,11 @@ sealed class UpdateUserDetailsPostProcessor(private val userService: UserService
         override val stepId = FlowStep.PHONE_NUMBER
 
         override fun doInvoke(userDetails: UserDetails, input: String) {
-            val clean = input.replace("\\s*\\D".toRegex(), "")
-            if (clean.length in (5..15)) {
-                userDetails.phone = clean
-            } else
-                throw UserInputValidationException.InvalidPhoneNumber(input)
+            val clean = input.trim()
+            if (clean.length < 6 || clean.length > 127) {
+                throw UserInputValidationException.InvalidPhoneNumber(clean)
+            }
+            userDetails.phone = input
         }
     }
 

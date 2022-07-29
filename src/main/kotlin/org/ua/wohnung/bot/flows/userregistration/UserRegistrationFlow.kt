@@ -36,7 +36,7 @@ class UserRegistrationFlow(private val stepFactory: StepFactory) : Flow() {
         ).addSingle()
         stepFactory.multipleButtons(
             id = FlowStep.FAMILY_COUNT,
-            *(1..8).map { "$it" }.allTo(FlowStep.FAMILY_MEMBERS)
+            *(1..12).map { "$it" }.allTo(FlowStep.FAMILY_MEMBERS)
         ).addSingle()
         stepFactory.singleReply(
             id = FlowStep.FAMILY_MEMBERS,
