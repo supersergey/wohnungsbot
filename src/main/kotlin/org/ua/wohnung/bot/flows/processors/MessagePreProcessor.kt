@@ -1,5 +1,6 @@
 package org.ua.wohnung.bot.flows.processors
 
+import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.apartment.ApartmentService
 import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
@@ -23,10 +24,18 @@ abstract class MessagePreProcessor : PreProcessor {
         }
     }
 
-    class RegisteredUserListApartments(private val apartmentService: ApartmentService) : MessagePreProcessor() {
+    class RegisteredUserListApartments(
+        private val apartmentService: ApartmentService,
+        private val accountService: AccountService
+    ) : MessagePreProcessor() {
         override val stepId: FlowStep = FlowStep.REGISTERED_USER_LIST_APARTMENTS
 
         override fun invoke(chatMetadata: ChatMetadata, input: String): List<MessageMeta> {
+            if (chatMetadata.username.isNullOrBlank()) {
+                throw ServiceException.UsernameNotFound(userId = chatMetadata.userId)
+            } else {
+                accountService.updateUserName(chatMetadata.userId, chatMetadata.username)
+            }
             val apartments = apartmentService.findByUserDetails(chatMetadata.userId)
             if (apartments.isEmpty())
                 throw ServiceException.MatchingApartmentNotFoundException

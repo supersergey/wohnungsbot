@@ -16,4 +16,13 @@ class AccountService(
             }
         }
     }
+
+    fun updateUserName(id: Long, username: String) {
+        jooq.transaction { _ ->
+            val user = accountRepository.findById(id)
+                ?.apply { this.username = username }
+                ?: return@transaction
+            accountRepository.save(user)
+        }
+    }
 }

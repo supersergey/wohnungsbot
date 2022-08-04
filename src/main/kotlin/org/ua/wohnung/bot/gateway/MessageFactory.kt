@@ -65,7 +65,10 @@ class MessageFactory(
                             (step.reply as Reply.WithInlineButtons).inlineKeyboardRows(messageMeta, 3)
                         ).build()
                 }
-                else -> ReplyKeyboardMarkup.builder().clearKeyboard().build()
+                else -> ReplyKeyboardMarkup.builder()
+                    .keyboard(emptyList())
+                    .clearKeyboard()
+                    .build()
             }
         )
         return this.build()

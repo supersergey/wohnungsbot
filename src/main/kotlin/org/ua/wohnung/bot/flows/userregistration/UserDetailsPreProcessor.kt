@@ -1,5 +1,6 @@
 package org.ua.wohnung.bot.flows.userregistration
 
+import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.PreProcessor
 import org.ua.wohnung.bot.flows.step.FlowStep
@@ -12,6 +13,9 @@ sealed class UserDetailsPreProcessor : PreProcessor {
         override val stepId = FlowStep.BUNDESLAND_SELECTION
 
         override fun invoke(chatMetadata: ChatMetadata, input: String) {
+            if (chatMetadata.username.isNullOrBlank()) {
+                throw ServiceException.UsernameNotFound(chatMetadata.userId)
+            }
             userService.createAccount(chatMetadata.toAccount().apply { role = Role.USER })
         }
 

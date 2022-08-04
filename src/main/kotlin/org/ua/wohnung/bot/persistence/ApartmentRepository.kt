@@ -41,7 +41,7 @@ class ApartmentRepository(private val dslContext: DSLContext) {
     }
 
     fun count(): Int {
-        return dslContext.fetchCount(APARTMENT)
+        return dslContext.fetchCount(APARTMENT, APARTMENT.PUBLICATIONSTATUS.eq(PublicationStatus.ACTIVE.name))
     }
 
     private fun ApartmentRecord.toApartment(): Apartment =

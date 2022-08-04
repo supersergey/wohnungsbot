@@ -27,7 +27,7 @@ internal class AccountRepositoryTest {
         val id = nextLong()
         val accountRecord = Account(id, nextLong(), "username", ADMIN)
         accountRepository.save(accountRecord)
-        val newAccountRecord = Account(id, nextLong(), "username", USER)
+        val newAccountRecord = Account(id, nextLong(), "new_username", USER)
         accountRepository.save(newAccountRecord)
         val saved = accountRepository.findById(accountRecord.id)
         assertThat(saved).usingRecursiveComparison().isEqualTo(newAccountRecord)

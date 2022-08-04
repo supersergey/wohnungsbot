@@ -17,6 +17,11 @@ import org.ua.wohnung.bot.sheets.SheetReader
 import org.ua.wohnung.bot.user.model.BundesLand
 import java.time.Duration
 import java.time.OffsetDateTime
+import java.util.Timer
+import java.util.TimerTask
+import java.util.concurrent.locks.Lock
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 class ApartmentService(
     private val dslContext: DSLContext,
@@ -29,19 +34,40 @@ class ApartmentService(
 ) {
 
     private val logger = KotlinLogging.logger { }
+    private val timer = Timer()
+    private val lock: Lock = ReentrantLock()
+
+    init {
+        timer.schedule(
+            DbUpdateTask(),
+            0,
+            Duration.ofMinutes(5).toMillis()
+        )
+    }
+
+    inner class DbUpdateTask : TimerTask() {
+        override fun run() {
+            lock.withLock {
+                update()
+            }
+        }
+    }
 
     fun update() {
-        val incomingApartments = sheetReader.readRows().mapNotNull(rowMapper)
-        dslContext.transaction { ctx ->
-            val activeApartments = apartmentRepository
-                .findByCriteria(ApartmentSearchCriteria(publicationStatus = PublicationStatus.ACTIVE))
-            val incomingApartmentsIds = incomingApartments.map { it.id }
-            val inactiveApartments = activeApartments
-                .filterNot { it.id in incomingApartmentsIds }
-                .onEach { it.publicationstatus = PublicationStatus.NOT_ACTIVE.name }
-            apartmentRepository.saveAll(ctx.dsl(), incomingApartments)
-            apartmentRepository.saveAll(ctx.dsl(), inactiveApartments)
+        lock.withLock {
+            val incomingApartments = sheetReader.readRows().mapNotNull(rowMapper)
+            dslContext.transaction { ctx ->
+                val activeApartments = apartmentRepository
+                    .findByCriteria(ApartmentSearchCriteria(publicationStatus = PublicationStatus.ACTIVE))
+                val incomingApartmentsIds = incomingApartments.map { it.id }
+                val inactiveApartments = activeApartments
+                    .filterNot { it.id in incomingApartmentsIds }
+                    .onEach { it.publicationstatus = PublicationStatus.NOT_ACTIVE.name }
+                apartmentRepository.saveAll(ctx.dsl(), incomingApartments)
+                apartmentRepository.saveAll(ctx.dsl(), inactiveApartments)
+            }
         }
+        logger.info { "DB updated, ${count()} active records" }
     }
 
     fun count(): Int = apartmentRepository.count()

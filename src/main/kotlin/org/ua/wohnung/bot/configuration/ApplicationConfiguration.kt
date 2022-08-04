@@ -121,7 +121,7 @@ val processorsModule = module {
     single {
         ProcessorContainer.MessagePreProcessors(
             MessagePreProcessor.RegisteredUserConversationStart(get()),
-            MessagePreProcessor.RegisteredUserListApartments(get()),
+            MessagePreProcessor.RegisteredUserListApartments(get(), get()),
 
             OwnerMessagePreProcessor.OwnerStart(get(), get()),
             OwnerMessagePreProcessor.OwnerApartmentsUpdated(get()),

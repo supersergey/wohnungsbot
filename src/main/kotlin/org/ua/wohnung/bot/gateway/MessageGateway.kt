@@ -5,6 +5,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.ua.wohnung.bot.exception.ServiceException
+import org.ua.wohnung.bot.exception.WohnungsBotException
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.step.Step
@@ -23,9 +24,9 @@ class MessageGateway(
     override fun getBotUsername(): String = botName
 
     override fun onUpdateReceived(update: Update) {
-        logger.info { "Received update, chatId: ${update.message.chatId}" }
         if (update.isProcessable()) {
             val chatMetadata = update.metadata()
+            logger.info { "Received update, chatId: ${update.message.chatId}" }
             val currentStep = resolveCurrentStep(chatMetadata)
 
             runCatching {
@@ -45,7 +46,7 @@ class MessageGateway(
                 }
                 session.updateState(chatMetadata.chatId, nextStep.id)
             }.onFailure {
-                val userMessage = if (it is ServiceException && it.userMessage.isNotEmpty())
+                val userMessage = if (it is WohnungsBotException && it.userMessage.isNotEmpty())
                     it.userMessage
                 else {
                     logger.error(it) { it.message }
