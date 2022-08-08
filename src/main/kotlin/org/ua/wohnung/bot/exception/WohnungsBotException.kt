@@ -1,16 +1,22 @@
 package org.ua.wohnung.bot.exception
 
+import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 
 abstract class WohnungsBotException(message: String, open val userMessage: String = "", cause: Throwable? = null) : Throwable(message, cause)
 
 sealed class ServiceException(
     message: String,
-    override val userMessage: String = "",
+    override val userMessage: String = "❌ Помилка системи. Ми спробуємо її полагодити. Спробуйте повернутися до Бота через деякий час",
     val finishSession: Boolean = true,
     cause: Throwable? = null
 ) :
     WohnungsBotException(message, userMessage, cause) {
+
+    class StepFactoryNotFound(flowStep: FlowStep):
+        ServiceException("Step factory not found, flowStep: $flowStep")
+    class StepProcessorNotFound(updateId: Int, flowStep: FlowStep, userInput: String) :
+        ServiceException("Step processor not found, flowStep: $flowStep, userInput: $userInput, updateId: $updateId")
     class UnreadableMessage(updateId: Int) : ServiceException("Message unreadable, $updateId")
     class UserNotFound(val userId: Long) : ServiceException("User not found: $userId", "Користувач не знайдений: $userId")
     class ApartmentNotFound(apartmentId: String) :

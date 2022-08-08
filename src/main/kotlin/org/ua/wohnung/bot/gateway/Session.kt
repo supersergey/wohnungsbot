@@ -14,7 +14,10 @@ class Session(private val sessionTtl: Duration = Duration.ofMinutes(15)) {
     private val internalMap: ConcurrentMap<Long, StepSession> = ConcurrentHashMap()
     private val timer: Timer = Timer(true)
 
-    private data class StepSession(val flowStep: FlowStep, val lastUpdateTs: Instant = Instant.now())
+    private data class StepSession(
+        val steps: MutableList<FlowStep>,
+        var lastUpdateTs: Instant = Instant.now()
+    )
 
     init {
         timer.schedule(
@@ -24,11 +27,15 @@ class Session(private val sessionTtl: Duration = Duration.ofMinutes(15)) {
         )
     }
 
-    fun current(chatId: Long): FlowStep? = internalMap[chatId]?.flowStep
+    fun current(chatId: Long): List<FlowStep>? = internalMap[chatId]?.steps?.toList()
 
     fun updateState(chatId: Long, state: FlowStep) {
-        internalMap[chatId] = StepSession(state)
+        internalMap.computeIfAbsent(chatId) {
+            StepSession(mutableListOf(state))
+        }.steps.add(state)
+        internalMap[chatId]?.lastUpdateTs = Instant.now()
     }
+
 
     fun dropSession(vararg chatId: Long) {
         chatId.forEach { internalMap.remove(it) }

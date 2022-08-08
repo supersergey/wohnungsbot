@@ -15,22 +15,35 @@ import org.koin.dsl.module
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.apartment.ApartmentService
-import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.admin.AdminFlow
-import org.ua.wohnung.bot.flows.admin.AdminMessagePreProcessor
-import org.ua.wohnung.bot.flows.dynamicbuttons.DynamicButtonProducersRegistry
-import org.ua.wohnung.bot.flows.dynamicbuttons.DynamicButtonsProducerImpl
 import org.ua.wohnung.bot.flows.owner.OwnerFlow
-import org.ua.wohnung.bot.flows.owner.OwnerMessagePreProcessor
-import org.ua.wohnung.bot.flows.owner.OwnerPostProcessor
-import org.ua.wohnung.bot.flows.processors.MessagePreProcessor
-import org.ua.wohnung.bot.flows.processors.ProcessorContainer
-import org.ua.wohnung.bot.flows.registereduser.RegisteredUserFlow
-import org.ua.wohnung.bot.flows.registereduser.RegisteredUserPostProcessor
-import org.ua.wohnung.bot.flows.step.StepFactory
-import org.ua.wohnung.bot.flows.userregistration.UpdateUserDetailsPostProcessor
-import org.ua.wohnung.bot.flows.userregistration.UserDetailsPreProcessor
-import org.ua.wohnung.bot.flows.userregistration.UserRegistrationFlow
+import org.ua.wohnung.bot.flows.processors.StepFactoriesRegistry
+import org.ua.wohnung.bot.flows.processors.UserInputProcessorsRegistry
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.AcceptPoliciesStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.AllergiesStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ApprovePersonalDataStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.BundeslandStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ConversationFinishedDeclinedStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ConversationStartStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.DistrictFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.FamilyCountFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.FamilyMembersFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.FirstAndLastNameFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ForeignLanguagesFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.PetsFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.PhoneNumberFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ReadyToMoveFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.AllergiesInputProcessor
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.BundeslandInputProcessor
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.DistrictInputProcessor
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.FamilyMembersInputProcessor
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.FirstAndLastNameInputProcessor
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.ForeignLanguagesInputProcessor
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.NumberOfTenantsInputProcessor
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.PetsInputProcessor
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.PhoneNumberInputProcessor
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.ReadyToMoveInputProcessor
+import org.ua.wohnung.bot.flows.step.UserRegistrationFlow
 import org.ua.wohnung.bot.gateway.MessageFactory
 import org.ua.wohnung.bot.gateway.MessageGateway
 import org.ua.wohnung.bot.gateway.Session
@@ -72,85 +85,108 @@ val servicesModule = module {
 }
 
 val userFlowModule = module {
-    single { UserRegistrationFlow(get()) }
+    singleOf(::UserRegistrationFlow)
 }
 
 val registeredUserFlow = module {
-    single {
-        DynamicButtonProducersRegistry(
-            DynamicButtonsProducerImpl(get())
-        )
-    }
-    single { RegisteredUserFlow(get()) }
+//    single {
+//        DynamicButtonProducersRegistry(
+//            DynamicButtonsProducerImpl(get())
+//        )
+//    }
+//    single { RegisteredUserFlow(get()) }
 }
 
 val adminModule = module {
-    single { AdminFlow(get()) }
+    singleOf(::AdminFlow)
 }
 
 val ownerModule = module {
-    single { OwnerFlow(get()) }
+    singleOf(::OwnerFlow)
 }
 
 val processorsModule = module {
-    single {
-        ProcessorContainer.PreProcessors(
-            UserDetailsPreProcessor.BundesLandSelectionPreProcessor(get()),
-            UserDetailsPreProcessor.UserRegistrationFlowConditionsRejectedPreProcessor(get())
-        )
-    }
-    single {
-        ProcessorContainer.PostProcessors(
-            UpdateUserDetailsPostProcessor.Bundesland(get()),
-            UpdateUserDetailsPostProcessor.DistrictSelectionPostProcessorUpdate(get()),
-            UpdateUserDetailsPostProcessor.FamilyCountPostProcessorUpdate(get()),
-            UpdateUserDetailsPostProcessor.FamilyMembersPostProcessorUpdate(get()),
-            UpdateUserDetailsPostProcessor.FirstAndLastNamePostProcessorUpdate(get()),
-            UpdateUserDetailsPostProcessor.PhoneNumberPostProcessorUpdate(get()),
-            UpdateUserDetailsPostProcessor.PetsPostProcessorUpdate(get()),
-            UpdateUserDetailsPostProcessor.ForeignLanguagesPostProcessorUpdate(get()),
-            UpdateUserDetailsPostProcessor.AllergiesPostProcessorUpdate(get()),
-            UpdateUserDetailsPostProcessor.ReadyToMovePostProcessorUpdate(get()),
-
-            RegisteredUserPostProcessor.RegisteredUserRequestReceived(get()),
-
-            OwnerPostProcessor.AddAdmin(get(), get()),
-            OwnerPostProcessor.RemoveAdmin(get(), get())
-        )
-    }
-    single {
-        ProcessorContainer.MessagePreProcessors(
-            MessagePreProcessor.RegisteredUserConversationStart(get()),
-            MessagePreProcessor.RegisteredUserListApartments(get(), get()),
-
-            OwnerMessagePreProcessor.OwnerStart(get(), get()),
-            OwnerMessagePreProcessor.OwnerApartmentsUpdated(get()),
-            OwnerMessagePreProcessor.OwnerListAdmins(get()),
-
-            AdminMessagePreProcessor.AdminStart(get(), get()),
-            AdminMessagePreProcessor.AdminWhoIsInterested(get(), get())
-        )
-    }
+//    single {
+//        ProcessorContainer.PreProcessors(
+//            UserDetailsStepProcessor.BundesLandSelectionStepProcessor(get()),
+//            UserDetailsStepProcessor.UserRegistrationFlowConditionsRejectedStepProcessor(get())
+//        )
+//    }
+//    single {
+//        ProcessorContainer.PostProcessors(
+//            UpdateUserDetailsStepProcessor.Bundesland(get()),
+//            UpdateUserDetailsStepProcessor.DistrictSelectionStepProcessorUpdate(get()),
+//            UpdateUserDetailsStepProcessor.FamilyCountStepProcessorUpdate(get()),
+//            UpdateUserDetailsStepProcessor.FamilyMembersStepProcessorUpdate(get()),
+//            UpdateUserDetailsStepProcessor.FirstAndLastNameStepProcessorUpdate(get()),
+//            UpdateUserDetailsStepProcessor.PhoneNumberStepProcessorUpdate(get()),
+//            UpdateUserDetailsStepProcessor.PetsStepProcessorUpdate(get()),
+//            UpdateUserDetailsStepProcessor.ForeignLanguagesStepProcessorUpdate(get()),
+//            UpdateUserDetailsStepProcessor.AllergiesStepProcessorUpdate(get()),
+//            UpdateUserDetailsStepProcessor.ReadyToMoveStepProcessorUpdate(get()),
+//
+//            RegisteredUserStepProcessor.RegisteredUserRequestReceived(get()),
+//
+//            OwnerStepProcessor.AddAdmin(get(), get()),
+//            OwnerStepProcessor.RemoveAdmin(get(), get())
+//        )
+//    }
+//    single {
+//        ProcessorContainer.MessagePreProcessors(
+//            MessageStepProcessor.RegisteredUserConversationStart(get()),
+//            MessageStepProcessor.RegisteredUserListApartments(get(), get()),
+//
+//            OwnerMessageStepProcessor.OwnerStart(get(), get()),
+//            OwnerMessageStepProcessor.OwnerApartmentsUpdated(get()),
+//            OwnerMessageStepProcessor.OwnerListAdmins(get()),
+//
+//            AdminMessageStepProcessor.AdminStart(get(), get()),
+//            AdminMessageStepProcessor.AdminWhoIsInterested(get(), get())
+//        )
+//    }
 }
 
 val messageGatewayModule = module {
     single { Session() }
     single { MessageSource(get(), Path.of("flows", "newUserFlow.yml")) }
-    single { StepFactory(get(), get(), get()) }
     singleOf(::MessageFactory)
     single {
-        FlowRegistry(
-            get(),
-            get<UserRegistrationFlow>(),
-            get<OwnerFlow>(),
-            get<AdminFlow>(),
-            get<RegisteredUserFlow>()
+        StepFactoriesRegistry(
+            ConversationStartStepFactory(get(), get()),
+            AcceptPoliciesStepFactory(get()),
+            ApprovePersonalDataStepFactory(get()),
+            ConversationFinishedDeclinedStepFactory(get()),
+            BundeslandStepFactory(get()),
+            DistrictFactory(get()),
+            FamilyCountFactory(get()),
+            FamilyMembersFactory(get()),
+            FirstAndLastNameFactory(get()),
+            PhoneNumberFactory(get()),
+            PetsFactory(get()),
+            ForeignLanguagesFactory(get()),
+            ReadyToMoveFactory(get()),
+            AllergiesStepFactory(get())
+        )
+    }
+    single {
+        UserInputProcessorsRegistry(
+            BundeslandInputProcessor(get()),
+            DistrictInputProcessor(get()),
+            FamilyMembersInputProcessor(get()),
+            FirstAndLastNameInputProcessor(get()),
+            ForeignLanguagesInputProcessor(get()),
+            NumberOfTenantsInputProcessor(get()),
+            PetsInputProcessor(get()),
+            PhoneNumberInputProcessor(get()),
+            ReadyToMoveInputProcessor(get()),
+            AllergiesInputProcessor(get())
         )
     }
     single<LongPollingBot>(named("WohnungsBot")) {
         MessageGateway(
             getProperty(BOT_API_SECRET.setting),
             getProperty(Secrets.BOT_NAME.setting),
+            get(),
             get(),
             get(),
             get()
