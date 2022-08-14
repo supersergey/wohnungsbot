@@ -40,7 +40,7 @@ class ApartmentService(
     init {
         timer.schedule(
             DbUpdateTask(),
-            0,
+            Duration.ofMinutes(5).toMillis(),
             Duration.ofMinutes(5).toMillis()
         )
     }
@@ -63,8 +63,8 @@ class ApartmentService(
                 val inactiveApartments = activeApartments
                     .filterNot { it.id in incomingApartmentsIds }
                     .onEach { it.publicationstatus = PublicationStatus.NOT_ACTIVE.name }
-                apartmentRepository.saveAll(ctx.dsl(), incomingApartments)
                 apartmentRepository.saveAll(ctx.dsl(), inactiveApartments)
+                apartmentRepository.saveAll(ctx.dsl(), incomingApartments)
             }
         }
         logger.info { "DB updated, ${count()} active records" }

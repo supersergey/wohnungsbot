@@ -64,18 +64,28 @@ internal class ApartmentServiceTest {
 
     @Test
     fun `should mark apartments that are not present in the source as INACTIVE`() {
-        val activeApartment = anApartment("activeApartment", PublicationStatus.ACTIVE)
-        val activeApartmentMissingInIncomingList = anApartment("activeApartmentMissingInIncomingList", PublicationStatus.ACTIVE)
-        val newApartment = anApartment("newApartment", PublicationStatus.ACTIVE)
-        val apartmentTheBecomesInactive = anApartment("apartmentTheBecomesInactive", PublicationStatus.NOT_ACTIVE)
-        val apartmentThatRemainsNotActive = anApartment("apartmentThatRemainsNotActive", PublicationStatus.NOT_ACTIVE)
+        val dbApartmentTheBecomesInactive = anApartment("apartmentThatBecomesInactive", PublicationStatus.ACTIVE)
+        val dbApartmentTheBecomesActive = anApartment("apartmentThatBecomesActive", PublicationStatus.NOT_ACTIVE)
+        val dbApartmentThatRemainsNotActive = anApartment("apartmentThatRemainsNotActive", PublicationStatus.NOT_ACTIVE)
+        val dbApartmentThatRemainsActive = anApartment("apartmentThatRemainsActive", PublicationStatus.NOT_ACTIVE)
+        val dbActiveApartmentThatIsMissingInTheIncomingList =
+            anApartment("activeApartmentThatIsMissingInTheIncomingList", PublicationStatus.ACTIVE)
+        val dbInactiveApartmentThatIsMissingInTheIncomingList =
+            anApartment("inActiveApartmentThatIsMissingInTheIncomingList", PublicationStatus.NOT_ACTIVE)
 
-        every { sheetReader.readRows() } returns listOf(mockk(), mockk(), mockk(), mockk())
+        val newApartment = anApartment("newApartment", PublicationStatus.ACTIVE)
+        val apartmentThatBecomesInactive = anApartment("apartmentThatBecomesInactive", PublicationStatus.NOT_ACTIVE)
+        val apartmentThatBecomesActive = anApartment("apartmentThatBecomesActive", PublicationStatus.ACTIVE)
+        val apartmentThatRemainsNotActive = anApartment("apartmentThatRemainsNotActive", PublicationStatus.NOT_ACTIVE)
+        val apartmentThatRemainsActive = anApartment("apartmentThatRemainsActive", PublicationStatus.NOT_ACTIVE)
+
+        every { sheetReader.readRows() } returns listOf(mockk(), mockk(), mockk(), mockk(), mockk())
         every { rowMapper.invoke(any()) } returns
-            activeApartment andThen
             newApartment andThen
-            apartmentTheBecomesInactive andThen
-            apartmentThatRemainsNotActive
+            apartmentThatBecomesInactive andThen
+            apartmentThatRemainsNotActive andThen
+            apartmentThatRemainsActive andThen
+            apartmentThatBecomesActive
 
         val dslConfig = mockk<Configuration>()
         val internalDslContext = mockk<DSLContext>()
@@ -86,10 +96,12 @@ internal class ApartmentServiceTest {
             )
         }
         every { apartmentRepository.findByCriteria(any()) } returns listOf(
-            activeApartment,
-            activeApartmentMissingInIncomingList,
-            apartmentTheBecomesInactive,
-            apartmentThatRemainsNotActive
+            dbApartmentTheBecomesInactive,
+            dbApartmentTheBecomesActive,
+            dbApartmentThatRemainsNotActive,
+            dbApartmentThatRemainsActive,
+            dbActiveApartmentThatIsMissingInTheIncomingList,
+            dbInactiveApartmentThatIsMissingInTheIncomingList
         )
         every { apartmentRepository.saveAll(any(), any()) } returns 1
 
@@ -99,18 +111,20 @@ internal class ApartmentServiceTest {
             apartmentRepository.saveAll(
                 internalDslContext,
                 listOf(
-                    activeApartment,
-                    newApartment,
-                    apartmentTheBecomesInactive,
-                    apartmentThatRemainsNotActive
+                    dbActiveApartmentThatIsMissingInTheIncomingList.apply {
+                        publicationstatus = PublicationStatus.NOT_ACTIVE.name
+                    },
+                    dbInactiveApartmentThatIsMissingInTheIncomingList
                 )
             )
             apartmentRepository.saveAll(
                 internalDslContext,
                 listOf(
-                    activeApartmentMissingInIncomingList.apply {
-                        publicationstatus = PublicationStatus.NOT_ACTIVE.name
-                    }
+                    newApartment,
+                    apartmentThatBecomesInactive,
+                    apartmentThatRemainsNotActive,
+                    apartmentThatRemainsActive,
+                    apartmentThatBecomesActive
                 )
             )
         }
