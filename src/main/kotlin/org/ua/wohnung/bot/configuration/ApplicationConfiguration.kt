@@ -15,26 +15,30 @@ import org.koin.dsl.module
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.apartment.ApartmentService
-import org.ua.wohnung.bot.flows.admin.AdminFlow
-import org.ua.wohnung.bot.flows.owner.OwnerFlow
-import org.ua.wohnung.bot.flows.processors.StepFactoriesRegistry
+import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.processors.UserInputProcessorsRegistry
+import org.ua.wohnung.bot.flows.processors.registereduser.RegisteredUserFlow
 import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.AcceptPoliciesStepFactory
 import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.AllergiesStepFactory
 import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ApprovePersonalDataStepFactory
 import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.BundeslandStepFactory
 import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ConversationFinishedDeclinedStepFactory
 import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ConversationStartStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.DistrictFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.FamilyCountFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.FamilyMembersFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.FirstAndLastNameFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ForeignLanguagesFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.PetsFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.PhoneNumberFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ReadyToMoveFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.DistrictSelectionStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.DummyInitStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.FamilyCountStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.FamilyMembersStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.FirstAndLastNameStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ForeignLanguagesStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.PetsStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.PhoneNumberStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ReadyToMoveStepFactory
+import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.StepFactoriesRegistry
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.AcceptPoliciesUserInputProcessor
 import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.AllergiesInputProcessor
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.ApprovePersonalDataUserInputProcessor
 import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.BundeslandInputProcessor
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.ConversationStartInputProcessor
 import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.DistrictInputProcessor
 import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.FamilyMembersInputProcessor
 import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.FirstAndLastNameInputProcessor
@@ -84,9 +88,9 @@ val servicesModule = module {
     singleOf(::AccountService)
 }
 
-val userFlowModule = module {
-    singleOf(::UserRegistrationFlow)
-}
+// val userFlowModule = module {
+//    singleOf(::UserRegistrationFlow)
+// }
 
 val registeredUserFlow = module {
 //    single {
@@ -97,13 +101,13 @@ val registeredUserFlow = module {
 //    single { RegisteredUserFlow(get()) }
 }
 
-val adminModule = module {
-    singleOf(::AdminFlow)
-}
+// val adminModule = module {
+//    singleOf(::AdminFlow)
+// }
 
-val ownerModule = module {
-    singleOf(::OwnerFlow)
-}
+// val ownerModule = module {
+//    singleOf(::OwnerFlow)
+// }
 
 val processorsModule = module {
 //    single {
@@ -151,25 +155,32 @@ val messageGatewayModule = module {
     single { MessageSource(get(), Path.of("flows", "newUserFlow.yml")) }
     singleOf(::MessageFactory)
     single {
+        FlowRegistry(UserRegistrationFlow(), RegisteredUserFlow())
+    }
+    single {
         StepFactoriesRegistry(
+            DummyInitStepFactory(get(), get()),
             ConversationStartStepFactory(get(), get()),
-            AcceptPoliciesStepFactory(get()),
-            ApprovePersonalDataStepFactory(get()),
-            ConversationFinishedDeclinedStepFactory(get()),
-            BundeslandStepFactory(get()),
-            DistrictFactory(get()),
-            FamilyCountFactory(get()),
-            FamilyMembersFactory(get()),
-            FirstAndLastNameFactory(get()),
-            PhoneNumberFactory(get()),
-            PetsFactory(get()),
-            ForeignLanguagesFactory(get()),
-            ReadyToMoveFactory(get()),
-            AllergiesStepFactory(get())
+            AcceptPoliciesStepFactory(get(), get()),
+            ApprovePersonalDataStepFactory(get(), get()),
+            ConversationFinishedDeclinedStepFactory(get(), get()),
+            BundeslandStepFactory(get(), get()),
+            DistrictSelectionStepFactory(get(), get()),
+            FamilyCountStepFactory(get(), get()),
+            FamilyMembersStepFactory(get(), get()),
+            FirstAndLastNameStepFactory(get(), get()),
+            PhoneNumberStepFactory(get(), get()),
+            PetsStepFactory(get(), get()),
+            ForeignLanguagesStepFactory(get(), get()),
+            ReadyToMoveStepFactory(get(), get()),
+            AllergiesStepFactory(get(), get())
         )
     }
     single {
         UserInputProcessorsRegistry(
+            ConversationStartInputProcessor(),
+            AcceptPoliciesUserInputProcessor(get()),
+            ApprovePersonalDataUserInputProcessor(get()),
             BundeslandInputProcessor(get()),
             DistrictInputProcessor(get()),
             FamilyMembersInputProcessor(get()),

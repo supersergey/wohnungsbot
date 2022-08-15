@@ -31,11 +31,10 @@ class Session(private val sessionTtl: Duration = Duration.ofMinutes(15)) {
 
     fun updateState(chatId: Long, state: FlowStep) {
         internalMap.computeIfAbsent(chatId) {
-            StepSession(mutableListOf(state))
+            StepSession(mutableListOf())
         }.steps.add(state)
         internalMap[chatId]?.lastUpdateTs = Instant.now()
     }
-
 
     fun dropSession(vararg chatId: Long) {
         chatId.forEach { internalMap.remove(it) }

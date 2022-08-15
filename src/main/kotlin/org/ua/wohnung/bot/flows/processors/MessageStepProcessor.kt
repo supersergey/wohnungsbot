@@ -1,14 +1,14 @@
-//package org.ua.wohnung.bot.flows.processors
+// package org.ua.wohnung.bot.flows.processors
 //
-//import org.ua.wohnung.bot.account.AccountService
-//import org.ua.wohnung.bot.apartment.ApartmentService
-//import org.ua.wohnung.bot.exception.ServiceException
-//import org.ua.wohnung.bot.flows.dto.ChatMetadata
-//import org.ua.wohnung.bot.flows.step.FlowStep
-//import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
-//import org.ua.wohnung.bot.user.UserService
+// import org.ua.wohnung.bot.account.AccountService
+// import org.ua.wohnung.bot.apartment.ApartmentService
+// import org.ua.wohnung.bot.exception.ServiceException
+// import org.ua.wohnung.bot.flows.dto.ChatMetadata
+// import org.ua.wohnung.bot.flows.step.FlowStep
+// import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
+// import org.ua.wohnung.bot.user.UserService
 //
-//abstract class MessageStepProcessor : StepProcessor {
+// abstract class MessageStepProcessor : StepProcessor {
 //
 //    abstract override fun invoke(chatMetadata: ChatMetadata, input: String): List<Message>
 //
@@ -85,4 +85,4 @@
 //
 //        override val stepId: FlowStep = FlowStep.CONVERSATION_START
 //    }
-//}
+// }

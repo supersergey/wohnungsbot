@@ -7,7 +7,7 @@ interface Flow {
     val supportedRole: Role
     val first: FlowStep
 }
-//abstract class Flow {
+// abstract class Flow {
 //    private val internalMap = mutableMapOf<FlowStep, Step>()
 //
 //    private var first: Step? = null
@@ -48,4 +48,4 @@ interface Flow {
 //
 //    protected fun List<String>.allTo(next: FlowStep): Array<ReplyOption> =
 //        map { ReplyOption(it, next) }.toTypedArray()
-//}
+// }

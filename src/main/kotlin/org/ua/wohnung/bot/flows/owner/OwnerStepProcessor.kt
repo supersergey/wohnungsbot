@@ -1,16 +1,16 @@
-//package org.ua.wohnung.bot.flows.owner
+// package org.ua.wohnung.bot.flows.owner
 //
-//import mu.KotlinLogging
-//import org.ua.wohnung.bot.account.AccountService
-//import org.ua.wohnung.bot.exception.ServiceException
-//import org.ua.wohnung.bot.exception.UserInputValidationException
-//import org.ua.wohnung.bot.flows.dto.ChatMetadata
-//import org.ua.wohnung.bot.flows.processors.StepProcessor
-//import org.ua.wohnung.bot.flows.step.FlowStep
-//import org.ua.wohnung.bot.persistence.generated.enums.Role
-//import org.ua.wohnung.bot.user.UserService
+// import mu.KotlinLogging
+// import org.ua.wohnung.bot.account.AccountService
+// import org.ua.wohnung.bot.exception.ServiceException
+// import org.ua.wohnung.bot.exception.UserInputValidationException
+// import org.ua.wohnung.bot.flows.dto.ChatMetadata
+// import org.ua.wohnung.bot.flows.processors.StepProcessor
+// import org.ua.wohnung.bot.flows.step.FlowStep
+// import org.ua.wohnung.bot.persistence.generated.enums.Role
+// import org.ua.wohnung.bot.user.UserService
 //
-//sealed class OwnerStepProcessor(private val userService: UserService) : StepProcessor {
+// sealed class OwnerStepProcessor(private val userService: UserService) : StepProcessor {
 //
 //    protected val logger = KotlinLogging.logger { }
 //
@@ -55,4 +55,4 @@
 //            logger.info { "User $userId has been granted USER privileges" }
 //        }
 //    }
-//}
+// }

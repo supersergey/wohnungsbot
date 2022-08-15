@@ -1,16 +1,16 @@
-//package org.ua.wohnung.bot.flows.owner
+// package org.ua.wohnung.bot.flows.owner
 //
-//import org.ua.wohnung.bot.apartment.ApartmentService
-//import org.ua.wohnung.bot.exception.ServiceException.UserNotFound
-//import org.ua.wohnung.bot.flows.FlowRegistry
-//import org.ua.wohnung.bot.flows.dto.ChatMetadata
-//import org.ua.wohnung.bot.flows.processors.Message
-//import org.ua.wohnung.bot.flows.processors.MessageStepProcessor
-//import org.ua.wohnung.bot.flows.step.FlowStep
-//import org.ua.wohnung.bot.persistence.generated.enums.Role
-//import org.ua.wohnung.bot.user.UserService
+// import org.ua.wohnung.bot.apartment.ApartmentService
+// import org.ua.wohnung.bot.exception.ServiceException.UserNotFound
+// import org.ua.wohnung.bot.flows.FlowRegistry
+// import org.ua.wohnung.bot.flows.dto.ChatMetadata
+// import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.Message
+// import org.ua.wohnung.bot.flows.processors.MessageStepProcessor
+// import org.ua.wohnung.bot.flows.step.FlowStep
+// import org.ua.wohnung.bot.persistence.generated.enums.Role
+// import org.ua.wohnung.bot.user.UserService
 //
-//sealed class OwnerMessageStepProcessor : MessageStepProcessor() {
+// sealed class OwnerMessageStepProcessor : MessageStepProcessor() {
 //    class OwnerStart(private val userService: UserService, private val flowRegistry: FlowRegistry) :
 //        OwnerMessageStepProcessor() {
 //        override val stepId = FlowStep.OWNER_START
@@ -61,4 +61,4 @@
 //                }.map { Message(it) }
 //        }
 //    }
-//}
+// }

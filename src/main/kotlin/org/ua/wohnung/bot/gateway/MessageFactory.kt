@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.StepOutput
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.StepOutput
 
 data class MessageWrapper(
     val editMessage: EditMessageText? = null,
@@ -39,7 +39,6 @@ class MessageFactory {
                 messageId = chatMeta.messageId
             )
         }
-
     }
 
     fun getCustom(chatIdentifier: Long?, message: String): SendMessage = SendMessage().apply {
@@ -72,7 +71,8 @@ class MessageFactory {
         keyboard(
             stepOutput.replyOptions
                 .map { InlineKeyboardButton(it, null, it, null, null, null, null, null, null) }
-                .chunked(buttonsPerRow))
+                .chunked(buttonsPerRow)
+        )
 
     private fun ReplyKeyboardMarkup.ReplyKeyboardMarkupBuilder.withKeyboard(
         stepOutput: StepOutput.MarkupButtons,

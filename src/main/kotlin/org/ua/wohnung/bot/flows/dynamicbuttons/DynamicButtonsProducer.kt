@@ -1,17 +1,17 @@
-//package org.ua.wohnung.bot.flows.dynamicbuttons
+// package org.ua.wohnung.bot.flows.dynamicbuttons
 //
-//import org.ua.wohnung.bot.apartment.ApartmentService
-//import org.ua.wohnung.bot.flows.dto.ChatMetadata
-//import org.ua.wohnung.bot.flows.step.FlowStep
-//import org.ua.wohnung.bot.flows.step.ReplyOption
+// import org.ua.wohnung.bot.apartment.ApartmentService
+// import org.ua.wohnung.bot.flows.dto.ChatMetadata
+// import org.ua.wohnung.bot.flows.step.FlowStep
+// import org.ua.wohnung.bot.flows.step.ReplyOption
 //
-//interface DynamicButtonsProducer : (ChatMetadata, FlowStep) -> List<ReplyOption> {
+// interface DynamicButtonsProducer : (ChatMetadata, FlowStep) -> List<ReplyOption> {
 //    val supportedStep: FlowStep
-//}
+// }
 //
-//class DynamicButtonsProducerImpl(
+// class DynamicButtonsProducerImpl(
 //    private val apartmentService: ApartmentService,
-//) : DynamicButtonsProducer {
+// ) : DynamicButtonsProducer {
 //    override val supportedStep: FlowStep = FlowStep.REGISTERED_USER_LIST_APARTMENTS
 //
 //    override fun invoke(chatMetadata: ChatMetadata, flowStep: FlowStep): List<ReplyOption> {
@@ -24,4 +24,4 @@
 //                )
 //            }
 //    }
-//}
+// }

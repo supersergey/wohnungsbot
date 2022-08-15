@@ -1,7 +1,6 @@
 package org.ua.wohnung.bot.flows.step
 
 import org.ua.wohnung.bot.flows.Flow
-import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.user.model.Role
 
 class UserRegistrationFlow : Flow {

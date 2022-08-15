@@ -1,8 +1,8 @@
-//package org.ua.wohnung.bot.flows.dynamicbuttons
+// package org.ua.wohnung.bot.flows.dynamicbuttons
 //
-//import org.ua.wohnung.bot.flows.step.FlowStep
+// import org.ua.wohnung.bot.flows.step.FlowStep
 //
-//class DynamicButtonProducersRegistry(vararg dynamicButtonsProducers: DynamicButtonsProducer) {
+// class DynamicButtonProducersRegistry(vararg dynamicButtonsProducers: DynamicButtonsProducer) {
 //    private val map: Map<FlowStep, DynamicButtonsProducer>
 //
 //    init {
@@ -10,4 +10,4 @@
 //    }
 //
 //    operator fun get(id: FlowStep): DynamicButtonsProducer? = map[id]
-//}
+// }

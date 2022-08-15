@@ -1,13 +1,14 @@
 package org.ua.wohnung.bot.flows.processors
 
+import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.AbstractUserInputProcessor
 import org.ua.wohnung.bot.flows.step.FlowStep
 
-class UserInputProcessorsRegistry(vararg processors: UserInputProcessor) {
-    private val map: Map<FlowStep, UserInputProcessor>
+class UserInputProcessorsRegistry(vararg processors: AbstractUserInputProcessor) {
+    private val map: Map<FlowStep, AbstractUserInputProcessor>
 
     init {
         map = processors.associateBy { it.supportedStep }
     }
 
-    operator fun get(step: FlowStep): UserInputProcessor? = map[step]
+    operator fun get(step: FlowStep): AbstractUserInputProcessor? = map[step]
 }

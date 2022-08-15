@@ -1,17 +1,17 @@
-//package org.ua.wohnung.bot.flows.admin
+// package org.ua.wohnung.bot.flows.admin
 //
-//import org.ua.wohnung.bot.apartment.ApartmentService
-//import org.ua.wohnung.bot.exception.ServiceException
-//import org.ua.wohnung.bot.flows.FlowRegistry
-//import org.ua.wohnung.bot.flows.dto.ChatMetadata
-//import org.ua.wohnung.bot.flows.processors.Message
-//import org.ua.wohnung.bot.flows.processors.MessageStepProcessor
-//import org.ua.wohnung.bot.flows.step.FlowStep
-//import org.ua.wohnung.bot.persistence.ApartmentApplication
-//import org.ua.wohnung.bot.persistence.generated.enums.Role
-//import org.ua.wohnung.bot.user.UserService
+// import org.ua.wohnung.bot.apartment.ApartmentService
+// import org.ua.wohnung.bot.exception.ServiceException
+// import org.ua.wohnung.bot.flows.FlowRegistry
+// import org.ua.wohnung.bot.flows.dto.ChatMetadata
+// import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.Message
+// import org.ua.wohnung.bot.flows.processors.MessageStepProcessor
+// import org.ua.wohnung.bot.flows.step.FlowStep
+// import org.ua.wohnung.bot.persistence.ApartmentApplication
+// import org.ua.wohnung.bot.persistence.generated.enums.Role
+// import org.ua.wohnung.bot.user.UserService
 //
-//sealed class AdminMessageStepProcessor(private val userService: UserService) : MessageStepProcessor() {
+// sealed class AdminMessageStepProcessor(private val userService: UserService) : MessageStepProcessor() {
 //
 //    protected fun validateOwnerPermission(userId: Long) { // todo code duplication
 //        val currentUserRole = userService.findUserRoleById(userId)
@@ -88,4 +88,4 @@
 //                    .toString()
 //            }
 //    }
-//}
+// }

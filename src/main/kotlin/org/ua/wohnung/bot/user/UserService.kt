@@ -2,6 +2,8 @@ package org.ua.wohnung.bot.user
 
 import org.jooq.DSLContext
 import org.ua.wohnung.bot.exception.ServiceException.UserNotFound
+import org.ua.wohnung.bot.flows.Flow
+import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentAccountRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
@@ -14,7 +16,8 @@ class UserService(
     private val accountRepository: AccountRepository,
     private val userDetailsRepository: UserDetailsRepository,
     private val apartmentAccountRepository: ApartmentAccountRepository,
-    private val dslContext: DSLContext
+    private val dslContext: DSLContext,
+    private val flowRegistry: FlowRegistry
 ) {
     fun findById(userId: Long): UserDetails? {
         return userDetailsRepository.findById(userId)
@@ -32,7 +35,20 @@ class UserService(
         val account = accountRepository.findById(userId)
         val userDetails = userDetailsRepository.findById(userId)
         return account?.role == Role.USER && userDetails.isComplete()
+    }
 
+    fun getFlowByUserId(userId: Long): Flow {
+        val suggestedRole = when (val userRole = findUserRoleById(userId)) {
+            null -> org.ua.wohnung.bot.user.model.Role.GUEST
+            Role.USER -> {
+                if (isRegistrationComplete(userId))
+                    org.ua.wohnung.bot.user.model.Role.USER
+                else
+                    org.ua.wohnung.bot.user.model.Role.GUEST
+            }
+            else -> org.ua.wohnung.bot.user.model.Role.valueOf(userRole.name)
+        }
+        return flowRegistry[suggestedRole]
     }
 
     private fun UserDetails?.isComplete(): Boolean =
