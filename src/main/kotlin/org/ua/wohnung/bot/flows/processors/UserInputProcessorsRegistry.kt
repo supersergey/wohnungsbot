@@ -1,6 +1,6 @@
 package org.ua.wohnung.bot.flows.processors
 
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.AbstractUserInputProcessor
+import org.ua.wohnung.bot.flows.AbstractUserInputProcessor
 import org.ua.wohnung.bot.flows.step.FlowStep
 
 class UserInputProcessorsRegistry(vararg processors: AbstractUserInputProcessor) {

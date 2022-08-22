@@ -17,37 +17,24 @@ import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.apartment.ApartmentService
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.flows.processors.UserInputProcessorsRegistry
-import org.ua.wohnung.bot.flows.processors.registereduser.RegisteredUserFlow
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.AcceptPoliciesStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.AllergiesStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ApprovePersonalDataStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.BundeslandStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ConversationFinishedDeclinedStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ConversationStartStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.DistrictSelectionStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.DummyInitStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.FamilyCountStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.FamilyMembersStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.FirstAndLastNameStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ForeignLanguagesStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.PetsStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.PhoneNumberStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.ReadyToMoveStepFactory
-import org.ua.wohnung.bot.flows.processors.userregistration.stepfactory.StepFactoriesRegistry
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.AcceptPoliciesUserInputProcessor
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.AllergiesInputProcessor
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.ApprovePersonalDataUserInputProcessor
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.BundeslandInputProcessor
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.ConversationStartInputProcessor
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.DistrictInputProcessor
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.FamilyMembersInputProcessor
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.FirstAndLastNameInputProcessor
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.ForeignLanguagesInputProcessor
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.NumberOfTenantsInputProcessor
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.PetsInputProcessor
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.PhoneNumberInputProcessor
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.ReadyToMoveInputProcessor
-import org.ua.wohnung.bot.flows.step.UserRegistrationFlow
+import org.ua.wohnung.bot.flows.registereduser.RegisteredUserFlow
+import org.ua.wohnung.bot.flows.registereduser.processors.RegisteredUserInitialInputProcessor
+import org.ua.wohnung.bot.flows.registereduser.processors.RegisteredUserListApartmentsInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.AcceptPoliciesUserInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.AllergiesInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.ApprovePersonalDataUserInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.BundeslandInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.ConversationStartInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.DistrictInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.FamilyCountInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.FamilyMembersInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.FirstAndLastNameInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.ForeignLanguagesInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.InitInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.PetsInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.PhoneNumberInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.ReadyToMoveInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.GuestUserFlow
 import org.ua.wohnung.bot.gateway.MessageFactory
 import org.ua.wohnung.bot.gateway.MessageGateway
 import org.ua.wohnung.bot.gateway.Session
@@ -91,7 +78,6 @@ val servicesModule = module {
 // val userFlowModule = module {
 //    singleOf(::UserRegistrationFlow)
 // }
-
 val registeredUserFlow = module {
 //    single {
 //        DynamicButtonProducersRegistry(
@@ -155,42 +141,27 @@ val messageGatewayModule = module {
     single { MessageSource(get(), Path.of("flows", "newUserFlow.yml")) }
     singleOf(::MessageFactory)
     single {
-        FlowRegistry(UserRegistrationFlow(), RegisteredUserFlow())
-    }
-    single {
-        StepFactoriesRegistry(
-            DummyInitStepFactory(get(), get()),
-            ConversationStartStepFactory(get(), get()),
-            AcceptPoliciesStepFactory(get(), get()),
-            ApprovePersonalDataStepFactory(get(), get()),
-            ConversationFinishedDeclinedStepFactory(get(), get()),
-            BundeslandStepFactory(get(), get()),
-            DistrictSelectionStepFactory(get(), get()),
-            FamilyCountStepFactory(get(), get()),
-            FamilyMembersStepFactory(get(), get()),
-            FirstAndLastNameStepFactory(get(), get()),
-            PhoneNumberStepFactory(get(), get()),
-            PetsStepFactory(get(), get()),
-            ForeignLanguagesStepFactory(get(), get()),
-            ReadyToMoveStepFactory(get(), get()),
-            AllergiesStepFactory(get(), get())
-        )
+        FlowRegistry(GuestUserFlow(), RegisteredUserFlow())
     }
     single {
         UserInputProcessorsRegistry(
-            ConversationStartInputProcessor(),
-            AcceptPoliciesUserInputProcessor(get()),
-            ApprovePersonalDataUserInputProcessor(get()),
-            BundeslandInputProcessor(get()),
-            DistrictInputProcessor(get()),
-            FamilyMembersInputProcessor(get()),
-            FirstAndLastNameInputProcessor(get()),
-            ForeignLanguagesInputProcessor(get()),
-            NumberOfTenantsInputProcessor(get()),
-            PetsInputProcessor(get()),
-            PhoneNumberInputProcessor(get()),
-            ReadyToMoveInputProcessor(get()),
-            AllergiesInputProcessor(get())
+            InitInputProcessor(get(), get()),
+            ConversationStartInputProcessor(get(), get()),
+            AcceptPoliciesUserInputProcessor(get(), get()),
+            ApprovePersonalDataUserInputProcessor(get(), get()),
+            BundeslandInputProcessor(get(), get()),
+            DistrictInputProcessor(get(), get()),
+            FamilyMembersInputProcessor(get(), get()),
+            FirstAndLastNameInputProcessor(get(), get()),
+            ForeignLanguagesInputProcessor(get(), get()),
+            FamilyCountInputProcessor(get(), get()),
+            PetsInputProcessor(get(), get()),
+            PhoneNumberInputProcessor(get(), get()),
+            ReadyToMoveInputProcessor(get(), get()),
+            AllergiesInputProcessor(get(), get()),
+
+            RegisteredUserInitialInputProcessor(get(), get()),
+            RegisteredUserListApartmentsInputProcessor(get(), get(), get())
         )
     }
     single<LongPollingBot>(named("WohnungsBot")) {

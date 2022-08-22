@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.userregistration.userinputprocessor.StepOutput
+import org.ua.wohnung.bot.flows.processors.StepOutput
 
 data class MessageWrapper(
     val editMessage: EditMessageText? = null,
@@ -70,7 +70,7 @@ class MessageFactory {
     ): InlineKeyboardMarkup.InlineKeyboardMarkupBuilder =
         keyboard(
             stepOutput.replyOptions
-                .map { InlineKeyboardButton(it, null, it, null, null, null, null, null, null) }
+                .mapIndexed { i, it -> InlineKeyboardButton(it, null, stepOutput.replyMetaData.getOrElse(i) {stepOutput}, null, null, null, null, null, null) }
                 .chunked(buttonsPerRow)
         )
 
