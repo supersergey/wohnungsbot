@@ -11,7 +11,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row11;
+import org.jooq.Row12;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -101,6 +101,11 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
      */
     public final TableField<UserDetailsRecord, String> ALLERGIES = createField(DSL.name("allergies"), SQLDataType.CLOB, this, "");
 
+    /**
+     * The column <code>main.user_details.email</code>.
+     */
+    public final TableField<UserDetailsRecord, String> EMAIL = createField(DSL.name("email"), SQLDataType.VARCHAR(1024), this, "");
+
     private UserDetails(Name alias, Table<UserDetailsRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -188,11 +193,11 @@ public class UserDetails extends TableImpl<UserDetailsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row11 type methods
+    // Row12 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row11<Long, String, String, Short, Boolean, String, String, String, Boolean, String, String> fieldsRow() {
-        return (Row11) super.fieldsRow();
+    public Row12<Long, String, String, Short, Boolean, String, String, String, Boolean, String, String, String> fieldsRow() {
+        return (Row12) super.fieldsRow();
     }
 }

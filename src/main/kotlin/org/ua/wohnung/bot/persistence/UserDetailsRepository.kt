@@ -25,6 +25,7 @@ class UserDetailsRepository(private val jooq: DSLContext) {
             foreignLanguages = userDetails.foreignLanguages
             district = userDetails.district
             allergies = userDetails.allergies
+            email = userDetails.email
         }
         userDetailsRecord.store()
     }
@@ -68,7 +69,8 @@ class UserDetailsRepository(private val jooq: DSLContext) {
             familyMembers,
             readyToMove,
             foreignLanguages,
-            allergies
+            allergies,
+            email
         )
 }
 

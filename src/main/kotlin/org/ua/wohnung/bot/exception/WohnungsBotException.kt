@@ -18,7 +18,18 @@ sealed class ServiceException(
     class UsernameNotFound(val userId: Long) :
         ServiceException(
             message = "Username not found: $userId",
-            userMessage = "❌ Помилка! Налаштуйте свій псевдонім (username) в Телеграмі і спробуйте знову. Дивіться інструкцію тут: https://youtube.com/shorts/Md79GzTsZn0",
+            userMessage =
+            """
+                ❌ Помилка! Налаштуйте свій псевдонім (username) в Телеграмі і спробуйте знову. Дивіться інструкцію тут: 
+                
+                🍏Для Iphone (IOS):  https://www.youtube.com/shorts/Md79GzTsZn0
+
+                🤖Для Android:  https://youtu.be/AJCzF7sPoI0
+
+                💻Для комп'ютерів/ноутбуків на Windows: https://www.youtube.com/watch?v=Q4AUj84oDlA
+
+                🖥Для комп'ютерів/ноутбуків від Apple: https://www.youtube.com/watch?v=XfqBIcoK2Yk
+            """.trimIndent()
         )
 
     class AccessViolation(val userId: Long, actualRole: Role?, vararg expectedRole: Role) :
@@ -48,6 +59,12 @@ sealed class UserInputValidationException(message: String, userMessage: String =
         UserInputValidationException(
             "Invalid phone number: $phoneNumber",
             "Цей номер $phoneNumber неправльний, введіть номер правильно"
+        )
+
+    class InvalidEmail(val email: String) :
+        UserInputValidationException(
+            "Invalid email: $email",
+            "Цей email $email неправльний, введіть правильну електронну адресу"
         )
 
     class InvalidUserName(val userName: String) : UserInputValidationException("Invalid user name: $userName")

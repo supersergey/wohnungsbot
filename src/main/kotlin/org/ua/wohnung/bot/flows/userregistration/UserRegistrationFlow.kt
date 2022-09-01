@@ -44,10 +44,14 @@ class UserRegistrationFlow(private val stepFactory: StepFactory) : Flow() {
         ).addSingle()
         stepFactory.singleReply(
             id = FlowStep.FIRSTNAME_AND_LASTNAME,
-            next = FlowStep.PHONE_NUMBER
+            next = FlowStep.PHONE_NUMBER,
         ).addSingle()
         stepFactory.singleReply(
             id = FlowStep.PHONE_NUMBER,
+            next = FlowStep.EMAIL
+        ).addSingle()
+        stepFactory.singleReply(
+            id = FlowStep.EMAIL,
             next = FlowStep.PETS
         ).addSingle()
         stepFactory.multipleButtons(

@@ -69,6 +69,8 @@ sealed class AdminMessagePreProcessor(private val userService: UserService) : Me
                     .append("\n\n")
                     .append("\uD83D\uDCF1 Телефон: ${it.userDetails.phone}")
                     .append("\n\n")
+                    .append("\uD83D\uDCEE E-mail: ${it.userDetails.email ?: "Не вказаний"}")
+                    .append("\n\n")
                     .append("\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66 Кількість людей в родині: ${it.userDetails.numberOfTenants}")
                     .append("\n\n")
                     .append("\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66 Склад сімʼї: ${it.userDetails.familyMembers}")

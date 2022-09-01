@@ -56,7 +56,8 @@ class ApartmentAccountRepository(private val jooq: DSLContext) {
                         it[USER_DETAILS.FAMILY_MEMBERS],
                         it[USER_DETAILS.READY_TO_MOVE],
                         it[USER_DETAILS.FOREIGN_LANGUAGES],
-                        it[USER_DETAILS.ALLERGIES]
+                        it[USER_DETAILS.ALLERGIES],
+                        it[USER_DETAILS.EMAIL]
                     )
                 )
             }

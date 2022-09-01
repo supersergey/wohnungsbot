@@ -107,6 +107,7 @@ val processorsModule = module {
             UpdateUserDetailsPostProcessor.FamilyMembersPostProcessorUpdate(get()),
             UpdateUserDetailsPostProcessor.FirstAndLastNamePostProcessorUpdate(get()),
             UpdateUserDetailsPostProcessor.PhoneNumberPostProcessorUpdate(get()),
+            UpdateUserDetailsPostProcessor.EmailPostProcessorUpdate(get()),
             UpdateUserDetailsPostProcessor.PetsPostProcessorUpdate(get()),
             UpdateUserDetailsPostProcessor.ForeignLanguagesPostProcessorUpdate(get()),
             UpdateUserDetailsPostProcessor.AllergiesPostProcessorUpdate(get()),

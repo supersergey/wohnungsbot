@@ -57,6 +57,18 @@ sealed class UpdateUserDetailsPostProcessor(private val userService: UserService
         }
     }
 
+    class EmailPostProcessorUpdate(userService: UserService) : UpdateUserDetailsPostProcessor(userService) {
+        override val stepId = FlowStep.EMAIL
+
+        override fun doInvoke(userDetails: UserDetails, input: String) {
+            val clean = input.trim()
+            if (clean.length < 6 || clean.length > 127 || !clean.contains(".+@.+\\..+".toRegex())) {
+                throw UserInputValidationException.InvalidEmail(clean)
+            }
+            userDetails.email = input
+        }
+    }
+
     class PetsPostProcessorUpdate(userService: UserService) : UpdateUserDetailsPostProcessor(userService) {
         override val stepId = FlowStep.PETS
 
