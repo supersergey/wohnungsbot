@@ -67,7 +67,7 @@ class RowMapper : (List<String>) -> Apartment? {
     private val List<String>.petsAllowed: Boolean
         get() = runCatching {
             this[columnsMap.getValue(APARTMENT.PETS_ALLOWED)].trim().lowercase() == "так" ||
-                this[columnsMap.getValue(APARTMENT.PETS_ALLOWED)].trim() == "за домовленістю"
+                this[columnsMap.getValue(APARTMENT.PETS_ALLOWED)].trim().lowercase() == "за домовленістю"
         }.getOrElse { false }
     private val List<String>.publicationStatus: PublicationStatus
         get() = if (this[columnsMap.getValue(APARTMENT.PUBLICATIONSTATUS)].trim()

@@ -55,16 +55,20 @@ class ApartmentService(
 
     fun update() {
         lock.withLock {
-            val incomingApartments = sheetReader.readRows().mapNotNull(rowMapper)
-            dslContext.transaction { ctx ->
-                val activeApartments = apartmentRepository
-                    .findByCriteria(ApartmentSearchCriteria(publicationStatus = PublicationStatus.ACTIVE))
-                val incomingApartmentsIds = incomingApartments.map { it.id }
-                val inactiveApartments = activeApartments
-                    .filterNot { it.id in incomingApartmentsIds }
-                    .onEach { it.publicationstatus = PublicationStatus.NOT_ACTIVE.name }
-                apartmentRepository.saveAll(ctx.dsl(), inactiveApartments)
-                apartmentRepository.saveAll(ctx.dsl(), incomingApartments)
+            kotlin.runCatching {
+                val incomingApartments = sheetReader.readRows().mapNotNull(rowMapper)
+                dslContext.transaction { ctx ->
+                    val activeApartments = apartmentRepository
+                        .findByCriteria(ApartmentSearchCriteria(publicationStatus = PublicationStatus.ACTIVE))
+                    val incomingApartmentsIds = incomingApartments.map { it.id }
+                    val inactiveApartments = activeApartments
+                        .filterNot { it.id in incomingApartmentsIds }
+                        .onEach { it.publicationstatus = PublicationStatus.NOT_ACTIVE.name }
+                    apartmentRepository.saveAll(ctx.dsl(), inactiveApartments)
+                    apartmentRepository.saveAll(ctx.dsl(), incomingApartments)
+                }
+            }.onFailure {
+                logger.error(it) {}
             }
         }
         logger.info { "DB updated, ${count()} active records" }
