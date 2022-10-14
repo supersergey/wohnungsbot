@@ -70,7 +70,11 @@ class MessageFactory {
     ): InlineKeyboardMarkup.InlineKeyboardMarkupBuilder =
         keyboard(
             stepOutput.replyOptions
-                .mapIndexed { i, it -> InlineKeyboardButton(it, null, stepOutput.replyMetaData.getOrElse(i) {stepOutput}, null, null, null, null, null, null) }
+                .map { buttonCaption -> InlineKeyboardButton.builder()
+                    .text(buttonCaption)
+                    .callbackData(buttonCaption)
+                    .build()
+                }
                 .chunked(buttonsPerRow)
         )
 
