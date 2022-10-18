@@ -2,9 +2,7 @@ package org.ua.wohnung.bot.flows.registereduser.processors
 
 import org.ua.wohnung.bot.apartment.ApartmentService
 import org.ua.wohnung.bot.configuration.MessageSource
-import org.ua.wohnung.bot.flows.AbstractUserInputProcessor
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.Message
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
@@ -19,41 +17,33 @@ class RegisteredUserListApartmentsInputProcessor(
 
     override fun processSpecificCommands(chatMetadata: ChatMetadata): StepOutput? {
         val apartments = apartmentService.findByUserDetails(chatMetadata.userId)
-        return when(chatMetadata.input) {
-            "переглянути наявне житло" -> listApartment(apartments, chatMetadata)
-            in apartments.map { it.id } -> listApartment(apartments, chatMetadata, chatMetadata.input)
-            else -> null
-        }
-    }
-
-    private fun listApartment(apartments: List<Apartment>, chatMetadata: ChatMetadata, apartmentId: String? = null): StepOutput {
         if (apartments.isEmpty()) {
             return StepOutput.PlainText(
-                message = Message(messageSource[FlowStep.REGISTERED_USER_NO_APARTMENTS_AVAILABLE]),
+                message = messageSource[FlowStep.REGISTERED_USER_NO_APARTMENTS_AVAILABLE],
                 finishSession = true
             )
         }
-        val apartmentToDisplay = apartments.getApartmentToDisplay(apartmentId)
-
-        val message = messageSource[FlowStep.REGISTERED_USER_LIST_APARTMENTS]
-            .format(apartments.count()) + "\n\n" +
-            apartmentToDisplay.stringify()
-
-        return StepOutput.InlineButtons(
-            message = Message(message),
-            replyOptions = (if (apartments.size > 1) {
-                apartments.map { it.id }
-            } else emptyList()) + "Відгукнутись",
-            nextStep = FlowStep.REGISTERED_USER_APPLY_FOR_APARTMENT
-        )
+        val apartmentToDisplay = when(chatMetadata.input) {
+            "переглянути наявне житло" -> apartments.map { it.id }.firstOrNull()
+            in apartments.map { it.id } -> apartments.map { it.id }.firstOrNull { it == chatMetadata.input }
+            else -> null
+        }
+        return apartmentToDisplay?.let {
+            apartments.toStepOutput(apartmentToDisplay, chatMetadata.input)
+        }
     }
 
-    private fun List<Apartment>.getApartmentToDisplay(apartmentId: String?): Apartment {
-        return if (apartmentId == null) {
-            first()
-        } else {
-            first { it.id == apartmentId }
-        }
+    private fun List<Apartment>.toStepOutput(apartmentId: String, userInput: String): StepOutput {
+        val apartmentToDisplay = first { it.id == apartmentId }
+        val message = messageSource[FlowStep.REGISTERED_USER_LIST_APARTMENTS]
+            .format(this.count()) + "\n\n${apartmentToDisplay.stringify()}"
+        return StepOutput.InlineButtons(
+            message = message,
+            replyOptions = this.map { it.id } + listOf("Відгукнутись"),
+            nextStep = FlowStep.REGISTERED_USER_LIST_APARTMENTS,
+            replyMetaData = this.map { it.id } + listOf("Відгукнутись;$apartmentId"),
+            editMessage = true
+        )
     }
 
     private fun Apartment.stringify(): String =
@@ -75,16 +65,19 @@ class RegisteredUserListApartmentsInputProcessor(
             .append("\n\n")
             .append("\uD83C\uDFD8 ").append(description)
             .append("\n\n")
-            .append("⬆️ Житло знаходиться на поверсі: ").append(etage ?: "Не зазначений")
+            .append("⬆️ Житло знаходиться на поверсі: ").append(etage ?: UNDEFINED)
             .append("\n\n")
-            .append("\uD83D\uDCCD Місцезнаходження житла на карті: ").append(mapLocation ?: "Не зазначене")
+            .append("\uD83D\uDCCD Місцезнаходження житла на карті: ").append(mapLocation ?: UNDEFINED)
             .append("\n\n")
-            .append("⏰ Термін проживання: ").append(livingPeriod?.takeIf { it.isNotBlank() } ?: "Не зазначений")
+            .append("⏰ Термін проживання: ").append(livingPeriod?.takeIf { it.isNotBlank() } ?: UNDEFINED)
             .append("\n\n")
             .append("\uD83D\uDCC5 Дата показу житла: ")
-            .append(showingDate?.takeIf { it.isNotBlank() } ?: "Не зазначений")
+            .append(showingDate?.takeIf { it.isNotBlank() } ?: UNDEFINED)
             .toString()
-}
 
+    private companion object {
+        private const val UNDEFINED = "Не зазначений"
+    }
+}
 
 

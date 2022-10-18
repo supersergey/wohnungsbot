@@ -9,7 +9,7 @@ plugins {
     application
     id("org.flywaydb.flyway") version "8.5.10"
     id("nu.studer.jooq") version "7.1.1"
-    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
+//    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
 }
 
 group = "org.ua.wohnung.bot"

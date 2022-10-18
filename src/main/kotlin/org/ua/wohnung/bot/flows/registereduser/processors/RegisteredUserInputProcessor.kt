@@ -3,7 +3,6 @@ package org.ua.wohnung.bot.flows.registereduser.processors
 import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.flows.AbstractUserInputProcessor
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.Message
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.user.UserService
@@ -24,7 +23,7 @@ abstract class RegisteredUserInputProcessor(userService: UserService, messageSou
     private fun getErrorIfRegistrationIsNotComplete(chatMetadata: ChatMetadata): StepOutput? {
         return if (userService.isRegistrationComplete(chatMetadata.userId)) {
             StepOutput.Error(
-                message = Message("❌ Спочатку пройдіть реєстрацію. Для цього натисніть /start, а далі кнопку *Зарєеструватись*"),
+                message = "❌ Спочатку пройдіть реєстрацію. Для цього натисніть /start, а далі кнопку *Зарєеструватись*",
                 finishSession = true
             )
         } else
@@ -34,10 +33,8 @@ abstract class RegisteredUserInputProcessor(userService: UserService, messageSou
     private fun processStartCommand(chatMetadata: ChatMetadata): StepOutput {
         val user = userService.findById(chatMetadata.userId)
         return StepOutput.InlineButtons(
-            message = Message(
-                messageSource[FlowStep.REGISTERED_USER_CONVERSATION_START]
-                    .format(user?.firstLastName?.capitalize())
-            ),
+            message = messageSource[FlowStep.REGISTERED_USER_CONVERSATION_START]
+                    .format(user?.firstLastName?.capitalize()),
             nextStep = FlowStep.REGISTERED_USER_LIST_APARTMENTS,
             replyOptions = listOf("Переглянути наявне житло")
         )

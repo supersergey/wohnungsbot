@@ -2,7 +2,6 @@ package org.ua.wohnung.bot.flows.guestuser.processors
 
 import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.Message
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.flows.step.FlowStep.ALLERGIES
@@ -21,7 +20,7 @@ class AllergiesInputProcessor(userService: UserService, messageSource: MessageSo
             allergies = chatMetadata.input
         }
         return StepOutput.PlainText(
-            message = Message(messageSource[GUEST_USER_REGISTRATION_FINISHED_SUCCESS]),
+            message = messageSource[GUEST_USER_REGISTRATION_FINISHED_SUCCESS],
             finishSession = true
         )
     }

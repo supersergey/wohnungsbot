@@ -2,7 +2,6 @@ package org.ua.wohnung.bot.flows.guestuser.processors
 
 import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.Message
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.flows.step.FlowStep.ALLERGIES
@@ -16,7 +15,7 @@ class ReadyToMoveInputProcessor(userService: UserService, messageSource: Message
     override fun processSpecificCommands(chatMetadata: ChatMetadata): StepOutput {
         if (chatMetadata.input !in setOf("так", "ні")) {
             return StepOutput.Error(
-                message = Message("❌ Неправильно введені дані. Скористайтесь кнопками вибору. Якшо бажаєте повернутись на початок, натисніть /start"),
+                message = "❌ Неправильно введені дані. Скористайтесь кнопками вибору. Якшо бажаєте повернутись на початок, натисніть /start",
                 finishSession = false
             )
         }
@@ -24,7 +23,7 @@ class ReadyToMoveInputProcessor(userService: UserService, messageSource: Message
             readyToMove = chatMetadata.input == "так"
         }
         return StepOutput.PlainText(
-            message = Message(messageSource[ALLERGIES]),
+            message = messageSource[ALLERGIES],
             nextStep = ALLERGIES
         )
     }

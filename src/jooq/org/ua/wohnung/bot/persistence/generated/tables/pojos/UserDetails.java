@@ -26,6 +26,7 @@ public class UserDetails implements Serializable {
     private Boolean readyToMove;
     private String  foreignLanguages;
     private String  allergies;
+    private String  email;
 
     public UserDetails() {}
 
@@ -41,6 +42,7 @@ public class UserDetails implements Serializable {
         this.readyToMove = value.readyToMove;
         this.foreignLanguages = value.foreignLanguages;
         this.allergies = value.allergies;
+        this.email = value.email;
     }
 
     public UserDetails(
@@ -54,7 +56,8 @@ public class UserDetails implements Serializable {
         String  familyMembers,
         Boolean readyToMove,
         String  foreignLanguages,
-        String  allergies
+        String  allergies,
+        String  email
     ) {
         this.id = id;
         this.firstLastName = firstLastName;
@@ -67,6 +70,7 @@ public class UserDetails implements Serializable {
         this.readyToMove = readyToMove;
         this.foreignLanguages = foreignLanguages;
         this.allergies = allergies;
+        this.email = email;
     }
 
     /**
@@ -223,6 +227,20 @@ public class UserDetails implements Serializable {
         this.allergies = allergies;
     }
 
+    /**
+     * Getter for <code>main.user_details.email</code>.
+     */
+    public String getEmail() {
+        return this.email;
+    }
+
+    /**
+     * Setter for <code>main.user_details.email</code>.
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("UserDetails (");
@@ -238,6 +256,7 @@ public class UserDetails implements Serializable {
         sb.append(", ").append(readyToMove);
         sb.append(", ").append(foreignLanguages);
         sb.append(", ").append(allergies);
+        sb.append(", ").append(email);
 
         sb.append(")");
         return sb.toString();

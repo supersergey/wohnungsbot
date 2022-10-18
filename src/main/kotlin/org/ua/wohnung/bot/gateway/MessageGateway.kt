@@ -3,12 +3,12 @@ package org.ua.wohnung.bot.gateway
 import mu.KotlinLogging
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.exception.WohnungsBotException
 import org.ua.wohnung.bot.flows.Flow
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.processors.UserInputProcessorsRegistry
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.user.UserService
@@ -43,10 +43,6 @@ class MessageGateway(
                 )
 
                 val message = messageFactory.get(chatMetadata, output)
-
-//                if (output is StepOutput.PlainText) {
-//                    super.execute(DeleteMessage(chatMetadata.chatId.toString(), chatMetadata.messageId))
-//                }
 
                 execute(message)
 
@@ -84,18 +80,6 @@ class MessageGateway(
     private fun resolveUserRole(chatMetadata: ChatMetadata) =
         userService.findUserRoleById(chatMetadata.userId) ?: throw ServiceException.UserNotFound(chatMetadata.userId)
 
-    private fun execute(message: MessageWrapper) {
-        if (message.editMessage != null) {
-            super.execute(message.editMessage)
-        } else {
-            super.execute(message.sendMessage)
-        }
-    }
-
-    private fun execute(message: SendMessage) {
-        super.execute(message)
-    }
-
     private fun resolveCurrentStep(chatMetadata: ChatMetadata, flow: Flow): FlowStep {
         return session.current(chatMetadata.chatId)?.lastOrNull()
             ?: flow.first
@@ -131,7 +115,8 @@ class MessageGateway(
                 chatId = this.callbackQuery.message.chatId,
                 messageId = callbackQuery.message.messageId,
                 username = callbackQuery.from.userName,
-                input = callbackQuery.data.lowercase().trim()
+                input = callbackQuery.data.lowercase().trim(),
+                meta = callbackQuery.data,
             )
         } else throw ServiceException.UnreadableMessage(updateId)
 }

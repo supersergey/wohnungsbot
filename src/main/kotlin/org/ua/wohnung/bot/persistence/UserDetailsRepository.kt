@@ -68,7 +68,8 @@ class UserDetailsRepository(private val jooq: DSLContext) {
             familyMembers,
             readyToMove,
             foreignLanguages,
-            allergies
+            allergies,
+            email
         )
 }
 

@@ -2,10 +2,10 @@ package org.ua.wohnung.bot.flows.guestuser.processors
 
 import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.Message
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
-import org.ua.wohnung.bot.flows.step.FlowStep.*
+import org.ua.wohnung.bot.flows.step.FlowStep.FIRSTNAME_AND_LASTNAME
+import org.ua.wohnung.bot.flows.step.FlowStep.PHONE_NUMBER
 import org.ua.wohnung.bot.user.UserService
 
 class FirstAndLastNameInputProcessor(userService: UserService, messageSource: MessageSource) :
@@ -22,7 +22,7 @@ class FirstAndLastNameInputProcessor(userService: UserService, messageSource: Me
                 .joinToString(" ")
         }
         return StepOutput.PlainText(
-            message = Message(messageSource[PHONE_NUMBER]),
+            message = messageSource[PHONE_NUMBER],
             nextStep = PHONE_NUMBER
         )
     }

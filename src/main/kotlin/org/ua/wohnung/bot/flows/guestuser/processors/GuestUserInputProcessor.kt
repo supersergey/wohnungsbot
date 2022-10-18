@@ -3,7 +3,6 @@ package org.ua.wohnung.bot.flows.guestuser.processors
 import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.flows.AbstractUserInputProcessor
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.Message
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.user.UserService
@@ -22,7 +21,7 @@ abstract class GuestUserInputProcessor(userService: UserService, messageSource: 
 
     private fun processStartCommand(): StepOutput {
         return StepOutput.InlineButtons(
-            message = Message(messageSource[FlowStep.CONVERSATION_START]),
+            message = messageSource[FlowStep.CONVERSATION_START],
             nextStep = FlowStep.CONVERSATION_START,
             replyOptions = listOf("Зареєструватись"),
             finishSession = true

@@ -2,7 +2,6 @@ package org.ua.wohnung.bot.flows.guestuser.processors
 
 import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.Message
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.flows.step.FlowStep.PHONE_NUMBER
@@ -21,8 +20,8 @@ class PhoneNumberInputProcessor(userService: UserService, messageSource: Message
             phone = chatMetadata.input
         }
         return StepOutput.InlineButtons(
-            message = Message(messageSource[FlowStep.PETS]),
-            nextStep = FlowStep.PETS,
+            message = messageSource[FlowStep.EMAIL],
+            nextStep = FlowStep.EMAIL,
             replyOptions = listOf("Так", "Ні")
         )
     }

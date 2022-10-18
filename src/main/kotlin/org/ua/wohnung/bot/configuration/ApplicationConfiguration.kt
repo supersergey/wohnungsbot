@@ -16,10 +16,7 @@ import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.apartment.ApartmentService
 import org.ua.wohnung.bot.flows.FlowRegistry
-import org.ua.wohnung.bot.flows.processors.UserInputProcessorsRegistry
-import org.ua.wohnung.bot.flows.registereduser.RegisteredUserFlow
-import org.ua.wohnung.bot.flows.registereduser.processors.RegisteredUserInitialInputProcessor
-import org.ua.wohnung.bot.flows.registereduser.processors.RegisteredUserListApartmentsInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.GuestUserFlow
 import org.ua.wohnung.bot.flows.guestuser.processors.AcceptPoliciesUserInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.AllergiesInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.ApprovePersonalDataUserInputProcessor
@@ -34,7 +31,10 @@ import org.ua.wohnung.bot.flows.guestuser.processors.InitInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.PetsInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.PhoneNumberInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.ReadyToMoveInputProcessor
-import org.ua.wohnung.bot.flows.guestuser.GuestUserFlow
+import org.ua.wohnung.bot.flows.processors.UserInputProcessorsRegistry
+import org.ua.wohnung.bot.flows.registereduser.RegisteredUserFlow
+import org.ua.wohnung.bot.flows.registereduser.processors.RegisteredUserInitialInputProcessor
+import org.ua.wohnung.bot.flows.registereduser.processors.RegisteredUserListApartmentsInputProcessor
 import org.ua.wohnung.bot.gateway.MessageFactory
 import org.ua.wohnung.bot.gateway.MessageGateway
 import org.ua.wohnung.bot.gateway.Session

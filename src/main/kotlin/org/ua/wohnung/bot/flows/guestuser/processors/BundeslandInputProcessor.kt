@@ -2,10 +2,10 @@ package org.ua.wohnung.bot.flows.guestuser.processors
 
 import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.Message
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
-import org.ua.wohnung.bot.flows.step.FlowStep.*
+import org.ua.wohnung.bot.flows.step.FlowStep.BUNDESLAND_SELECTION
+import org.ua.wohnung.bot.flows.step.FlowStep.DISTRICT_SELECTION
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.user.UserService
@@ -19,12 +19,12 @@ class BundeslandInputProcessor(userService: UserService, messageSource: MessageS
         return if (chatMetadata.input.isValidBundesLand()) {
             updateUserProfile(chatMetadata)
             return StepOutput.PlainText(
-                message = Message(messageSource[DISTRICT_SELECTION]),
-                nextStep = DISTRICT_SELECTION
+                message = messageSource[DISTRICT_SELECTION],
+                nextStep = DISTRICT_SELECTION,
             )
         } else {
             StepOutput.Error(
-                message = Message("❌ Неправильно введені дані. Будь-ласка, виберіть Федеральну Землю, натиснувши кнопку. Якшо бажаєте повернутись на початок, натисніть /start"),
+                message = "❌ Неправильно введені дані. Будь-ласка, виберіть Федеральну Землю, натиснувши кнопку. Якшо бажаєте повернутись на початок, натисніть /start",
                 finishSession = false
             )
         }

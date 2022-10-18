@@ -2,7 +2,6 @@ package org.ua.wohnung.bot.flows.guestuser.processors
 
 import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.Message
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.flows.step.FlowStep.FOREIGN_LANGUAGES
@@ -21,7 +20,7 @@ class ForeignLanguagesInputProcessor(userService: UserService, messageSource: Me
             foreignLanguages = chatMetadata.input
         }
         return StepOutput.InlineButtons(
-            message = Message(messageSource[READY_TO_MOVE]),
+            message = messageSource[READY_TO_MOVE],
             nextStep = READY_TO_MOVE,
             replyOptions = listOf("Так", "Ні")
         )

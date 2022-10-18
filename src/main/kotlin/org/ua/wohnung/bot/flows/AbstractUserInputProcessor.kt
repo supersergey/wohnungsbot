@@ -2,7 +2,6 @@ package org.ua.wohnung.bot.flows
 
 import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
-import org.ua.wohnung.bot.flows.processors.Message
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.flows.step.FlowStep.*
@@ -22,7 +21,7 @@ abstract class AbstractUserInputProcessor(
             "/conditions" -> processConditionsCommand()
             "/delete_my_data" -> processDeleteMyDataCommand(chatMetadata)
             else -> processGenericCommands(chatMetadata) ?: StepOutput.Error(
-                message = Message("❌ Будь-ласка, дайте корректну відповідь на запитання. Якшо бажаєте повернутись на початок, натисніть /start"),
+                message = "❌ Будь-ласка, дайте корректну відповідь на запитання. Якшо бажаєте повернутись на початок, натисніть /start",
                 finishSession = false
             )
         }
@@ -30,20 +29,20 @@ abstract class AbstractUserInputProcessor(
 
     private fun processSiteCommand(): StepOutput =
         StepOutput.PlainText(
-            message = Message(messageSource[FORWARD_TO_WEB]),
+            message = messageSource[FORWARD_TO_WEB],
             finishSession = true
         )
 
     private fun processConditionsCommand(): StepOutput =
         StepOutput.PlainText(
-            message = Message(messageSource[CONVERSATION_START]),
+            message = messageSource[CONVERSATION_START],
             finishSession = true
         )
 
     private fun processDeleteMyDataCommand(chatMetadata: ChatMetadata): StepOutput {
         userService.delete(chatMetadata.userId)
         return StepOutput.PlainText(
-            message = Message(messageSource[CONVERSATION_FINISH_REMOVAL]),
+            message = messageSource[CONVERSATION_FINISH_REMOVAL],
             finishSession = true
         )
     }

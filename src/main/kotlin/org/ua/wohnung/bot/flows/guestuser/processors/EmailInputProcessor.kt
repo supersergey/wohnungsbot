@@ -4,25 +4,25 @@ import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
-import org.ua.wohnung.bot.flows.step.FlowStep.DISTRICT_SELECTION
-import org.ua.wohnung.bot.flows.step.FlowStep.FAMILY_COUNT
+import org.ua.wohnung.bot.flows.step.FlowStep.EMAIL
 import org.ua.wohnung.bot.user.UserService
 
-class DistrictInputProcessor(userService: UserService, messageSource: MessageSource) :
+class EmailInputProcessor(userService: UserService, messageSource: MessageSource) :
     GuestUserInputProcessor(userService, messageSource) {
-    override val supportedStep: FlowStep = DISTRICT_SELECTION
+    override val supportedStep: FlowStep = EMAIL
+    private val emailRegexp = ".+@.+\\..{2,5}".toRegex()
 
     override fun processSpecificCommands(chatMetadata: ChatMetadata): StepOutput? {
-        if (chatMetadata.input.filter { it.isLetter() }.length < 4) {
+        if (!chatMetadata.input.matches(emailRegexp)) {
             return null
         }
         userService.updateUserDetails(chatMetadata.userId) {
-            district = chatMetadata.input
+            email = chatMetadata.input
         }
         return StepOutput.InlineButtons(
-            message = messageSource[FAMILY_COUNT],
-            nextStep = FAMILY_COUNT,
-            replyOptions = (1..12).map { "$it" }
+            message = messageSource[FlowStep.PETS],
+            nextStep = FlowStep.PETS,
+            replyOptions = listOf("Так", "Ні")
         )
     }
 }

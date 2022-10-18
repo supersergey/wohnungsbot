@@ -5,5 +5,6 @@ data class ChatMetadata(
     val chatId: Long,
     val messageId: Int,
     val username: String?,
-    val input: String
+    val input: String,
+    val meta: String? = null
 )
