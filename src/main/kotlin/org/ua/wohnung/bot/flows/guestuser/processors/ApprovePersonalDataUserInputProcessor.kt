@@ -1,7 +1,7 @@
 package org.ua.wohnung.bot.flows.guestuser.processors
 
 import org.ua.wohnung.bot.configuration.MessageSource
-import org.ua.wohnung.bot.flows.dto.ChatMetadata
+import org.ua.wohnung.bot.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.flows.step.FlowStep.BUNDESLAND_SELECTION

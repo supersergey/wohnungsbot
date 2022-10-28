@@ -1,4 +1,4 @@
-package org.ua.wohnung.bot.flows.dto
+package org.ua.wohnung.bot.dto
 
 data class ChatMetadata(
     val userId: Long,

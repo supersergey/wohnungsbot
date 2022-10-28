@@ -3,7 +3,7 @@ package org.ua.wohnung.bot.flows.registereduser.processors
 import org.ua.wohnung.bot.apartment.ApartmentRequestResult
 import org.ua.wohnung.bot.apartment.ApartmentService
 import org.ua.wohnung.bot.configuration.MessageSource
-import org.ua.wohnung.bot.flows.dto.ChatMetadata
+import org.ua.wohnung.bot.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment

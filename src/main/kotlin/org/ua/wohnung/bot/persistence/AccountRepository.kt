@@ -1,6 +1,7 @@
 package org.ua.wohnung.bot.persistence
 
 import org.jooq.DSLContext
+import org.jooq.impl.DSL.upper
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.Account.ACCOUNT
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
@@ -20,6 +21,12 @@ class AccountRepository(private val jooq: DSLContext) {
 
     fun findById(userId: Long): Account? {
         return jooq.fetchOne(ACCOUNT, ACCOUNT.ID.eq(userId))?.let {
+            Account(it.id, it.chatId, it.username, it.role)
+        }
+    }
+
+    fun findByUsername(username: String): Account? {
+        return jooq.fetchOne(ACCOUNT, upper(ACCOUNT.USERNAME).eq(username.uppercase()))?.let {
             Account(it.id, it.chatId, it.username, it.role)
         }
     }

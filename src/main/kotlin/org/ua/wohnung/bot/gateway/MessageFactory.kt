@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRem
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
-import org.ua.wohnung.bot.flows.dto.ChatMetadata
+import org.ua.wohnung.bot.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import java.io.Serializable
 
