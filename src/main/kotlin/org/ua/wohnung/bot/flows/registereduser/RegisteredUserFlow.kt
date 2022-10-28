@@ -15,8 +15,13 @@ class RegisteredUserFlow(
     override fun initialize() {
         stepFactory.multipleButtons(
             id = FlowStep.REGISTERED_USER_CONVERSATION_START,
-            ReplyOption("Доступне мені житло", FlowStep.REGISTERED_USER_LIST_APARTMENTS),
+            ReplyOption("Доступне мені житло", FlowStep.REGISTERED_USER_ADV),
             ReplyOption("Видаліть мої дані", FlowStep.CONVERSATION_FINISH_REMOVAL)
+        )
+            .addSingle()
+        stepFactory.multipleButtons(
+            id = FlowStep.REGISTERED_USER_ADV,
+            ReplyOption("Продовжити", FlowStep.REGISTERED_USER_LIST_APARTMENTS),
         )
             .addSingle()
         stepFactory.multipleDynamicButtons(
