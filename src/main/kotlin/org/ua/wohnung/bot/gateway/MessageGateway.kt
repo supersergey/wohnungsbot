@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException
 import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.exception.WohnungsBotException
 import org.ua.wohnung.bot.flows.Flow
-import org.ua.wohnung.bot.flows.dto.ChatMetadata
+import org.ua.wohnung.bot.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.UserInputProcessorsRegistry
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.user.UserService

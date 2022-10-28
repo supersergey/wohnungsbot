@@ -16,6 +16,10 @@ import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.ua.wohnung.bot.account.AccountService
 import org.ua.wohnung.bot.apartment.ApartmentService
 import org.ua.wohnung.bot.flows.FlowRegistry
+import org.ua.wohnung.bot.flows.admin.AdminFlow
+import org.ua.wohnung.bot.flows.admin.processors.AdminApartmentInfoInputProcessor
+import org.ua.wohnung.bot.flows.admin.processors.AdminStartInputProcessor
+import org.ua.wohnung.bot.flows.admin.processors.AdminUserInfo
 import org.ua.wohnung.bot.flows.guestuser.GuestUserFlow
 import org.ua.wohnung.bot.flows.guestuser.processors.AcceptPoliciesUserInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.AllergiesInputProcessor
@@ -144,7 +148,7 @@ val messageGatewayModule = module {
     single { MessageSource(get(), Path.of("flows", "newUserFlow.yml")) }
     singleOf(::MessageFactory)
     single {
-        FlowRegistry(GuestUserFlow(), RegisteredUserFlow())
+        FlowRegistry(GuestUserFlow(), RegisteredUserFlow(), AdminFlow())
     }
     single {
         UserInputProcessorsRegistry(
@@ -167,7 +171,11 @@ val messageGatewayModule = module {
             AllergiesInputProcessor(get(), get()),
 
             RegisteredUserInitialInputProcessor(get(), get()),
-            RegisteredUserListApartmentsInputProcessor(get(), get(), get())
+            RegisteredUserListApartmentsInputProcessor(get(), get(), get()),
+
+            AdminStartInputProcessor(get(), get()),
+            AdminUserInfo(get(), get(), get()),
+            AdminApartmentInfoInputProcessor(get(), get(), get())
         )
     }
     single<LongPollingBot>(named("WohnungsBot")) {

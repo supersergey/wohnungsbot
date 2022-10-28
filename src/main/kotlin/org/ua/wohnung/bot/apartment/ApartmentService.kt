@@ -37,7 +37,6 @@ class ApartmentService(
     private val rowMapper: RowMapper,
     private val messageSource: MessageSource
 ) {
-
     private val logger = KotlinLogging.logger { }
     private val timer = Timer()
     private val lock: Lock = ReentrantLock()
@@ -78,6 +77,8 @@ class ApartmentService(
     }
 
     fun count(): Int = apartmentRepository.count()
+
+    fun findById(apartmentId: String): Apartment? = apartmentRepository.findById(apartmentId)
 
     fun findByUserDetails(userId: Long): List<Apartment> {
         val userDetails = userDetailsRepository.findById(userId) ?: run {

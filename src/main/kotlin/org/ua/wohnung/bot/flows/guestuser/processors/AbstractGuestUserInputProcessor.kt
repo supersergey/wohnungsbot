@@ -2,12 +2,12 @@ package org.ua.wohnung.bot.flows.guestuser.processors
 
 import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.flows.AbstractUserInputProcessor
-import org.ua.wohnung.bot.flows.dto.ChatMetadata
+import org.ua.wohnung.bot.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.user.UserService
 
-abstract class GuestUserInputProcessor(userService: UserService, messageSource: MessageSource) :
+abstract class AbstractGuestUserInputProcessor(userService: UserService, messageSource: MessageSource) :
     AbstractUserInputProcessor(userService, messageSource) {
 
     abstract fun processSpecificCommands(chatMetadata: ChatMetadata): StepOutput?
