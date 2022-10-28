@@ -23,6 +23,7 @@ import org.ua.wohnung.bot.flows.guestuser.processors.ApprovePersonalDataUserInpu
 import org.ua.wohnung.bot.flows.guestuser.processors.BundeslandInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.ConversationStartInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.DistrictInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.EmailInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.FamilyCountInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.FamilyMembersInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.FirstAndLastNameInputProcessor
@@ -31,6 +32,8 @@ import org.ua.wohnung.bot.flows.guestuser.processors.InitInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.PetsInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.PhoneNumberInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.ReadyToMoveInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.WbsDetailsInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.WbsInputProcessor
 import org.ua.wohnung.bot.flows.processors.UserInputProcessorsRegistry
 import org.ua.wohnung.bot.flows.registereduser.RegisteredUserFlow
 import org.ua.wohnung.bot.flows.registereduser.processors.RegisteredUserInitialInputProcessor
@@ -156,7 +159,10 @@ val messageGatewayModule = module {
             ForeignLanguagesInputProcessor(get(), get()),
             FamilyCountInputProcessor(get(), get()),
             PetsInputProcessor(get(), get()),
+            WbsInputProcessor(get(), get()),
+            WbsDetailsInputProcessor(get(), get()),
             PhoneNumberInputProcessor(get(), get()),
+            EmailInputProcessor(get(), get()),
             ReadyToMoveInputProcessor(get(), get()),
             AllergiesInputProcessor(get(), get()),
 

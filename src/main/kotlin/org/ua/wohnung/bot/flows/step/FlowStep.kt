@@ -11,6 +11,8 @@ enum class FlowStep {
     FAMILY_MEMBERS,
     FIRSTNAME_AND_LASTNAME,
     PHONE_NUMBER,
+    WBS,
+    WBS_DETAILS,
     EMAIL,
     PETS,
     FOREIGN_LANGUAGES,

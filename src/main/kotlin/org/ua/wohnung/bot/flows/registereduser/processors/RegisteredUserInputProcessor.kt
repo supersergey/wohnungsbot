@@ -12,7 +12,7 @@ abstract class RegisteredUserInputProcessor(userService: UserService, messageSou
     abstract fun processSpecificCommands(chatMetadata: ChatMetadata): StepOutput?
 
     override fun processGenericCommands(chatMetadata: ChatMetadata): StepOutput? {
-        return getErrorIfRegistrationIsNotComplete(chatMetadata)?.let {
+        return getErrorIfRegistrationIsNotComplete(chatMetadata) ?: run {
             when (chatMetadata.input) {
                 "/start" -> processStartCommand(chatMetadata)
                 else -> processSpecificCommands(chatMetadata)
@@ -22,27 +22,29 @@ abstract class RegisteredUserInputProcessor(userService: UserService, messageSou
 
     private fun getErrorIfRegistrationIsNotComplete(chatMetadata: ChatMetadata): StepOutput? {
         return if (userService.isRegistrationComplete(chatMetadata.userId)) {
+            null
+        } else {
             StepOutput.Error(
                 message = "❌ Спочатку пройдіть реєстрацію. Для цього натисніть /start, а далі кнопку *Зарєеструватись*",
                 finishSession = true
             )
-        } else
-            null
+        }
     }
 
     private fun processStartCommand(chatMetadata: ChatMetadata): StepOutput {
-        val user = userService.findById(chatMetadata.userId)
-        return StepOutput.InlineButtons(
-            message = messageSource[FlowStep.REGISTERED_USER_CONVERSATION_START]
-                    .format(user?.firstLastName?.capitalize()),
-            nextStep = FlowStep.REGISTERED_USER_LIST_APARTMENTS,
-            replyOptions = listOf("Переглянути наявне житло")
-        )
-    }
-
-    private fun String?.capitalize(): String {
-        return this?.split("\\s".toRegex())
-            ?.joinToString(" ") { word -> word.replaceFirstChar { it.uppercase() } }
-            ?: ""
+        return if (!userService.isWbsSpecified(chatMetadata.userId)) {
+            StepOutput.InlineButtons(
+                message = messageSource[FlowStep.WBS],
+                nextStep = FlowStep.WBS,
+                replyOptions = listOf("Так", "Ні")
+            )
+        } else {
+            StepOutput.InlineButtons(
+                message = messageSource[FlowStep.REGISTERED_USER_CONVERSATION_START]
+                    .format(userService.capitalizeFirstLastName(chatMetadata.userId)),
+                nextStep = FlowStep.REGISTERED_USER_LIST_APARTMENTS,
+                replyOptions = listOf("Переглянути наявне житло")
+            )
+        }
     }
 }

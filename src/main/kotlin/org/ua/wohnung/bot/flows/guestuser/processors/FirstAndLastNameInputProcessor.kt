@@ -5,7 +5,7 @@ import org.ua.wohnung.bot.flows.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.flows.step.FlowStep.FIRSTNAME_AND_LASTNAME
-import org.ua.wohnung.bot.flows.step.FlowStep.PHONE_NUMBER
+import org.ua.wohnung.bot.flows.step.FlowStep.WBS
 import org.ua.wohnung.bot.user.UserService
 
 class FirstAndLastNameInputProcessor(userService: UserService, messageSource: MessageSource) :
@@ -18,12 +18,14 @@ class FirstAndLastNameInputProcessor(userService: UserService, messageSource: Me
         }
         userService.updateUserDetails(chatMetadata.userId) {
             firstLastName = chatMetadata.input.split("\\s")
-                .onEach { word -> word.replaceFirstChar { it.uppercase() }}
+                .onEach { word -> word.replaceFirstChar { it.uppercase() } }
                 .joinToString(" ")
         }
-        return StepOutput.PlainText(
-            message = messageSource[PHONE_NUMBER],
-            nextStep = PHONE_NUMBER
+
+        return StepOutput.InlineButtons(
+            message = messageSource[WBS],
+            nextStep = WBS,
+            replyOptions = listOf("Так", "Ні")
         )
     }
 }

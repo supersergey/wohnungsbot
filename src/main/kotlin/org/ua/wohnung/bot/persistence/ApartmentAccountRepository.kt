@@ -58,6 +58,8 @@ class ApartmentAccountRepository(private val jooq: DSLContext) {
                         it[USER_DETAILS.FOREIGN_LANGUAGES],
                         it[USER_DETAILS.ALLERGIES],
                         it[USER_DETAILS.EMAIL],
+                        it[USER_DETAILS.WBS],
+                        it[USER_DETAILS.WBS_DETAILS]
                     )
                 )
             }

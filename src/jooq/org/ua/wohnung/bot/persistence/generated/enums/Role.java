@@ -20,7 +20,9 @@ public enum Role implements EnumType {
 
     ADMIN("ADMIN"),
 
-    USER("USER");
+    USER("USER"),
+
+    GUEST("GUEST");
 
     private final String literal;
 

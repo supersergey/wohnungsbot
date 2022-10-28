@@ -67,7 +67,7 @@ class RowMapper : (List<String>) -> Apartment? {
     private val List<String>.petsAllowed: Boolean
         get() = runCatching {
             this[columnsMap.getValue(APARTMENT.PETS_ALLOWED)].trim().lowercase() == "так" ||
-                this[columnsMap.getValue(APARTMENT.PETS_ALLOWED)].trim() == "за домовленістю"
+                this[columnsMap.getValue(APARTMENT.PETS_ALLOWED)].trim().lowercase() == "за домовленістю"
         }.getOrElse { false }
     private val List<String>.publicationStatus: PublicationStatus
         get() = if (this[columnsMap.getValue(APARTMENT.PUBLICATIONSTATUS)].trim()
@@ -83,9 +83,9 @@ class RowMapper : (List<String>) -> Apartment? {
         APARTMENT.MAX_TENANTS to 5,
         APARTMENT.ETAGE to 7,
         APARTMENT.PETS_ALLOWED to 8,
-        APARTMENT.LIVING_PERIOD to 9,
-        APARTMENT.SHOWING_DATE to 10,
-        APARTMENT.PUBLICATIONSTATUS to 15
+        APARTMENT.LIVING_PERIOD to 6,
+        APARTMENT.SHOWING_DATE to 11,
+        APARTMENT.PUBLICATIONSTATUS to 16
     )
 
     private fun String.parseTenantsNum(): Pair<Short, Short> {

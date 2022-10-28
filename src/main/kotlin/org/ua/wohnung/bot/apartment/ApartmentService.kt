@@ -2,7 +2,9 @@ package org.ua.wohnung.bot.apartment
 
 import mu.KotlinLogging
 import org.jooq.DSLContext
+import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.exception.ServiceException
+import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentAccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentApplication
@@ -17,6 +19,8 @@ import org.ua.wohnung.bot.sheets.SheetReader
 import org.ua.wohnung.bot.user.model.BundesLand
 import java.time.Duration
 import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.Timer
 import java.util.TimerTask
 import java.util.concurrent.locks.Lock
@@ -30,7 +34,8 @@ class ApartmentService(
     private val apartmentRepository: ApartmentRepository,
     private val apartmentAccountRepository: ApartmentAccountRepository,
     private val sheetReader: SheetReader,
-    private val rowMapper: RowMapper
+    private val rowMapper: RowMapper,
+    private val messageSource: MessageSource
 ) {
 
     private val logger = KotlinLogging.logger { }
@@ -47,8 +52,10 @@ class ApartmentService(
 
     inner class DbUpdateTask : TimerTask() {
         override fun run() {
-            lock.withLock {
+            runCatching {
                 update()
+            }.onFailure {
+                logger.error(it) {}
             }
         }
     }
@@ -87,32 +94,47 @@ class ApartmentService(
         ).toList()
     }
 
-    fun acceptUserApartmentRequest(userId: Long, apartmentId: String) {
+    fun acceptUserApartmentRequest(userId: Long, apartmentId: String): ApartmentRequestResult {
         val account = accountRepository.findById(userId) ?: throw ServiceException.UserNotFound(userId)
         if (account.role != Role.USER) throw ServiceException.AccessViolation(userId, account.role, Role.USER)
         apartmentRepository.findById(apartmentId)?.takeIf {
             PublicationStatus.valueOf(it.publicationstatus) == PublicationStatus.ACTIVE
-        } ?: throw ServiceException.ApartmentNotFound(apartmentId)
-        apartmentAccountRepository
+        } ?: return ApartmentRequestResult.Failure("Помешкання не знайдено: $apartmentId")
+        val apartmentRequestResult = apartmentAccountRepository
             .findLatestApplyTs(userId)
-            .assertUserApplicationRateLimit(userId)
-        if (apartmentAccountRepository.findAccountsByApartmentId(apartmentId).none { it.account.id == userId }) {
+            .assertUserApplicationRateLimit()
+        if (apartmentRequestResult is ApartmentRequestResult.Success && userId.hasNotAlreadyAppliedForApartment(apartmentId)) {
             apartmentAccountRepository.save(apartmentId, userId)
         }
+        return apartmentRequestResult
     }
+
+    private fun Long.hasNotAlreadyAppliedForApartment(apartmentId: String): Boolean =
+        apartmentAccountRepository.findAccountsByApartmentId(apartmentId).none { it.account.id == this }
 
     fun findApplicantsByApartmentId(apartmentId: String): List<ApartmentApplication> {
         return apartmentAccountRepository.findAccountsByApartmentId(apartmentId)
     }
 
     private fun List<OffsetDateTime>.assertUserApplicationRateLimit(
-        userId: Long,
         limit: Int = 2,
-        duration: Duration = Duration.ofDays(1)
-    ): List<OffsetDateTime> {
-        if (this.size == limit && Duration.between(this.last(), OffsetDateTime.now()) < duration) {
-            throw ServiceException.UserApplicationRateExceeded(userId, limit)
+        threshold: Duration = Duration.ofDays(1)
+    ): ApartmentRequestResult {
+        if (this.size == limit && Duration.between(this.last(), OffsetDateTime.now()) < threshold) {
+            return ApartmentRequestResult.Failure(
+                messageSource[FlowStep.REGISTERED_USER_REQUEST_DECLINED].formatWithNextTimestamp(last(), threshold)
+            )
         }
-        return this
+        return ApartmentRequestResult.Success
     }
+
+    private fun String.formatWithNextTimestamp(last: OffsetDateTime, threshold: Duration): String =
+        last.plusDays(threshold.toDays())
+            .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))
+            .let { format(it) }
+}
+
+sealed class ApartmentRequestResult {
+    object Success: ApartmentRequestResult()
+    class Failure(val cause: String): ApartmentRequestResult()
 }

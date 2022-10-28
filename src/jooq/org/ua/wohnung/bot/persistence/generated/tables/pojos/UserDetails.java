@@ -27,6 +27,8 @@ public class UserDetails implements Serializable {
     private String  foreignLanguages;
     private String  allergies;
     private String  email;
+    private Boolean wbs;
+    private String  wbsDetails;
 
     public UserDetails() {}
 
@@ -43,6 +45,8 @@ public class UserDetails implements Serializable {
         this.foreignLanguages = value.foreignLanguages;
         this.allergies = value.allergies;
         this.email = value.email;
+        this.wbs = value.wbs;
+        this.wbsDetails = value.wbsDetails;
     }
 
     public UserDetails(
@@ -57,7 +61,9 @@ public class UserDetails implements Serializable {
         Boolean readyToMove,
         String  foreignLanguages,
         String  allergies,
-        String  email
+        String  email,
+        Boolean wbs,
+        String  wbsDetails
     ) {
         this.id = id;
         this.firstLastName = firstLastName;
@@ -71,6 +77,8 @@ public class UserDetails implements Serializable {
         this.foreignLanguages = foreignLanguages;
         this.allergies = allergies;
         this.email = email;
+        this.wbs = wbs;
+        this.wbsDetails = wbsDetails;
     }
 
     /**
@@ -241,6 +249,34 @@ public class UserDetails implements Serializable {
         this.email = email;
     }
 
+    /**
+     * Getter for <code>main.user_details.wbs</code>.
+     */
+    public Boolean getWbs() {
+        return this.wbs;
+    }
+
+    /**
+     * Setter for <code>main.user_details.wbs</code>.
+     */
+    public void setWbs(Boolean wbs) {
+        this.wbs = wbs;
+    }
+
+    /**
+     * Getter for <code>main.user_details.wbs_details</code>.
+     */
+    public String getWbsDetails() {
+        return this.wbsDetails;
+    }
+
+    /**
+     * Setter for <code>main.user_details.wbs_details</code>.
+     */
+    public void setWbsDetails(String wbsDetails) {
+        this.wbsDetails = wbsDetails;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("UserDetails (");
@@ -257,6 +293,8 @@ public class UserDetails implements Serializable {
         sb.append(", ").append(foreignLanguages);
         sb.append(", ").append(allergies);
         sb.append(", ").append(email);
+        sb.append(", ").append(wbs);
+        sb.append(", ").append(wbsDetails);
 
         sb.append(")");
         return sb.toString();

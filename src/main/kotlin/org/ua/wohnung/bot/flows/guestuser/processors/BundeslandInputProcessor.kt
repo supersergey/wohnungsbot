@@ -35,7 +35,7 @@ class BundeslandInputProcessor(userService: UserService, messageSource: MessageS
 
     private fun updateUserProfile(chatMetadata: ChatMetadata) {
         userService.createAccount(
-            Account(chatMetadata.userId, chatMetadata.chatId, chatMetadata.username, Role.USER)
+            Account(chatMetadata.userId, chatMetadata.chatId, chatMetadata.username, Role.GUEST)
         )
         userService.updateUserDetails(chatMetadata.userId) {
             bundesland = BundesLand.values()

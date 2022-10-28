@@ -6,6 +6,7 @@ import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.flows.step.FlowStep.ALLERGIES
 import org.ua.wohnung.bot.flows.step.FlowStep.GUEST_USER_REGISTRATION_FINISHED_SUCCESS
+import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.user.UserService
 
 class AllergiesInputProcessor(userService: UserService, messageSource: MessageSource) :
@@ -18,6 +19,9 @@ class AllergiesInputProcessor(userService: UserService, messageSource: MessageSo
         }
         userService.updateUserDetails(chatMetadata.userId) {
             allergies = chatMetadata.input
+        }
+        userService.updateAccount(chatMetadata.userId) {
+            role = Role.USER
         }
         return StepOutput.PlainText(
             message = messageSource[GUEST_USER_REGISTRATION_FINISHED_SUCCESS],

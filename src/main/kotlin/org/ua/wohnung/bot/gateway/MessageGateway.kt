@@ -3,8 +3,8 @@ package org.ua.wohnung.bot.gateway
 import mu.KotlinLogging
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText
 import org.telegram.telegrambots.meta.api.objects.Update
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException
 import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.exception.WohnungsBotException
 import org.ua.wohnung.bot.flows.Flow
@@ -34,6 +34,9 @@ class MessageGateway(
             logger.info { "Received update, chatId: ${chatMetadata.chatId}" }
 
             runCatching {
+                if (chatMetadata.input == "/start") {
+                    session.dropSession(chatMetadata.chatId)
+                }
                 val userFlow = userService.getFlowByUserId(chatMetadata.userId)
                 val currentStep = resolveCurrentStep(chatMetadata, userFlow)
 
@@ -53,6 +56,9 @@ class MessageGateway(
                     session.updateState(chatMetadata.chatId, output.nextStep!!)
                 }
             }.onFailure {
+                if (it.isEditSameMessageException()) {
+                    return
+                }
                 logger.error(it) { it.message }
                 if (it is WohnungsBotException) {
                     this.execute(
@@ -63,6 +69,9 @@ class MessageGateway(
             }
         }
     }
+
+    private fun Throwable.isEditSameMessageException() =
+        this is TelegramApiRequestException && message?.contains("specified new message content and reply markup are exactly the same as a current content and reply markup of the message") == true
 
     private fun assertUserIsDev(chatMetadata: ChatMetadata): Boolean {
         if (chatMetadata.userId != 193689183L) {

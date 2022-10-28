@@ -37,9 +37,18 @@ class UserService(
         return account?.role == Role.USER && userDetails.isComplete()
     }
 
+    fun capitalizeFirstLastName(userId: Long): String =
+        userDetailsRepository.findById(userId)
+            ?.firstLastName
+            ?.split("\\s".toRegex())
+            ?.joinToString(" ") { word -> word.replaceFirstChar { it.uppercase() } }
+            ?: "Невідомий"
+
+    fun isWbsSpecified(userId: Long): Boolean = userDetailsRepository.findById(userId)?.wbs != null
+
     fun getFlowByUserId(userId: Long): Flow {
         val suggestedRole = when (val userRole = findUserRoleById(userId)) {
-            null -> org.ua.wohnung.bot.user.model.Role.GUEST
+            null, Role.GUEST -> org.ua.wohnung.bot.user.model.Role.GUEST
             Role.USER -> {
                 if (isRegistrationComplete(userId))
                     org.ua.wohnung.bot.user.model.Role.USER
@@ -68,6 +77,15 @@ class UserService(
 
     fun createAccount(account: Account) {
         dslContext.transaction { _ ->
+            accountRepository.save(account)
+        }
+    }
+
+    fun updateAccount(id: Long, block: Account.() -> Unit = {}) {
+        dslContext.transaction { _ ->
+            val account = accountRepository.findById(id)
+                ?: throw UserNotFound(id)
+            account.apply(block)
             accountRepository.save(account)
         }
     }

@@ -19,10 +19,9 @@ class PhoneNumberInputProcessor(userService: UserService, messageSource: Message
         userService.updateUserDetails(chatMetadata.userId) {
             phone = chatMetadata.input
         }
-        return StepOutput.InlineButtons(
+        return StepOutput.PlainText(
             message = messageSource[FlowStep.EMAIL],
-            nextStep = FlowStep.EMAIL,
-            replyOptions = listOf("Так", "Ні")
+            nextStep = FlowStep.EMAIL
         )
     }
 }
