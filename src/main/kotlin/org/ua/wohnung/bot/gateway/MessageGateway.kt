@@ -30,10 +30,13 @@ class MessageGateway(
     override fun onUpdateReceived(update: Update) {
         if (update.isProcessable()) {
             val chatMetadata = update.metadata()
-            if (assertUserIsDev(chatMetadata)) return
-            logger.info { "Received update, chatId: ${chatMetadata.chatId}" }
-
             runCatching {
+                if (assertUserIsDev(chatMetadata)) return
+                if (chatMetadata.username.isNullOrBlank()) {
+                    throw ServiceException.UsernameNotFound(chatMetadata.userId)
+                }
+                logger.info { "Received update, chatId: ${chatMetadata.chatId}" }
+
                 if (chatMetadata.input == "/start") {
                     session.dropSession(chatMetadata.chatId)
                 }
