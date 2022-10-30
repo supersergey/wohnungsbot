@@ -12,7 +12,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -61,6 +61,11 @@ public class ApartmentAccount extends TableImpl<ApartmentAccountRecord> {
      * The column <code>main.apartment_account.apply_ts</code>.
      */
     public final TableField<ApartmentAccountRecord, OffsetDateTime> APPLY_TS = createField(DSL.name("apply_ts"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
+
+    /**
+     * The column <code>main.apartment_account.hidden</code>.
+     */
+    public final TableField<ApartmentAccountRecord, Boolean> HIDDEN = createField(DSL.name("hidden"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     private ApartmentAccount(Name alias, Table<ApartmentAccountRecord> aliased) {
         this(alias, aliased, null);
@@ -160,11 +165,11 @@ public class ApartmentAccount extends TableImpl<ApartmentAccountRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<Long, String, OffsetDateTime> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row4<Long, String, OffsetDateTime, Boolean> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 }

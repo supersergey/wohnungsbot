@@ -19,6 +19,7 @@ public class ApartmentAccount implements Serializable {
     private Long           accountId;
     private String         apartmentId;
     private OffsetDateTime applyTs;
+    private Boolean        hidden;
 
     public ApartmentAccount() {}
 
@@ -26,16 +27,19 @@ public class ApartmentAccount implements Serializable {
         this.accountId = value.accountId;
         this.apartmentId = value.apartmentId;
         this.applyTs = value.applyTs;
+        this.hidden = value.hidden;
     }
 
     public ApartmentAccount(
         Long           accountId,
         String         apartmentId,
-        OffsetDateTime applyTs
+        OffsetDateTime applyTs,
+        Boolean        hidden
     ) {
         this.accountId = accountId;
         this.apartmentId = apartmentId;
         this.applyTs = applyTs;
+        this.hidden = hidden;
     }
 
     /**
@@ -80,6 +84,20 @@ public class ApartmentAccount implements Serializable {
         this.applyTs = applyTs;
     }
 
+    /**
+     * Getter for <code>main.apartment_account.hidden</code>.
+     */
+    public Boolean getHidden() {
+        return this.hidden;
+    }
+
+    /**
+     * Setter for <code>main.apartment_account.hidden</code>.
+     */
+    public void setHidden(Boolean hidden) {
+        this.hidden = hidden;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ApartmentAccount (");
@@ -87,6 +105,7 @@ public class ApartmentAccount implements Serializable {
         sb.append(accountId);
         sb.append(", ").append(apartmentId);
         sb.append(", ").append(applyTs);
+        sb.append(", ").append(hidden);
 
         sb.append(")");
         return sb.toString();

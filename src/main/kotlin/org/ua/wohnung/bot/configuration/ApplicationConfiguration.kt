@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.jooq.SQLDialect
@@ -20,6 +21,7 @@ import org.ua.wohnung.bot.flows.admin.AdminFlow
 import org.ua.wohnung.bot.flows.admin.processors.AdminApartmentInfoInputProcessor
 import org.ua.wohnung.bot.flows.admin.processors.AdminStartInputProcessor
 import org.ua.wohnung.bot.flows.admin.processors.AdminUserInfo
+import org.ua.wohnung.bot.flows.admin.processors.AdminWhoIsInterestedInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.GuestUserFlow
 import org.ua.wohnung.bot.flows.guestuser.processors.AcceptPoliciesUserInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.AllergiesInputProcessor
@@ -175,7 +177,8 @@ val messageGatewayModule = module {
 
             AdminStartInputProcessor(get(), get()),
             AdminUserInfo(get(), get(), get()),
-            AdminApartmentInfoInputProcessor(get(), get(), get())
+            AdminApartmentInfoInputProcessor(get(), get(), get()),
+            AdminWhoIsInterestedInputProcessor(get(), get(), get(), ObjectMapper().registerKotlinModule())
         )
     }
     single<LongPollingBot>(named("WohnungsBot")) {

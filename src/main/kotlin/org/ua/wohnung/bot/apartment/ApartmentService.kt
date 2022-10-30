@@ -111,10 +111,16 @@ class ApartmentService(
     }
 
     private fun Long.hasNotAlreadyAppliedForApartment(apartmentId: String): Boolean =
-        apartmentAccountRepository.findAccountsByApartmentId(apartmentId).none { it.account.id == this }
+        apartmentAccountRepository.findAccountsByApartmentId(apartmentId, 0, 1000).none { it.account.id == this }
 
-    fun findApplicantsByApartmentId(apartmentId: String): List<ApartmentApplication> {
-        return apartmentAccountRepository.findAccountsByApartmentId(apartmentId)
+    fun countApplicationByApartmentId(apartmentId: String): Int =
+        apartmentAccountRepository.countAccountsByApartmentId(apartmentId)
+
+    fun findApplicantsByApartmentId(apartmentId: String, offset: Int, limit: Int = 1): List<ApartmentApplication> =
+        apartmentAccountRepository.findAccountsByApartmentId(apartmentId, offset, limit)
+
+    fun hideApplication(apartmentId: String, userId: Long) {
+        apartmentAccountRepository.hideApplication(apartmentId, userId)
     }
 
     private fun List<OffsetDateTime>.assertUserApplicationRateLimit(
