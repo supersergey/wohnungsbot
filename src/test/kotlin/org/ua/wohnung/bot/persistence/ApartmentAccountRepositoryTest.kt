@@ -30,7 +30,7 @@ internal class ApartmentAccountRepositoryTest {
 
         apartmentAccountRepository.save(apartment.id, account.id)
 
-        val accounts = apartmentAccountRepository.findAccountsByApartmentId(apartment.id)
+        val accounts = apartmentAccountRepository.findAccountsByApartmentId(apartment.id, 0, 100)
         assertThat(accounts).singleElement()
         assertThat(accounts.first().account.id).isEqualTo(account.id)
     }

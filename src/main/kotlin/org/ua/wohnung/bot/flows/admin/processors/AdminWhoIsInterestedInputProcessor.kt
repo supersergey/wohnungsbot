@@ -34,11 +34,7 @@ class AdminWhoIsInterestedInputProcessor(
                 finishSession = true
             )
         } else {
-            if (minOf(page.cursor, totalCount - 1) < 0) {
-                page.cursor = 0
-            } else {
-                page.cursor = minOf(page.cursor, totalCount - 1)
-            }
+            updateCursor(page, totalCount)
             val application =
                 apartmentService.findApplicantsByApartmentId(page.apartmentId, page.cursor)
                     .first()
@@ -48,8 +44,20 @@ class AdminWhoIsInterestedInputProcessor(
                 message = message,
                 nextStep = FlowStep.ADMIN_WHO_IS_INTERESTED,
                 replyOptions = replyOptions,
-                replyMetaData = replyMetaData
+                replyMetaData = replyMetaData,
+                buttonsPerLine = 2
             )
+        }
+    }
+
+    private fun updateCursor(
+        page: Page,
+        totalCount: Int
+    ) {
+        if (page.cursor < 0) {
+            page.cursor = 0
+        } else {
+            page.cursor = minOf(page.cursor, totalCount - 1)
         }
     }
 
@@ -65,7 +73,8 @@ class AdminWhoIsInterestedInputProcessor(
             "Заявка номер ${page.cursor + 1} з $totalCount",
             application.userDetails.stringify(application.account),
             "Натисніть /start або /whoIsInterested, щоб подивитись анкети на інше житло"
-        ), "\n\n"
+        ),
+        "\n\n"
     )
 
     private fun createReplyOptions(page: Page, totalCount: Int): Pair<List<String>, List<String>> {
@@ -73,15 +82,15 @@ class AdminWhoIsInterestedInputProcessor(
             return listOf(HIDE_CAPTION) to listOf(hide(page))
         }
         if (page.cursor == 0) {
-            return listOf(HIDE_CAPTION, "⏩", "⏭️") to
-                listOf(hide(page), next(page), last(page, totalCount))
+            return listOf("⏩", "⏭️", HIDE_CAPTION) to
+                listOf(next(page), last(page, totalCount), hide(page))
         }
         if (page.cursor == totalCount - 1) {
             return listOf("⏮️", "⏪", HIDE_CAPTION) to
                 listOf(first(page), prev(page), hide(page))
         }
-        return listOf("⏮️", "⏪", HIDE_CAPTION, "⏩", "⏭️") to
-            listOf(first(page), prev(page), hide(page), next(page), last(page, totalCount))
+        return listOf("⏮️", "⏪", "⏩", "⏭️", HIDE_CAPTION) to
+            listOf(first(page), prev(page), next(page), last(page, totalCount), hide(page))
     }
 
     private fun first(page: Page): String = objectMapper.writeValueAsString(Page(page.apartmentId, 0))

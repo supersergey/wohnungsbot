@@ -25,7 +25,6 @@ class MessageFactory {
                 .text(stepOutput.message)
                 .withMarkup(stepOutput)
                 .build()
-
         } else
             SendMessage.builder()
                 .chatId(chatMeta.chatId.toString())
@@ -33,7 +32,6 @@ class MessageFactory {
                 .withMarkup(stepOutput)
                 .build() as BotApiMethod<Serializable>
     }
-
 
     fun getCustom(chatIdentifier: Long?, message: String): SendMessage = SendMessage().apply {
         this.chatId = chatIdentifier.toString()
@@ -62,11 +60,7 @@ class MessageFactory {
         }
     }
 
-
-    private fun InlineKeyboardMarkup.InlineKeyboardMarkupBuilder.withKeyboard(
-        stepOutput: StepOutput.InlineButtons,
-        buttonsPerRow: Int = 3
-    ): InlineKeyboardMarkup.InlineKeyboardMarkupBuilder =
+    private fun InlineKeyboardMarkup.InlineKeyboardMarkupBuilder.withKeyboard(stepOutput: StepOutput.InlineButtons): InlineKeyboardMarkup.InlineKeyboardMarkupBuilder =
         keyboard(
             stepOutput.replyOptions
                 .mapIndexed { i, buttonCaption ->
@@ -75,7 +69,7 @@ class MessageFactory {
                         .text(buttonCaption)
                         .build()
                 }
-                .chunked(buttonsPerRow)
+                .chunked(stepOutput.buttonsPerLine)
         )
 
     private fun ReplyKeyboardMarkup.ReplyKeyboardMarkupBuilder.withKeyboard(
@@ -90,4 +84,3 @@ class MessageFactory {
         )
             .oneTimeKeyboard(true)
 }
-

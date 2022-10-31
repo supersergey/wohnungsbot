@@ -12,8 +12,6 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 import org.ua.wohnung.bot.configuration.commonModule
 import org.ua.wohnung.bot.configuration.messageGatewayModule
 import org.ua.wohnung.bot.configuration.persistenceModule
-import org.ua.wohnung.bot.configuration.processorsModule
-import org.ua.wohnung.bot.configuration.registeredUserFlow
 import org.ua.wohnung.bot.configuration.servicesModule
 import org.ua.wohnung.bot.configuration.sheetReaderModule
 
@@ -27,8 +25,6 @@ fun main(args: Array<String>) {
         modules(
             commonModule,
             persistenceModule,
-            registeredUserFlow,
-            processorsModule,
             messageGatewayModule,
             sheetReaderModule,
             servicesModule,

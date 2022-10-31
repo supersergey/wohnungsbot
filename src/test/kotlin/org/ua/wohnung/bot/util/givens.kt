@@ -30,7 +30,10 @@ fun aFullUserDetails(
     "district",
     true,
     "foreign languages",
-    "allergies"
+    "allergies",
+    "abc@email.com",
+    true,
+    "wbs_details"
 )
 
 fun aPartialUserDetails(id: Long = nextLong()) = UserDetails(
@@ -43,6 +46,9 @@ fun aPartialUserDetails(id: Long = nextLong()) = UserDetails(
     null,
     null,
     false,
+    null,
+    null,
+    "email",
     null,
     null
 )

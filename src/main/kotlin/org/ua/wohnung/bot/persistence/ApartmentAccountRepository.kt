@@ -3,8 +3,6 @@ package org.ua.wohnung.bot.persistence
 import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.SelectSeekStep1
-import org.jooq.SelectSelectStep
-import org.jooq.impl.DSL
 import org.ua.wohnung.bot.persistence.generated.Tables.ACCOUNT
 import org.ua.wohnung.bot.persistence.generated.Tables.APARTMENT_ACCOUNT
 import org.ua.wohnung.bot.persistence.generated.Tables.USER_DETAILS
@@ -71,8 +69,7 @@ class ApartmentAccountRepository(private val jooq: DSLContext) {
     }
 
     private fun DSLContext.prepareFindAccountsByApartmentId(apartmentId: String): SelectSeekStep1<Record, Long> {
-        return jooq
-            .select().from(APARTMENT_ACCOUNT)
+        return select().from(APARTMENT_ACCOUNT)
             .join(ACCOUNT).on(APARTMENT_ACCOUNT.ACCOUNT_ID.eq(ACCOUNT.ID))
             .join(USER_DETAILS).on(APARTMENT_ACCOUNT.ACCOUNT_ID.eq(USER_DETAILS.ID))
             .where(APARTMENT_ACCOUNT.APARTMENT_ID.eq(apartmentId))

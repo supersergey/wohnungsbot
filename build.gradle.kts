@@ -9,7 +9,7 @@ plugins {
     application
     id("org.flywaydb.flyway") version "8.5.10"
     id("nu.studer.jooq") version "7.1.1"
-//    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
+    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
 }
 
 group = "org.ua.wohnung.bot"
@@ -34,9 +34,9 @@ dependencies {
 
     implementation("org.telegram:telegrambots:6.1.0")
 
-    runtimeOnly("org.postgresql:postgresql:42.3.6")
+    runtimeOnly("org.postgresql:postgresql:42.3.7")
     jooqGenerator("jakarta.xml.bind:jakarta.xml.bind-api:3.0.1")
-    jooqGenerator("org.postgresql:postgresql:42.3.6")
+    jooqGenerator("org.postgresql:postgresql:42.3.7")
 
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.23")
     implementation("ch.qos.logback:logback-classic:1.2.11")

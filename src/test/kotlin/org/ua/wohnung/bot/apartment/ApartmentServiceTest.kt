@@ -5,6 +5,7 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.just
 import io.mockk.mockk
@@ -15,6 +16,7 @@ import org.jooq.TransactionalRunnable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentAccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentApplication
@@ -54,6 +56,9 @@ internal class ApartmentServiceTest {
     @MockK
     private lateinit var rowMapper: RowMapper
 
+    @RelaxedMockK
+    private lateinit var messageSource: MessageSource
+
     @InjectMockKs
     private lateinit var apartmentService: ApartmentService
 
@@ -91,6 +96,7 @@ internal class ApartmentServiceTest {
             apartmentTheBecomesInactive,
             apartmentThatRemainsNotActive
         )
+        every { apartmentRepository.count() } returns 1
         every { apartmentRepository.saveAll(any(), any()) } returns 1
 
         apartmentService.update()

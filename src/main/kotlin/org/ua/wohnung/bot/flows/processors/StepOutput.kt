@@ -29,7 +29,8 @@ sealed class StepOutput(
         val replyOptions: List<String>,
         val replyMetaData: List<String>? = null,
         override val editMessage: Boolean = false,
-        override val finishSession: Boolean = false
+        override val finishSession: Boolean = false,
+        val buttonsPerLine: Int = 3
     ) :
         StepOutput(message = message, nextStep = nextStep, finishSession = finishSession)
 

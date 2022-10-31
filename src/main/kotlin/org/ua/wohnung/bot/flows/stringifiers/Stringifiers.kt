@@ -8,21 +8,21 @@ import org.ua.wohnung.bot.sheets.PublicationStatus
 fun UserDetails?.stringify(account: Account?): String {
     if (this == null) return "Помешкання не знайдено"
     return mapOf(
-            "\uD83E\uDEAC Логін телеграм" to (account?.username?.let { username -> "https://t.me/$username" } ?: "Прихований"),
-            "\uD83E\uDEA7 Прізвище" to  firstLastName,
-            "\uD83D\uDCF1 Телефон" to  phone,
-            "✉️ Email" to (email ?: UNDEFINED),
-            "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66 Кількість людей в родині" to "$numberOfTenants",
-            "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66 Склад сімʼї" to familyMembers,
-            "\uD83D\uDC36 Чи є тварини" to (if (pets) "так" else "ні"),
-            "\uD83D\uDDFA Де зареєстрований" to bundesland,
-            "\uD83D\uDCCD Район" to district,
-            "Чи є WBS" to ( if (wbs == null) UNDEFINED else if (wbs) "так" else "ні"),
-            "Деталі WBS" to ( if (wbsDetails == null) UNDEFINED else wbsDetails),
-            "Чи готові до переїзду" to (if (readyToMove) "так" else "ні"),
-            "\uD83C\uDFE7 Іноземні мови" to foreignLanguages,
-            "\uD83C\uDF21 Алергії" to allergies
-        ).stringify()
+        "\uD83E\uDEAC Логін телеграм" to (account?.username?.let { username -> "https://t.me/$username" } ?: "Прихований"),
+        "\uD83E\uDEA7 Прізвище" to firstLastName,
+        "\uD83D\uDCF1 Телефон" to phone,
+        "✉️ Email" to (email ?: UNDEFINED),
+        "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66 Кількість людей в родині" to "$numberOfTenants",
+        "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66 Склад сімʼї" to familyMembers,
+        "\uD83D\uDC36 Чи є тварини" to (if (pets) "так" else "ні"),
+        "\uD83D\uDDFA Де зареєстрований" to bundesland,
+        "\uD83D\uDCCD Район" to district,
+        "Чи є WBS" to (if (wbs == null) UNDEFINED else if (wbs) "так" else "ні"),
+        "Деталі WBS" to (if (wbsDetails == null) UNDEFINED else wbsDetails),
+        "Чи готові до переїзду" to (if (readyToMove) "так" else "ні"),
+        "\uD83C\uDFE7 Іноземні мови" to foreignLanguages,
+        "\uD83C\uDF21 Алергії" to allergies
+    ).stringify()
 }
 
 fun Apartment?.stringify(includeAdminFields: Boolean = false): String {
@@ -47,7 +47,7 @@ fun Apartment?.stringify(includeAdminFields: Boolean = false): String {
 }
 
 fun Map<String, String>.stringify(): String {
-    return map { "${it.key} : ${it.value}"}.joinToString("\n\n")
+    return map { "${it.key} : ${it.value}" }.joinToString("\n\n")
 }
 
 const val UNDEFINED = "Не зазначений"

@@ -9,7 +9,8 @@ import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.user.UserService
 
 class OwnerAddAdminInputProcessor(
-    userService: UserService, messageSource: MessageSource,
+    userService: UserService,
+    messageSource: MessageSource,
     private val accountService: AccountService
 ) :
     AbstractOwnerFlowInputProcessor(userService, messageSource) {

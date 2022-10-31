@@ -3,6 +3,7 @@ package org.ua.wohnung.bot.user
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.jooq.DSLContext
 import org.junit.jupiter.api.BeforeEach
@@ -40,7 +41,8 @@ internal class UserServiceTest {
             accountRepository,
             mockUserDetailsRepository,
             mockApartmentAccountRepository,
-            jooq
+            jooq,
+            mockk(relaxed = true)
         )
     }
 

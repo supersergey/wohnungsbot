@@ -88,67 +88,6 @@ val servicesModule = module {
     singleOf(::AccountService)
 }
 
-// val userFlowModule = module {
-//    singleOf(::UserRegistrationFlow)
-// }
-val registeredUserFlow = module {
-//    single {
-//        DynamicButtonProducersRegistry(
-//            DynamicButtonsProducerImpl(get())
-//        )
-//    }
-//    single { RegisteredUserFlow(get()) }
-}
-
-// val adminModule = module {
-//    singleOf(::AdminFlow)
-// }
-
-// val ownerModule = module {
-//    singleOf(::OwnerFlow)
-// }
-
-val processorsModule = module {
-//    single {
-//        ProcessorContainer.PreProcessors(
-//            UserDetailsStepProcessor.BundesLandSelectionStepProcessor(get()),
-//            UserDetailsStepProcessor.UserRegistrationFlowConditionsRejectedStepProcessor(get())
-//        )
-//    }
-//    single {
-//        ProcessorContainer.PostProcessors(
-//            UpdateUserDetailsStepProcessor.Bundesland(get()),
-//            UpdateUserDetailsStepProcessor.DistrictSelectionStepProcessorUpdate(get()),
-//            UpdateUserDetailsStepProcessor.FamilyCountStepProcessorUpdate(get()),
-//            UpdateUserDetailsStepProcessor.FamilyMembersStepProcessorUpdate(get()),
-//            UpdateUserDetailsStepProcessor.FirstAndLastNameStepProcessorUpdate(get()),
-//            UpdateUserDetailsStepProcessor.PhoneNumberStepProcessorUpdate(get()),
-//            UpdateUserDetailsStepProcessor.PetsStepProcessorUpdate(get()),
-//            UpdateUserDetailsStepProcessor.ForeignLanguagesStepProcessorUpdate(get()),
-//            UpdateUserDetailsStepProcessor.AllergiesStepProcessorUpdate(get()),
-//            UpdateUserDetailsStepProcessor.ReadyToMoveStepProcessorUpdate(get()),
-//
-//            RegisteredUserStepProcessor.RegisteredUserRequestReceived(get()),
-//
-//            OwnerStepProcessor.AddAdmin(get(), get()),
-//            OwnerStepProcessor.RemoveAdmin(get(), get())
-//        )
-//    }
-//    single {
-//        ProcessorContainer.MessagePreProcessors(
-//            MessageStepProcessor.RegisteredUserConversationStart(get()),
-//            MessageStepProcessor.RegisteredUserListApartments(get(), get()),
-//
-//            OwnerMessageStepProcessor.OwnerStart(get(), get()),
-//            OwnerMessageStepProcessor.OwnerApartmentsUpdated(get()),
-//            OwnerMessageStepProcessor.OwnerListAdmins(get()),
-//
-//            AdminMessageStepProcessor.AdminStart(get(), get()),
-//            AdminMessageStepProcessor.AdminWhoIsInterested(get(), get())
-//        )
-//    }
-}
-
 val messageGatewayModule = module {
     single { Session() }
     single { MessageSource(get(), Path.of("flows", "newUserFlow.yml")) }

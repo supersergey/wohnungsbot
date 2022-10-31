@@ -15,7 +15,7 @@ class BundeslandInputProcessor(userService: UserService, messageSource: MessageS
     AbstractGuestUserInputProcessor(userService, messageSource) {
     override val supportedStep: FlowStep = BUNDESLAND_SELECTION
 
-    override fun processSpecificCommands(chatMetadata: ChatMetadata): StepOutput? {
+    override fun processSpecificCommands(chatMetadata: ChatMetadata): StepOutput {
         return if (chatMetadata.input.isValidBundesLand()) {
             updateUserProfile(chatMetadata)
             return StepOutput.PlainText(
@@ -39,8 +39,7 @@ class BundeslandInputProcessor(userService: UserService, messageSource: MessageS
         )
         userService.updateUserDetails(chatMetadata.userId) {
             bundesland = BundesLand.values()
-                .first { it.germanName.lowercase() == chatMetadata.input }
-                .toString()
+                .first { it.germanName.lowercase() == chatMetadata.input }.germanName
         }
     }
 }
