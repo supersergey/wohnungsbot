@@ -9,13 +9,12 @@ import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.flows.stringifiers.stringify
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
 import org.ua.wohnung.bot.user.UserService
-import java.time.Instant
 
 class RegisteredUserListApartmentsInputProcessor(
     private val apartmentService: ApartmentService,
     userService: UserService,
     messageSource: MessageSource
-) : RegisteredUserInputProcessor(userService, messageSource) {
+) : AbstractRegisteredUserInputProcessor(userService, messageSource) {
     override val supportedStep: FlowStep = FlowStep.REGISTERED_USER_LIST_APARTMENTS
 
     override fun processSpecificCommands(chatMetadata: ChatMetadata): StepOutput? {
@@ -36,7 +35,7 @@ class RegisteredUserListApartmentsInputProcessor(
             else -> null
         }
         return apartmentToDisplay?.let {
-            apartments.toStepOutput(apartmentToDisplay, chatMetadata.input)
+            apartments.toStepOutput(apartmentToDisplay)
         }
     }
 
@@ -56,7 +55,7 @@ class RegisteredUserListApartmentsInputProcessor(
         }
     }
 
-    private fun List<Apartment>.toStepOutput(apartmentId: String, userInput: String): StepOutput {
+    private fun List<Apartment>.toStepOutput(apartmentId: String): StepOutput {
         val apartmentToDisplay = first { it.id == apartmentId }
         val message = messageSource[FlowStep.REGISTERED_USER_LIST_APARTMENTS]
             .format(this.count()) + "\n\n${apartmentToDisplay.stringify()}"

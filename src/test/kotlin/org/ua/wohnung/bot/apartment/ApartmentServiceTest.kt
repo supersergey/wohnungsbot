@@ -130,7 +130,7 @@ internal class ApartmentServiceTest {
         val apartmentApplication = mockk<ApartmentApplication>().also {
             every { it.account.id } returns 1
         }
-        every { apartmentAccountRepository.findAccountsByApartmentId(any()) } returns listOf(apartmentApplication)
+        every { apartmentAccountRepository.findAccountsByApartmentId(any(), any(), any()) } returns listOf(apartmentApplication)
         every { apartmentAccountRepository.save(any(), any()) } just Runs
 
         apartmentService.acceptUserApartmentRequest(123L, "1")

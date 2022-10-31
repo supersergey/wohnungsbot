@@ -1,18 +1,21 @@
 package org.ua.wohnung.bot.flows.registereduser.processors
 
 import org.ua.wohnung.bot.configuration.MessageSource
-import org.ua.wohnung.bot.flows.AbstractUserInputProcessor
 import org.ua.wohnung.bot.dto.ChatMetadata
+import org.ua.wohnung.bot.flows.AbstractUserInputProcessor
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.user.UserService
 
-abstract class RegisteredUserInputProcessor(userService: UserService, messageSource: MessageSource) :
+abstract class AbstractRegisteredUserInputProcessor(userService: UserService, messageSource: MessageSource) :
     AbstractUserInputProcessor(userService, messageSource) {
     abstract fun processSpecificCommands(chatMetadata: ChatMetadata): StepOutput?
 
     override fun processGenericCommands(chatMetadata: ChatMetadata): StepOutput? {
         return getErrorIfRegistrationIsNotComplete(chatMetadata) ?: run {
+            userService.updateAccount(chatMetadata.userId) {
+                this.username = chatMetadata.username
+            }
             when (chatMetadata.input) {
                 "/start" -> processStartCommand(chatMetadata)
                 else -> processSpecificCommands(chatMetadata)

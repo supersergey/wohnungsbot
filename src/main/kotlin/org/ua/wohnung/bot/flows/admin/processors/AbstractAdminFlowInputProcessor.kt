@@ -30,7 +30,7 @@ abstract class AbstractAdminFlowInputProcessor(
 
     private fun assertAdminUser(userId: Long) {
         val userRole = userService.findUserRoleById(userId)
-        if (userRole != Role.ADMIN) {
+        if (userRole !in ADMIN_ROLES) {
             throw ServiceException.AccessViolation(userId, userRole, Role.ADMIN)
         }
     }
@@ -53,11 +53,15 @@ abstract class AbstractAdminFlowInputProcessor(
             nextStep = FlowStep.ADMIN_GET_APARTMENT_INFO
         )
 
-    private fun processStartCommand(chatMetadata: ChatMetadata): StepOutput {
+    protected open fun processStartCommand(chatMetadata: ChatMetadata): StepOutput {
         return StepOutput.PlainText(
             message = messageSource[FlowStep.ADMIN_START]
                 .format(userService.capitalizeFirstLastName(chatMetadata.userId)),
             nextStep = FlowStep.ADMIN_START
         )
+    }
+
+    private companion object {
+        private val ADMIN_ROLES = setOf(Role.OWNER, Role.ADMIN)
     }
 }

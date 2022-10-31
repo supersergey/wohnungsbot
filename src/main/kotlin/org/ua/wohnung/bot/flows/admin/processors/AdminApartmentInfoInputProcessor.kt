@@ -16,7 +16,7 @@ class AdminApartmentInfoInputProcessor(
     AbstractAdminFlowInputProcessor(userService, messageSource) {
     override val supportedStep = FlowStep.ADMIN_GET_APARTMENT_INFO
 
-    override fun processSpecificCommands(chatMetadata: ChatMetadata): StepOutput? {
+    override fun processSpecificCommands(chatMetadata: ChatMetadata): StepOutput {
         val apartment = apartmentService.findById(chatMetadata.input)
         return StepOutput.PlainText(
             message = apartment.stringify(includeAdminFields = true),

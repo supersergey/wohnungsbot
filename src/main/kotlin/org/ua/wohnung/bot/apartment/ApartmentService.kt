@@ -51,32 +51,34 @@ class ApartmentService(
 
     inner class DbUpdateTask : TimerTask() {
         override fun run() {
-            runCatching {
-                update()
-            }.onFailure {
-                logger.error(it) {}
-            }
+            update()
         }
     }
 
-    fun update() {
-        lock.withLock {
-            val incomingApartments = sheetReader.readRows().mapNotNull(rowMapper)
-            dslContext.transaction { ctx ->
-                val activeApartments = apartmentRepository
-                    .findByCriteria(ApartmentSearchCriteria(publicationStatus = PublicationStatus.ACTIVE))
-                val incomingApartmentsIds = incomingApartments.map { it.id }
-                val inactiveApartments = activeApartments
-                    .filterNot { it.id in incomingApartmentsIds }
-                    .onEach { it.publicationstatus = PublicationStatus.NOT_ACTIVE.name }
-                apartmentRepository.saveAll(ctx.dsl(), incomingApartments)
-                apartmentRepository.saveAll(ctx.dsl(), inactiveApartments)
+    fun update(): Int {
+        runCatching {
+            lock.withLock {
+                val incomingApartments = sheetReader.readRows().mapNotNull(rowMapper)
+                dslContext.transaction { ctx ->
+                    val activeApartments = apartmentRepository
+                        .findByCriteria(ApartmentSearchCriteria(publicationStatus = PublicationStatus.ACTIVE))
+                    val incomingApartmentsIds = incomingApartments.map { it.id }
+                    val inactiveApartments = activeApartments
+                        .filterNot { it.id in incomingApartmentsIds }
+                        .onEach { it.publicationstatus = PublicationStatus.NOT_ACTIVE.name }
+                    apartmentRepository.saveAll(ctx.dsl(), incomingApartments)
+                    apartmentRepository.saveAll(ctx.dsl(), inactiveApartments)
+                }
             }
+        }.onFailure {
+            logger.error(it) {}
         }
-        logger.info { "DB updated, ${count()} active records" }
+        return count().also {
+            logger.info { "DB updated, $it active records" }
+        }
     }
 
-    fun count(): Int = apartmentRepository.count()
+    private fun count(): Int = apartmentRepository.count()
 
     fun findById(apartmentId: String): Apartment? = apartmentRepository.findById(apartmentId)
 
@@ -104,7 +106,10 @@ class ApartmentService(
         val apartmentRequestResult = apartmentAccountRepository
             .findLatestApplyTs(userId)
             .assertUserApplicationRateLimit()
-        if (apartmentRequestResult is ApartmentRequestResult.Success && userId.hasNotAlreadyAppliedForApartment(apartmentId)) {
+        if (apartmentRequestResult is ApartmentRequestResult.Success && userId.hasNotAlreadyAppliedForApartment(
+                apartmentId
+            )
+        ) {
             apartmentAccountRepository.save(apartmentId, userId)
         }
         return apartmentRequestResult
@@ -142,6 +147,6 @@ class ApartmentService(
 }
 
 sealed class ApartmentRequestResult {
-    object Success: ApartmentRequestResult()
-    class Failure(val cause: String): ApartmentRequestResult()
+    object Success : ApartmentRequestResult()
+    class Failure(val cause: String) : ApartmentRequestResult()
 }

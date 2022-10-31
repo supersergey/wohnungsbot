@@ -5,10 +5,10 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException
+import org.ua.wohnung.bot.dto.ChatMetadata
 import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.exception.WohnungsBotException
 import org.ua.wohnung.bot.flows.Flow
-import org.ua.wohnung.bot.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.UserInputProcessorsRegistry
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.user.UserService
@@ -28,48 +28,46 @@ class MessageGateway(
     override fun getBotUsername(): String = botName
 
     override fun onUpdateReceived(update: Update) {
-        if (update.isProcessable()) {
-            val chatMetadata = update.metadata()
-            runCatching {
-                if (assertUserIsDev(chatMetadata)) return
-                if (chatMetadata.username.isNullOrBlank()) {
-                    throw ServiceException.UsernameNotFound(chatMetadata.userId)
-                }
-                logger.info { "Received update, chatId: ${chatMetadata.chatId}" }
+        if (!update.isProcessable()) return
+        val chatMetadata = update.metadata()
+        runCatching {
+            if (assertUserIsDev(chatMetadata)) return
+            if (chatMetadata.username.isNullOrBlank()) {
+                throw ServiceException.UsernameNotFound(chatMetadata.userId)
+            }
+            logger.info { "Received update, chatId: ${chatMetadata.chatId}" }
 
-                if (chatMetadata.input == "/start") {
-                    session.dropSession(chatMetadata.chatId)
-                }
-                val userFlow = userService.getFlowByUserId(chatMetadata.userId)
-                val currentStep = resolveCurrentStep(chatMetadata, userFlow)
-
-                val output = requireNotNull(
-                    userInputProcessorsRegistry[currentStep]?.invoke(chatMetadata),
-                    lazyMessage = { "System error, $currentStep input processor not found" }
-                )
-
-                val message = messageFactory.get(chatMetadata, output)
-
-                execute(message)
-
-                if (output.finishSession) {
-                    session.dropSession(chatMetadata.chatId)
-                }
-                if (output.nextStep != null) {
-                    session.updateState(chatMetadata.chatId, output.nextStep!!)
-                }
-            }.onFailure {
-                if (it.isEditSameMessageException()) {
-                    return
-                }
-                logger.error(it) { it.message }
-                if (it is WohnungsBotException) {
-                    this.execute(
-                        SendMessage(chatMetadata.chatId.toString(), it.userMessage)
-                    )
-                }
+            if (chatMetadata.input == "/start") {
                 session.dropSession(chatMetadata.chatId)
             }
+            val userFlow = userService.getFlowByUserId(chatMetadata.userId)
+            val currentStep = resolveCurrentStep(chatMetadata, userFlow)
+
+            val output = requireNotNull(
+                userInputProcessorsRegistry[currentStep]?.invoke(chatMetadata),
+                lazyMessage = { "System error, $currentStep input processor not found" }
+            )
+
+            val message = messageFactory.get(chatMetadata, output)
+
+            execute(message)
+
+            if (output.finishSession) {
+                session.dropSession(chatMetadata.chatId)
+            }
+            if (output.nextStep != null) {
+                session.updateState(chatMetadata.chatId, output.nextStep!!)
+            }
+        }.onFailure {
+            if (it.isEditSameMessageException()) {
+                return
+            }
+            logger.error(it) { it.message }
+            val userMessage = if (it is WohnungsBotException)
+                it.userMessage
+            else "❌ Щось пішло не так. Будь-ласка, спробуйте пізніше або повідомте про помилку адміністрацію: https://t.me/+bltxxw4qtbtjN2Vi"
+            execute(SendMessage(chatMetadata.chatId.toString(), userMessage))
+            session.dropSession(chatMetadata.chatId)
         }
     }
 
@@ -89,24 +87,9 @@ class MessageGateway(
         return false
     }
 
-    private fun resolveUserRole(chatMetadata: ChatMetadata) =
-        userService.findUserRoleById(chatMetadata.userId) ?: throw ServiceException.UserNotFound(chatMetadata.userId)
-
     private fun resolveCurrentStep(chatMetadata: ChatMetadata, flow: Flow): FlowStep {
         return session.current(chatMetadata.chatId)?.lastOrNull()
             ?: flow.first
-    }
-
-    private fun resolvePreviousStep(chatMetadata: ChatMetadata): FlowStep {
-        if (session.current(chatMetadata.chatId)?.lastOrNull() == null) {
-            return FlowStep.INITIAL
-        }
-        val list = session.current(chatMetadata.chatId)
-        return if (list != null && list.size > 1) {
-            return list[list.size - 2]
-        } else {
-            FlowStep.INITIAL
-        }
     }
 
     private fun Update.isProcessable(): Boolean =

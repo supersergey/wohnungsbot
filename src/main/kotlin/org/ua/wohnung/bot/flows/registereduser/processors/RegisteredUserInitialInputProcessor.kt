@@ -10,7 +10,7 @@ import org.ua.wohnung.bot.user.UserService
 class RegisteredUserInitialInputProcessor(
     userService: UserService,
     messageSource: MessageSource
-) : RegisteredUserInputProcessor(userService, messageSource) {
+) : AbstractRegisteredUserInputProcessor(userService, messageSource) {
     override val supportedStep: FlowStep = REGISTERED_USER_CONVERSATION_START
 
     override fun processSpecificCommands(chatMetadata: ChatMetadata): StepOutput? = null

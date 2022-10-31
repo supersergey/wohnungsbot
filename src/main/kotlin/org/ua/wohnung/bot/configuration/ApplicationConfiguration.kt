@@ -40,6 +40,10 @@ import org.ua.wohnung.bot.flows.guestuser.processors.PhoneNumberInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.ReadyToMoveInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.WbsDetailsInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.WbsInputProcessor
+import org.ua.wohnung.bot.flows.owner.OwnerFlow
+import org.ua.wohnung.bot.flows.owner.processors.OwnerAddAdminInputProcessor
+import org.ua.wohnung.bot.flows.owner.processors.OwnerRemoveAdminInputProcessor
+import org.ua.wohnung.bot.flows.owner.processors.OwnerStartInputProcessor
 import org.ua.wohnung.bot.flows.processors.UserInputProcessorsRegistry
 import org.ua.wohnung.bot.flows.registereduser.RegisteredUserFlow
 import org.ua.wohnung.bot.flows.registereduser.processors.RegisteredUserInitialInputProcessor
@@ -150,7 +154,7 @@ val messageGatewayModule = module {
     single { MessageSource(get(), Path.of("flows", "newUserFlow.yml")) }
     singleOf(::MessageFactory)
     single {
-        FlowRegistry(GuestUserFlow(), RegisteredUserFlow(), AdminFlow())
+        FlowRegistry(GuestUserFlow(), RegisteredUserFlow(), AdminFlow(), OwnerFlow())
     }
     single {
         UserInputProcessorsRegistry(
@@ -178,7 +182,11 @@ val messageGatewayModule = module {
             AdminStartInputProcessor(get(), get()),
             AdminUserInfo(get(), get(), get()),
             AdminApartmentInfoInputProcessor(get(), get(), get()),
-            AdminWhoIsInterestedInputProcessor(get(), get(), get(), ObjectMapper().registerKotlinModule())
+            AdminWhoIsInterestedInputProcessor(get(), get(), get(), ObjectMapper().registerKotlinModule()),
+
+            OwnerStartInputProcessor(get(), get(), get()),
+            OwnerAddAdminInputProcessor(get(), get(), get()),
+            OwnerRemoveAdminInputProcessor(get(), get(), get())
         )
     }
     single<LongPollingBot>(named("WohnungsBot")) {
