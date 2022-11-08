@@ -31,7 +31,7 @@ class RowMapper : (List<String>) -> Apartment? {
                 source.showingDate
             )
         }.getOrElse {
-            logger.info { "Invalid spreadsheet entry, ${it.message}" }
+            logger.debug { "Invalid spreadsheet entry, ${it.message}" }
             null
         }
     }

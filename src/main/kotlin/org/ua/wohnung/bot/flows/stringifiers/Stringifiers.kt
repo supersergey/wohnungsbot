@@ -6,7 +6,7 @@ import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 import org.ua.wohnung.bot.sheets.PublicationStatus
 
 fun UserDetails?.stringify(account: Account?): String {
-    if (this == null) return "Помешкання не знайдено"
+    if (this == null) return "Дані про користувача не знайдено"
     return mapOf(
         "\uD83E\uDEAC Логін телеграм" to (account?.username?.let { username -> "https://t.me/$username" } ?: "Прихований"),
         "\uD83E\uDEA7 Прізвище" to firstLastName,

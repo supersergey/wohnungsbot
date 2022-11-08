@@ -16,5 +16,6 @@ enum class BundesLand(val germanName: String, val ukrainianName: String = "") {
     HAMBURG("Hamburg"),
     SCHLESWIG_HOLSTEIN("Schleswig-Holstein"),
     SAARLAND("Saarland"),
-    BREMEN("Bremen")
+    BREMEN("Bremen"),
+    NO_REGISTRATION("Без реєстрації")
 }
