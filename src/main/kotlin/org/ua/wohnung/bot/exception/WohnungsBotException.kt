@@ -16,8 +16,16 @@ sealed class ServiceException(
     class UserNotFound(val userId: Long) :
         ServiceException("User not found: $userId", "Користувач не знайдений: $userId")
 
-    class UsernameNotFound(val userId: Long) :
+    class AccessViolation(val userId: Long, actualRole: Role?, vararg expectedRole: Role) :
         ServiceException(
+            "User $userId should have $expectedRole, but actual was $actualRole. Operation denied",
+            "Доступ заборонено"
+        )
+}
+
+sealed class UserFacingException(message: String, userMessage: String, finishSession: Boolean = true, cause: Throwable? = null): ServiceException(message, userMessage, finishSession, cause) {
+    class UsernameNotFound(val userId: Long) :
+        UserFacingException(
             message = "Username not found: $userId",
             userMessage =
             """
@@ -30,18 +38,13 @@ sealed class ServiceException(
                 💻Для комп'ютерів/ноутбуків на Windows: https://www.youtube.com/watch?v=Q4AUj84oDlA
 
                 🖥Для комп'ютерів/ноутбуків від Apple: https://www.youtube.com/watch?v=XfqBIcoK2Yk
-            """.trimIndent()
-        )
-
-    class AccessViolation(val userId: Long, actualRole: Role?, vararg expectedRole: Role) :
-        ServiceException(
-            "User $userId should have $expectedRole, but actual was $actualRole. Operation denied",
-            "Доступ заборонено"
+            """.trimIndent(),
+            finishSession = true
         )
 }
 
-sealed class SheetValidationException(message: String, cause: Throwable? = null) :
-    WohnungsBotException(message, "", cause) {
+sealed class SheetValidationException(message: String, finishSession: Boolean = true, cause: Throwable? = null) :
+    ServiceException(message, "", finishSession, cause) {
     class InvalidApartmentId(val id: String) : SheetValidationException("Invalid apartment id: $id")
     class InvalidBundesLand(bundesLand: String, rowId: String) :
         SheetValidationException("Invalid Bundesland: $bundesLand, rowId: $rowId")

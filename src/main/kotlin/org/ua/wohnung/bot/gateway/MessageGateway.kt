@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException
 import org.ua.wohnung.bot.dto.ChatMetadata
 import org.ua.wohnung.bot.exception.ServiceException
+import org.ua.wohnung.bot.exception.UserFacingException
 import org.ua.wohnung.bot.exception.WohnungsBotException
 import org.ua.wohnung.bot.flows.Flow
 import org.ua.wohnung.bot.flows.processors.UserInputProcessorsRegistry
@@ -33,7 +34,7 @@ class MessageGateway(
         runCatching {
             if (assertUserIsDev(chatMetadata)) return
             if (chatMetadata.username.isNullOrBlank()) {
-                throw ServiceException.UsernameNotFound(chatMetadata.userId)
+                throw UserFacingException.UsernameNotFound(chatMetadata.userId)
             }
             logger.info { "Received update, chatId: ${chatMetadata.chatId}" }
 
@@ -62,7 +63,11 @@ class MessageGateway(
             if (it.isEditSameMessageException()) {
                 return
             }
-            logger.error(it) { it.message }
+            if (it is UserFacingException) {
+                logger.info { it.message }
+            } else {
+                logger.error(it) { it.message }
+            }
             val userMessage = if (it is WohnungsBotException)
                 it.userMessage
             else "❌ Щось пішло не так. Будь-ласка, спробуйте пізніше або повідомте про помилку адміністрацію: https://t.me/+bltxxw4qtbtjN2Vi"
