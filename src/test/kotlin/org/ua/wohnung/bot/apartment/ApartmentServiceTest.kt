@@ -9,28 +9,38 @@ import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
+import org.assertj.core.api.Assertions.assertThat
 import org.jooq.Configuration
 import org.jooq.DSLContext
 import org.jooq.TransactionalRunnable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.arguments
+import org.junit.jupiter.params.provider.MethodSource
 import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentAccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentApplication
 import org.ua.wohnung.bot.persistence.ApartmentRepository
+import org.ua.wohnung.bot.persistence.ApartmentSearchCriteria
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Account
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
+import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 import org.ua.wohnung.bot.sheets.PublicationStatus
 import org.ua.wohnung.bot.sheets.RowMapper
 import org.ua.wohnung.bot.sheets.SheetReader
+import org.ua.wohnung.bot.user.model.BundesLand
 import java.time.Duration
 import java.time.OffsetDateTime
 import java.util.UUID
+import java.util.stream.Stream
 
 @ExtendWith(MockKExtension::class)
 internal class ApartmentServiceTest {
@@ -50,7 +60,7 @@ internal class ApartmentServiceTest {
     @MockK
     private lateinit var apartmentAccountRepository: ApartmentAccountRepository
 
-    @MockK
+    @RelaxedMockK
     private lateinit var sheetReader: SheetReader
 
     @MockK
@@ -146,6 +156,36 @@ internal class ApartmentServiceTest {
         }
     }
 
+    @ParameterizedTest
+    @MethodSource("wbdSearchCriteria")
+    fun `should build a search criteria with WBS`(userWbs: Boolean, criteriaWbs: Boolean?) {
+        val userId = 1L
+
+        val userDetails = mockk<UserDetails>(relaxed = true).also {
+            every { it.id } returns 1L
+            every { it.wbs } returns userWbs
+            every { it.bundesland } returns BundesLand.BRANDENBURG.germanName
+            every { it.numberOfTenants } returns 2
+            every { it.pets } returns true
+        }
+        every { userDetailsRepository.findById(any()) } returns userDetails
+        val apartmentSearchCriteria = slot<ApartmentSearchCriteria>()
+        every { apartmentRepository.findByCriteria(capture(apartmentSearchCriteria)) } returns emptyList()
+        every { sheetReader.readRows() } returns emptyList()
+
+        apartmentService.findByUserDetails(userId)
+
+        assertThat(apartmentSearchCriteria.captured).isEqualTo(
+            ApartmentSearchCriteria(
+                bundesLand = BundesLand.BRANDENBURG,
+                numberOfTenants = 2,
+                petsAllowed = true,
+                publicationStatus = PublicationStatus.ACTIVE,
+                wbs = criteriaWbs
+            )
+        )
+    }
+
     private fun anApartment(
         id: String = UUID.randomUUID().toString(),
         publicationStatus: PublicationStatus = PublicationStatus.ACTIVE
@@ -162,6 +202,18 @@ internal class ApartmentServiceTest {
             "",
             "",
             "",
-            ""
+            "",
+            true,
+            "wbs"
         )
+
+    companion object {
+        @JvmStatic
+        fun wbdSearchCriteria(): Stream<Arguments> {
+            return Stream.of(
+                arguments(true, null),
+                arguments(false, false)
+            )
+        }
+    }
 }

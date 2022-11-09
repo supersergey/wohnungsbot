@@ -31,6 +31,9 @@ fun Apartment?.stringify(includeAdminFields: Boolean = false): String {
         "Житло ✅" to id,
         "\uD83D\uDC49 Земля" to bundesland,
         "\uD83D\uDDFA Місто" to city,
+        "\uD83D\uDCDD Чи потрібен WBS" to listOfNotNull(
+            if (wbs==true) "так" else "ні",
+            wbsDetails?.ifBlank { null }).joinToString(", "),
         "\uD83D\uDC69\uD83D\uDC68\u200D\uD83E\uDDB1 Кількість людей" to "від $minTenants до $maxTenants",
         "\uD83D\uDC08\uD83D\uDC15" to if (petsAllowed) "Можна з тваринами" else "Без тварин",
         "\uD83C\uDFD8 Додаткова інформація" to description,

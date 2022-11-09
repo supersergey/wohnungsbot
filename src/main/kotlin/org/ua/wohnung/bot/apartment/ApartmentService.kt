@@ -92,7 +92,8 @@ class ApartmentService(
                 bundesLand = BundesLand.values().firstOrNull { it.germanName == userDetails.bundesland },
                 numberOfTenants = userDetails.numberOfTenants.toInt(),
                 petsAllowed = if (!userDetails.pets) null else true,
-                publicationStatus = PublicationStatus.ACTIVE
+                publicationStatus = PublicationStatus.ACTIVE,
+                wbs = if (userDetails.wbs) null else false,
             )
         ).toList()
     }

@@ -28,7 +28,9 @@ class RowMapper : (List<String>) -> Apartment? {
                 source.etage,
                 source.mapLocation,
                 source.livingPeriod,
-                source.showingDate
+                source.showingDate,
+                source.wbs,
+                source.wbsDetails
             )
         }.getOrElse {
             logger.debug { "Invalid spreadsheet entry, ${it.message}" }
@@ -73,6 +75,13 @@ class RowMapper : (List<String>) -> Apartment? {
         get() = if (this[columnsMap.getValue(APARTMENT.PUBLICATIONSTATUS)].trim()
             .uppercase() == "TRUE"
         ) PublicationStatus.ACTIVE else PublicationStatus.NOT_ACTIVE
+    private val List<String>.wbs: Boolean
+        get() = when(this[columnsMap.getValue(APARTMENT.WBS)].lowercase()) {
+            "так" -> true
+            else -> false
+        }
+    private val List<String>.wbsDetails: String
+        get() = this[columnsMap.getValue(APARTMENT.WBS_DETAILS)].trim()
 
     private val columnsMap: Map<TableField<ApartmentRecord, out Any>, Int> = mapOf(
         APARTMENT.ID to 0,
@@ -85,6 +94,8 @@ class RowMapper : (List<String>) -> Apartment? {
         APARTMENT.PETS_ALLOWED to 8,
         APARTMENT.LIVING_PERIOD to 6,
         APARTMENT.SHOWING_DATE to 11,
+        APARTMENT.WBS to 9,
+        APARTMENT.WBS_DETAILS to 10,
         APARTMENT.PUBLICATIONSTATUS to 16
     )
 

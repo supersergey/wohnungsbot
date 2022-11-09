@@ -65,7 +65,9 @@ fun anApartment(
     etage: String = "1",
     mapLocation: String = "",
     livingPeriod: String = "",
-    showingDate: String = ""
+    showingDate: String = "",
+    wbs: Boolean = false,
+    wbsDetails: String = "wbs_details"
 ): Apartment {
     return Apartment(
         "$id",
@@ -79,6 +81,8 @@ fun anApartment(
         etage,
         mapLocation,
         livingPeriod,
-        showingDate
+        showingDate,
+        wbs,
+        wbsDetails
     )
 }

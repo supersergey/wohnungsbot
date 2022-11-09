@@ -23,7 +23,12 @@ sealed class ServiceException(
         )
 }
 
-sealed class UserFacingException(message: String, userMessage: String, finishSession: Boolean = true, cause: Throwable? = null): ServiceException(message, userMessage, finishSession, cause) {
+sealed class UserFacingException(
+    message: String,
+    userMessage: String,
+    finishSession: Boolean = true,
+    cause: Throwable? = null
+) : ServiceException(message, userMessage, finishSession, cause) {
     class UsernameNotFound(val userId: Long) :
         UserFacingException(
             message = "Username not found: $userId",
