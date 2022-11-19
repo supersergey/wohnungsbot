@@ -157,13 +157,19 @@ internal class ApartmentServiceTest {
     }
 
     @ParameterizedTest
-    @MethodSource("wbdSearchCriteria")
-    fun `should build a search criteria with WBS`(userWbs: Boolean, criteriaWbs: Boolean?) {
+    @MethodSource("wbsSearchCriteria")
+    fun `should build a search criteria with WBS`(
+        userWbs: Boolean,
+        userNumberOfRooms: Int?,
+        criteriaWbs: Boolean?,
+        criteriaNumberOfRooms: Int?
+    ) {
         val userId = 1L
 
         val userDetails = mockk<UserDetails>(relaxed = true).also {
             every { it.id } returns 1L
             every { it.wbs } returns userWbs
+            every { it.wbsNumberOfRooms } returns userNumberOfRooms?.toShort()
             every { it.bundesland } returns BundesLand.BRANDENBURG.germanName
             every { it.numberOfTenants } returns 2
             every { it.pets } returns true
@@ -181,7 +187,8 @@ internal class ApartmentServiceTest {
                 numberOfTenants = 2,
                 petsAllowed = true,
                 publicationStatus = PublicationStatus.ACTIVE,
-                wbs = criteriaWbs
+                wbs = criteriaWbs,
+                numberOfRooms = criteriaNumberOfRooms?.toShort()
             )
         )
     }
@@ -202,17 +209,17 @@ internal class ApartmentServiceTest {
             "",
             "",
             "",
-            "",
             true,
-            "wbs"
+            "wbs",
+            2
         )
 
     companion object {
         @JvmStatic
-        fun wbdSearchCriteria(): Stream<Arguments> {
+        fun wbsSearchCriteria(): Stream<Arguments> {
             return Stream.of(
-                arguments(true, null),
-                arguments(false, false)
+                arguments(true, 2, null, 2),
+                arguments(false, null, false, null)
             )
         }
     }

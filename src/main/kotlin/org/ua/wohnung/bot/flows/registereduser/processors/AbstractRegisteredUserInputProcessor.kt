@@ -59,5 +59,4 @@ abstract class AbstractRegisteredUserInputProcessor(userService: UserService, me
     }
 
     private fun UserDetails?.isWbsNumberOfRoomsSpecified(): Boolean = this?.wbsNumberOfRooms != null
-
 }

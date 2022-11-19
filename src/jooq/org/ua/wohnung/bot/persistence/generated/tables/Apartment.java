@@ -8,7 +8,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row13;
+import org.jooq.Row14;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -108,6 +108,11 @@ public class Apartment extends TableImpl<ApartmentRecord> {
      */
     public final TableField<ApartmentRecord, String> WBS_DETAILS = createField(DSL.name("wbs_details"), SQLDataType.CLOB, this, "");
 
+    /**
+     * The column <code>main.apartment.number_of_rooms</code>.
+     */
+    public final TableField<ApartmentRecord, Short> NUMBER_OF_ROOMS = createField(DSL.name("number_of_rooms"), SQLDataType.SMALLINT, this, "");
+
     private Apartment(Name alias, Table<ApartmentRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -178,11 +183,11 @@ public class Apartment extends TableImpl<ApartmentRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row13 type methods
+    // Row14 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row13<String, String, String, Short, Short, String, Boolean, String, String, String, String, Boolean, String> fieldsRow() {
-        return (Row13) super.fieldsRow();
+    public Row14<String, String, String, Short, Short, String, Boolean, String, String, String, String, Boolean, String, Short> fieldsRow() {
+        return (Row14) super.fieldsRow();
     }
 }

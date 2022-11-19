@@ -33,7 +33,8 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             criteria.numberOfTenants?.let { APARTMENT.MAX_TENANTS.ge(it.toShort()) },
             criteria.petsAllowed?.let { APARTMENT.PETS_ALLOWED.eq(true) },
             criteria.publicationStatus?.let { APARTMENT.PUBLICATIONSTATUS.eq(it.name) },
-            criteria.wbs?.let { APARTMENT.WBS.eq(it) }
+            criteria.wbs?.let { APARTMENT.WBS.eq(it) },
+            criteria.numberOfRooms?.let { APARTMENT.NUMBER_OF_ROOMS.le(criteria.numberOfRooms) }
         )
 
         return dslContext.fetch(APARTMENT, criterias).map {
@@ -59,7 +60,8 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             mapLocation,
             showingDate,
             wbs,
-            wbsDetails
+            wbsDetails,
+            numberOfRooms
         )
 
     private fun ApartmentRecord.updateWith(apartment: Apartment): ApartmentRecord =
@@ -77,6 +79,7 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             showingDate = apartment.showingDate
             wbs = apartment.wbs
             wbsDetails = apartment.wbsDetails
+            numberOfRooms = apartment.numberOfRooms
         }
 
     private fun Apartment.toRecord(): ApartmentRecord =
@@ -93,7 +96,8 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             mapLocation,
             showingDate,
             wbs,
-            wbsDetails
+            wbsDetails,
+            numberOfRooms
         )
 }
 
@@ -102,5 +106,6 @@ data class ApartmentSearchCriteria(
     var numberOfTenants: Int? = null,
     var petsAllowed: Boolean? = null,
     var publicationStatus: PublicationStatus? = null,
-    var wbs: Boolean? = null
+    var wbs: Boolean? = null,
+    var numberOfRooms: Short? = null
 )

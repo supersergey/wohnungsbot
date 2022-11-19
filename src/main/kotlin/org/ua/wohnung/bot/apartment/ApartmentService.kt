@@ -94,6 +94,10 @@ class ApartmentService(
                 petsAllowed = if (!userDetails.pets) null else true,
                 publicationStatus = PublicationStatus.ACTIVE,
                 wbs = if (userDetails.wbs) null else false,
+                numberOfRooms = if (userDetails.wbs && userDetails.wbsNumberOfRooms != null)
+                    userDetails.wbsNumberOfRooms
+                else
+                    null
             )
         ).toList()
     }

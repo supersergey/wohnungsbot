@@ -22,11 +22,10 @@ fun UserDetails?.stringify(account: Account?): String {
         "\uD83C\uDFD8 WBS:" to (
             if (wbs == null)
                 UNDEFINED
+            else if (wbs)
+                "так, на кількість кімнат ${wbsNumberOfRooms ?: UNDEFINED}, ${wbsDetails ?: UNDEFINED}"
             else
-                if (wbs)
-                    "так, на кількість кімнат ${wbsNumberOfRooms ?: UNDEFINED}, ${wbsDetails ?: UNDEFINED}"
-                else
-                    "ні"
+                "ні"
             ),
         "Чи готові до переїзду" to (if (readyToMove) "так" else "ні"),
         "\uD83C\uDFE7 Іноземні мови" to foreignLanguages,
@@ -44,6 +43,7 @@ fun Apartment?.stringify(includeAdminFields: Boolean = false): String {
             if (wbs == true) "так" else "ні",
             wbsDetails?.ifBlank { null }
         ).joinToString(", "),
+        "\uD83C\uDFE0 Кімнат" to "$numberOfRooms",
         "\uD83D\uDC69\uD83D\uDC68\u200D\uD83E\uDDB1 Кількість людей" to "від $minTenants до $maxTenants",
         "\uD83D\uDC08\uD83D\uDC15" to if (petsAllowed) "Можна з тваринами" else "Без тварин",
         "\uD83C\uDFD8 Додаткова інформація" to description,

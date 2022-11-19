@@ -29,7 +29,8 @@ class RowMapper : (List<String>) -> Apartment? {
                 source.mapLocation,
                 source.showingDate,
                 source.wbs,
-                source.wbsDetails
+                source.wbsDetails,
+                source.numberOfRooms
             )
         }.getOrElse {
             logger.debug { "Invalid spreadsheet entry, ${it.message}" }
@@ -51,6 +52,8 @@ class RowMapper : (List<String>) -> Apartment? {
             )
     private val List<String>.etage: String
         get() = kotlin.runCatching { this[columnsMap.getValue(APARTMENT.ETAGE)] }.getOrDefault("Не вказано")
+    private val List<String>.numberOfRooms: Short?
+        get() = kotlin.runCatching { this[columnsMap.getValue(APARTMENT.NUMBER_OF_ROOMS)] }.getOrNull()?.toShort()
     private val List<String>.minTenants: Short
         get() = runCatching { this[columnsMap.getValue(APARTMENT.MIN_TENANTS)].parseTenantsNum().first }
             .getOrDefault(1)
@@ -87,12 +90,13 @@ class RowMapper : (List<String>) -> Apartment? {
         APARTMENT.MAP_LOCATION to 4,
         APARTMENT.MIN_TENANTS to 5,
         APARTMENT.MAX_TENANTS to 5,
-        APARTMENT.ETAGE to 7,
-        APARTMENT.PETS_ALLOWED to 8,
-        APARTMENT.SHOWING_DATE to 11,
-        APARTMENT.WBS to 9,
-        APARTMENT.WBS_DETAILS to 10,
-        APARTMENT.PUBLICATIONSTATUS to 16
+        APARTMENT.NUMBER_OF_ROOMS to 7,
+        APARTMENT.ETAGE to 8,
+        APARTMENT.PETS_ALLOWED to 9,
+        APARTMENT.WBS to 10,
+        APARTMENT.WBS_DETAILS to 11,
+        APARTMENT.SHOWING_DATE to 12,
+        APARTMENT.PUBLICATIONSTATUS to 17
     )
 
     private fun String.parseTenantsNum(): Pair<Short, Short> {

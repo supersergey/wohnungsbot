@@ -12,7 +12,7 @@ import org.koin.java.KoinJavaComponent
 import org.ua.wohnung.bot.persistence.config.JooqExtension
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.Apartment
 import org.ua.wohnung.bot.sheets.PublicationStatus
-import org.ua.wohnung.bot.user.model.BundesLand
+import org.ua.wohnung.bot.user.model.BundesLand.BERLIN
 import org.ua.wohnung.bot.util.anApartment
 import java.util.stream.Stream
 
@@ -57,13 +57,35 @@ internal class ApartmentRepositoryTest {
         assertThat(actual).singleElement().usingRecursiveComparison().isEqualTo(expected)
     }
 
+    @Test
+    fun `when user has wbs, should find only a WBS apartment with the LE number of rooms`() {
+        val apartments = listOf(
+            anApartment(bundesLand = BERLIN, wbs = true, numberOrRooms = 2),
+            anApartment(bundesLand = BERLIN, wbs = true, numberOrRooms = 1),
+            anApartment(bundesLand = BERLIN, wbs = false, numberOrRooms = 1),
+            anApartment(bundesLand = BERLIN, wbs = false, numberOrRooms = 2),
+            anApartment(bundesLand = BERLIN, wbs = true, numberOrRooms = 3)
+        )
+        apartmentRepository.saveAll(dslContext, apartments)
+
+        val actual = apartmentRepository.findByCriteria(
+            ApartmentSearchCriteria(BERLIN, 2, null, PublicationStatus.ACTIVE, true, 2)
+        )
+
+        assertThat(actual.onEach { it.id = "1" }.toList())
+            .usingRecursiveFieldByFieldElementComparator().containsExactlyInAnyOrder(
+                anApartment(id = 1, bundesLand = BERLIN, wbs = true, numberOrRooms = 2),
+                anApartment(id = 1, bundesLand = BERLIN, wbs = true, numberOrRooms = 1)
+            )
+    }
+
     companion object {
         @JvmStatic
         fun apartmentsSource(): Stream<Arguments> {
             return Stream.of(
                 arguments(
                     anApartment(
-                        bundesLand = BundesLand.BERLIN,
+                        bundesLand = BERLIN,
                         minTenants = 1,
                         maxTenants = 5,
                         petsAllowed = true,
@@ -71,7 +93,7 @@ internal class ApartmentRepositoryTest {
                         wbs = false
                     ),
                     ApartmentSearchCriteria(
-                        bundesLand = BundesLand.BERLIN,
+                        bundesLand = BERLIN,
                         numberOfTenants = 3,
                         petsAllowed = true,
                         publicationStatus = PublicationStatus.ACTIVE,
@@ -80,7 +102,7 @@ internal class ApartmentRepositoryTest {
                 ),
                 arguments(
                     anApartment(
-                        bundesLand = BundesLand.BERLIN,
+                        bundesLand = BERLIN,
                         minTenants = 1,
                         maxTenants = 5,
                         petsAllowed = true,
@@ -88,7 +110,7 @@ internal class ApartmentRepositoryTest {
                         wbs = true
                     ),
                     ApartmentSearchCriteria(
-                        bundesLand = BundesLand.BERLIN,
+                        bundesLand = BERLIN,
                         numberOfTenants = 3,
                         petsAllowed = true,
                         publicationStatus = PublicationStatus.ACTIVE,

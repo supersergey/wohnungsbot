@@ -33,7 +33,8 @@ fun aFullUserDetails(
     "allergies",
     "abc@email.com",
     true,
-    "wbs_details"
+    "wbs_details",
+    2
 )
 
 fun aPartialUserDetails(id: Long = nextLong()) = UserDetails(
@@ -50,7 +51,8 @@ fun aPartialUserDetails(id: Long = nextLong()) = UserDetails(
     null,
     "email",
     null,
-    null
+    null,
+    2
 )
 
 fun anApartment(
@@ -64,10 +66,10 @@ fun anApartment(
     publicationStatus: PublicationStatus = PublicationStatus.ACTIVE,
     etage: String = "1",
     mapLocation: String = "",
-    livingPeriod: String = "",
     showingDate: String = "",
     wbs: Boolean = false,
-    wbsDetails: String = "wbs_details"
+    wbsDetails: String = "wbs_details",
+    numberOrRooms: Short = 2
 ): Apartment {
     return Apartment(
         "$id",
@@ -80,9 +82,9 @@ fun anApartment(
         publicationStatus.name,
         etage,
         mapLocation,
-        livingPeriod,
         showingDate,
         wbs,
-        wbsDetails
+        wbsDetails,
+        numberOrRooms
     )
 }

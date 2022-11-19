@@ -28,6 +28,7 @@ public class Apartment implements Serializable {
     private String  showingDate;
     private Boolean wbs;
     private String  wbsDetails;
+    private Short   numberOfRooms;
 
     public Apartment() {}
 
@@ -45,6 +46,7 @@ public class Apartment implements Serializable {
         this.showingDate = value.showingDate;
         this.wbs = value.wbs;
         this.wbsDetails = value.wbsDetails;
+        this.numberOfRooms = value.numberOfRooms;
     }
 
     public Apartment(
@@ -60,7 +62,8 @@ public class Apartment implements Serializable {
         String  mapLocation,
         String  showingDate,
         Boolean wbs,
-        String  wbsDetails
+        String  wbsDetails,
+        Short   numberOfRooms
     ) {
         this.id = id;
         this.city = city;
@@ -75,6 +78,7 @@ public class Apartment implements Serializable {
         this.showingDate = showingDate;
         this.wbs = wbs;
         this.wbsDetails = wbsDetails;
+        this.numberOfRooms = numberOfRooms;
     }
 
     /**
@@ -259,6 +263,20 @@ public class Apartment implements Serializable {
         this.wbsDetails = wbsDetails;
     }
 
+    /**
+     * Getter for <code>main.apartment.number_of_rooms</code>.
+     */
+    public Short getNumberOfRooms() {
+        return this.numberOfRooms;
+    }
+
+    /**
+     * Setter for <code>main.apartment.number_of_rooms</code>.
+     */
+    public void setNumberOfRooms(Short numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Apartment (");
@@ -276,6 +294,7 @@ public class Apartment implements Serializable {
         sb.append(", ").append(showingDate);
         sb.append(", ").append(wbs);
         sb.append(", ").append(wbsDetails);
+        sb.append(", ").append(numberOfRooms);
 
         sb.append(")");
         return sb.toString();
