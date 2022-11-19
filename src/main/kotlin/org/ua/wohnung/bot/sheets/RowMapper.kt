@@ -61,9 +61,9 @@ class RowMapper : (List<String>) -> Apartment? {
     private val List<String>.mapLocation: String
         get() = kotlin.runCatching { this[columnsMap.getValue(APARTMENT.MAP_LOCATION)] }.getOrDefault("Не вказано")
     private val List<String>.description: String
-        get() = listOf(this[6], this[10]).joinToString("\n") { it.trim() }
+        get() = this[6].trim()
     private val List<String>.livingPeriod: String
-        get() = this[columnsMap.getValue(APARTMENT.LIVING_PERIOD)].trim()
+        get() = ""
     private val List<String>.showingDate: String
         get() = this[columnsMap.getValue(APARTMENT.SHOWING_DATE)].trim()
     private val List<String>.petsAllowed: Boolean

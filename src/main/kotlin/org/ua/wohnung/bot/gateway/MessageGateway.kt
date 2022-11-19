@@ -32,7 +32,7 @@ class MessageGateway(
         if (!update.isProcessable()) return
         val chatMetadata = update.metadata()
         runCatching {
-            if (assertUserIsDev(chatMetadata)) return
+//            if (assertUserIsDev(chatMetadata)) return
             if (chatMetadata.username.isNullOrBlank()) {
                 throw UserFacingException.UsernameNotFound(chatMetadata.userId)
             }

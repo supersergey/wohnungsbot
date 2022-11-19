@@ -39,7 +39,6 @@ fun Apartment?.stringify(includeAdminFields: Boolean = false): String {
         "\uD83C\uDFD8 Додаткова інформація" to description,
         "⬆️ Поверх " to (etage ?: UNDEFINED),
         "\uD83D\uDCCD Місцезнаходження на карті " to (mapLocation ?: UNDEFINED),
-        "⏰ Термін проживання" to (livingPeriod?.takeIf { it.isNotBlank() } ?: UNDEFINED),
         "\uD83D\uDCC5 Дата показу житла" to (showingDate?.takeIf { it.isNotBlank() } ?: UNDEFINED)
     )
     if (includeAdminFields) {
