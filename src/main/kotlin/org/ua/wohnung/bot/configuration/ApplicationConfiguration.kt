@@ -40,6 +40,7 @@ import org.ua.wohnung.bot.flows.guestuser.processors.PhoneNumberInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.ReadyToMoveInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.WbsDetailsInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.WbsInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.WbsNumberOfRoomsInputProcessor
 import org.ua.wohnung.bot.flows.owner.OwnerFlow
 import org.ua.wohnung.bot.flows.owner.processors.OwnerAddAdminInputProcessor
 import org.ua.wohnung.bot.flows.owner.processors.OwnerRemoveAdminInputProcessor
@@ -109,6 +110,7 @@ val messageGatewayModule = module {
             FamilyCountInputProcessor(get(), get()),
             PetsInputProcessor(get(), get()),
             WbsInputProcessor(get(), get()),
+            WbsNumberOfRoomsInputProcessor(get(), get()),
             WbsDetailsInputProcessor(get(), get()),
             PhoneNumberInputProcessor(get(), get()),
             EmailInputProcessor(get(), get()),

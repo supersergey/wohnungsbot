@@ -5,7 +5,7 @@ import org.ua.wohnung.bot.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
 import org.ua.wohnung.bot.flows.step.FlowStep.WBS
-import org.ua.wohnung.bot.flows.step.FlowStep.WBS_DETAILS
+import org.ua.wohnung.bot.flows.step.FlowStep.WBS_NUMBER_OF_ROOMS
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.user.UserService
 
@@ -19,9 +19,10 @@ class WbsInputProcessor(userService: UserService, messageSource: MessageSource) 
                 userService.updateUserDetails(chatMetadata.userId) {
                     wbs = true
                 }
-                StepOutput.PlainText(
-                    message = messageSource[WBS_DETAILS],
-                    nextStep = WBS_DETAILS
+                StepOutput.InlineButtons(
+                    message = messageSource[WBS_NUMBER_OF_ROOMS],
+                    nextStep = WBS_NUMBER_OF_ROOMS,
+                    replyOptions = (1..6).map { "$it" }
                 )
             }
             "ні" -> {

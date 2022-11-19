@@ -7,4 +7,3 @@ interface Flow {
     val supportedRole: Role
     val first: FlowStep
 }
-

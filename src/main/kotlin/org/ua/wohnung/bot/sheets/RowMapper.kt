@@ -27,7 +27,6 @@ class RowMapper : (List<String>) -> Apartment? {
                 source.publicationStatus.name,
                 source.etage,
                 source.mapLocation,
-                source.livingPeriod,
                 source.showingDate,
                 source.wbs,
                 source.wbsDetails
@@ -62,8 +61,6 @@ class RowMapper : (List<String>) -> Apartment? {
         get() = kotlin.runCatching { this[columnsMap.getValue(APARTMENT.MAP_LOCATION)] }.getOrDefault("Не вказано")
     private val List<String>.description: String
         get() = this[6].trim()
-    private val List<String>.livingPeriod: String
-        get() = ""
     private val List<String>.showingDate: String
         get() = this[columnsMap.getValue(APARTMENT.SHOWING_DATE)].trim()
     private val List<String>.petsAllowed: Boolean
@@ -76,7 +73,7 @@ class RowMapper : (List<String>) -> Apartment? {
             .uppercase() == "TRUE"
         ) PublicationStatus.ACTIVE else PublicationStatus.NOT_ACTIVE
     private val List<String>.wbs: Boolean
-        get() = when(this[columnsMap.getValue(APARTMENT.WBS)].lowercase()) {
+        get() = when (this[columnsMap.getValue(APARTMENT.WBS)].lowercase()) {
             "так" -> true
             else -> false
         }
@@ -92,7 +89,6 @@ class RowMapper : (List<String>) -> Apartment? {
         APARTMENT.MAX_TENANTS to 5,
         APARTMENT.ETAGE to 7,
         APARTMENT.PETS_ALLOWED to 8,
-        APARTMENT.LIVING_PERIOD to 6,
         APARTMENT.SHOWING_DATE to 11,
         APARTMENT.WBS to 9,
         APARTMENT.WBS_DETAILS to 10,

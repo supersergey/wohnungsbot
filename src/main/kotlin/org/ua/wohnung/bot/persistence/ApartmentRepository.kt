@@ -57,7 +57,6 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             publicationstatus,
             etage,
             mapLocation,
-            livingPeriod,
             showingDate,
             wbs,
             wbsDetails
@@ -75,7 +74,6 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             publicationstatus = apartment.publicationstatus
             etage = apartment.etage
             mapLocation = apartment.mapLocation
-            livingPeriod = apartment.livingPeriod
             showingDate = apartment.showingDate
             wbs = apartment.wbs
             wbsDetails = apartment.wbsDetails
@@ -93,7 +91,6 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             publicationstatus,
             etage,
             mapLocation,
-            livingPeriod,
             showingDate,
             wbs,
             wbsDetails

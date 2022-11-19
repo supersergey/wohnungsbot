@@ -5,6 +5,7 @@ import org.ua.wohnung.bot.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.AbstractUserInputProcessor
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
+import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
 import org.ua.wohnung.bot.user.UserService
 
 abstract class AbstractRegisteredUserInputProcessor(userService: UserService, messageSource: MessageSource) :
@@ -35,19 +36,28 @@ abstract class AbstractRegisteredUserInputProcessor(userService: UserService, me
     }
 
     private fun processStartCommand(chatMetadata: ChatMetadata): StepOutput {
-        return if (!userService.isWbsSpecified(chatMetadata.userId)) {
-            StepOutput.InlineButtons(
-                message = messageSource[FlowStep.WBS],
-                nextStep = FlowStep.WBS,
-                replyOptions = listOf("Так", "Ні")
-            )
-        } else {
+        val userDetails = userService.findById(chatMetadata.userId)
+        return if (userDetails?.wbs == false || (userDetails?.wbs == true && userDetails.isWbsNumberOfRoomsSpecified())) {
             StepOutput.InlineButtons(
                 message = messageSource[FlowStep.REGISTERED_USER_CONVERSATION_START]
                     .format(userService.capitalizeFirstLastName(chatMetadata.userId)),
                 nextStep = FlowStep.REGISTERED_USER_LIST_APARTMENTS,
                 replyOptions = listOf("Переглянути наявне житло")
             )
-        }
+        } else if (userDetails?.wbs == true && !userDetails.isWbsNumberOfRoomsSpecified()) {
+            StepOutput.InlineButtons(
+                message = messageSource[FlowStep.WBS_NUMBER_OF_ROOMS],
+                nextStep = FlowStep.WBS_NUMBER_OF_ROOMS,
+                replyOptions = (1..6).map { "$it" }.toList()
+            )
+        } else
+            StepOutput.InlineButtons(
+                message = messageSource[FlowStep.WBS],
+                nextStep = FlowStep.WBS,
+                replyOptions = listOf("Так", "Ні")
+            )
     }
+
+    private fun UserDetails?.isWbsNumberOfRoomsSpecified(): Boolean = this?.wbsNumberOfRooms != null
+
 }

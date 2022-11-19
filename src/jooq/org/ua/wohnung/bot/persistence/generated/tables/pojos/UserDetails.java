@@ -29,6 +29,7 @@ public class UserDetails implements Serializable {
     private String  email;
     private Boolean wbs;
     private String  wbsDetails;
+    private Short   wbsNumberOfRooms;
 
     public UserDetails() {}
 
@@ -47,6 +48,7 @@ public class UserDetails implements Serializable {
         this.email = value.email;
         this.wbs = value.wbs;
         this.wbsDetails = value.wbsDetails;
+        this.wbsNumberOfRooms = value.wbsNumberOfRooms;
     }
 
     public UserDetails(
@@ -63,7 +65,8 @@ public class UserDetails implements Serializable {
         String  allergies,
         String  email,
         Boolean wbs,
-        String  wbsDetails
+        String  wbsDetails,
+        Short   wbsNumberOfRooms
     ) {
         this.id = id;
         this.firstLastName = firstLastName;
@@ -79,6 +82,7 @@ public class UserDetails implements Serializable {
         this.email = email;
         this.wbs = wbs;
         this.wbsDetails = wbsDetails;
+        this.wbsNumberOfRooms = wbsNumberOfRooms;
     }
 
     /**
@@ -277,6 +281,20 @@ public class UserDetails implements Serializable {
         this.wbsDetails = wbsDetails;
     }
 
+    /**
+     * Getter for <code>main.user_details.wbs_number_of_rooms</code>.
+     */
+    public Short getWbsNumberOfRooms() {
+        return this.wbsNumberOfRooms;
+    }
+
+    /**
+     * Setter for <code>main.user_details.wbs_number_of_rooms</code>.
+     */
+    public void setWbsNumberOfRooms(Short wbsNumberOfRooms) {
+        this.wbsNumberOfRooms = wbsNumberOfRooms;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("UserDetails (");
@@ -295,6 +313,7 @@ public class UserDetails implements Serializable {
         sb.append(", ").append(email);
         sb.append(", ").append(wbs);
         sb.append(", ").append(wbsDetails);
+        sb.append(", ").append(wbsNumberOfRooms);
 
         sb.append(")");
         return sb.toString();

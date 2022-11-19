@@ -28,6 +28,7 @@ class UserDetailsRepository(private val jooq: DSLContext) {
             email = userDetails.email
             wbs = userDetails.wbs
             wbsDetails = userDetails.wbsDetails
+            wbsNumberOfRooms = userDetails.wbsNumberOfRooms
         }
         userDetailsRecord.store()
     }
@@ -74,7 +75,8 @@ class UserDetailsRepository(private val jooq: DSLContext) {
             allergies,
             email,
             wbs,
-            wbsDetails
+            wbsDetails,
+            wbsNumberOfRooms
         )
 }
 

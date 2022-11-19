@@ -44,8 +44,6 @@ class UserService(
             ?.joinToString(" ") { word -> word.replaceFirstChar { it.uppercase() } }
             ?: "Невідомий"
 
-    fun isWbsSpecified(userId: Long): Boolean = userDetailsRepository.findById(userId)?.wbs != null
-
     fun getFlowByUserId(userId: Long): Flow {
         val suggestedRole = when (val userRole = findUserRoleById(userId)) {
             null, Role.GUEST -> org.ua.wohnung.bot.user.model.Role.GUEST

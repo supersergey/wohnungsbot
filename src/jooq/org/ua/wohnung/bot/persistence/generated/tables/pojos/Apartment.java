@@ -25,7 +25,6 @@ public class Apartment implements Serializable {
     private String  publicationstatus;
     private String  etage;
     private String  mapLocation;
-    private String  livingPeriod;
     private String  showingDate;
     private Boolean wbs;
     private String  wbsDetails;
@@ -43,7 +42,6 @@ public class Apartment implements Serializable {
         this.publicationstatus = value.publicationstatus;
         this.etage = value.etage;
         this.mapLocation = value.mapLocation;
-        this.livingPeriod = value.livingPeriod;
         this.showingDate = value.showingDate;
         this.wbs = value.wbs;
         this.wbsDetails = value.wbsDetails;
@@ -60,7 +58,6 @@ public class Apartment implements Serializable {
         String  publicationstatus,
         String  etage,
         String  mapLocation,
-        String  livingPeriod,
         String  showingDate,
         Boolean wbs,
         String  wbsDetails
@@ -75,7 +72,6 @@ public class Apartment implements Serializable {
         this.publicationstatus = publicationstatus;
         this.etage = etage;
         this.mapLocation = mapLocation;
-        this.livingPeriod = livingPeriod;
         this.showingDate = showingDate;
         this.wbs = wbs;
         this.wbsDetails = wbsDetails;
@@ -222,20 +218,6 @@ public class Apartment implements Serializable {
     }
 
     /**
-     * Getter for <code>main.apartment.living_period</code>.
-     */
-    public String getLivingPeriod() {
-        return this.livingPeriod;
-    }
-
-    /**
-     * Setter for <code>main.apartment.living_period</code>.
-     */
-    public void setLivingPeriod(String livingPeriod) {
-        this.livingPeriod = livingPeriod;
-    }
-
-    /**
      * Getter for <code>main.apartment.showing_date</code>.
      */
     public String getShowingDate() {
@@ -291,7 +273,6 @@ public class Apartment implements Serializable {
         sb.append(", ").append(publicationstatus);
         sb.append(", ").append(etage);
         sb.append(", ").append(mapLocation);
-        sb.append(", ").append(livingPeriod);
         sb.append(", ").append(showingDate);
         sb.append(", ").append(wbs);
         sb.append(", ").append(wbsDetails);

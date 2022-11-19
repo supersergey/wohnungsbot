@@ -8,7 +8,9 @@ import org.ua.wohnung.bot.sheets.PublicationStatus
 fun UserDetails?.stringify(account: Account?): String {
     if (this == null) return "Дані про користувача не знайдено"
     return mapOf(
-        "\uD83E\uDEAC Логін телеграм" to (account?.username?.let { username -> "https://t.me/$username" } ?: "Прихований"),
+        "\uD83E\uDEAC Логін телеграм" to (
+            account?.username?.let { username -> "https://t.me/$username" } ?: "Прихований"
+            ),
         "\uD83E\uDEA7 Прізвище" to firstLastName,
         "\uD83D\uDCF1 Телефон" to phone,
         "✉️ Email" to (email ?: UNDEFINED),
@@ -17,8 +19,15 @@ fun UserDetails?.stringify(account: Account?): String {
         "\uD83D\uDC36 Чи є тварини" to (if (pets) "так" else "ні"),
         "\uD83D\uDDFA Де зареєстрований" to bundesland,
         "\uD83D\uDCCD Район" to district,
-        "Чи є WBS" to (if (wbs == null) UNDEFINED else if (wbs) "так" else "ні"),
-        "Деталі WBS" to (if (wbsDetails == null) UNDEFINED else wbsDetails),
+        "\uD83C\uDFD8 WBS:" to (
+            if (wbs == null)
+                UNDEFINED
+            else
+                if (wbs)
+                    "так, на кількість кімнат ${wbsNumberOfRooms ?: UNDEFINED}, ${wbsDetails ?: UNDEFINED}"
+                else
+                    "ні"
+            ),
         "Чи готові до переїзду" to (if (readyToMove) "так" else "ні"),
         "\uD83C\uDFE7 Іноземні мови" to foreignLanguages,
         "\uD83C\uDF21 Алергії" to allergies
@@ -32,8 +41,9 @@ fun Apartment?.stringify(includeAdminFields: Boolean = false): String {
         "\uD83D\uDC49 Земля" to bundesland,
         "\uD83D\uDDFA Місто" to city,
         "\uD83D\uDCDD Чи потрібен WBS" to listOfNotNull(
-            if (wbs==true) "так" else "ні",
-            wbsDetails?.ifBlank { null }).joinToString(", "),
+            if (wbs == true) "так" else "ні",
+            wbsDetails?.ifBlank { null }
+        ).joinToString(", "),
         "\uD83D\uDC69\uD83D\uDC68\u200D\uD83E\uDDB1 Кількість людей" to "від $minTenants до $maxTenants",
         "\uD83D\uDC08\uD83D\uDC15" to if (petsAllowed) "Можна з тваринами" else "Без тварин",
         "\uD83C\uDFD8 Додаткова інформація" to description,

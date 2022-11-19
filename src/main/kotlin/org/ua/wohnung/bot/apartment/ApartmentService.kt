@@ -44,7 +44,7 @@ class ApartmentService(
     init {
         timer.schedule(
             DbUpdateTask(),
-            Duration.ofMinutes(5).toMillis(),
+            Duration.ofMinutes(0).toMillis(),
             Duration.ofMinutes(5).toMillis()
         )
     }
