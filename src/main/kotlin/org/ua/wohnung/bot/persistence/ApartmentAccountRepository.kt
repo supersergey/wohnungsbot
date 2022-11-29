@@ -35,6 +35,13 @@ class ApartmentAccountRepository(private val jooq: DSLContext) {
     fun countAccountsByApartmentId(apartmentId: String): Int =
         jooq.prepareFindAccountsByApartmentId(apartmentId).count()
 
+    fun isUserAlreadyAppliedForApartment(apartmentId: String, userId: Long): Boolean =
+        jooq.fetchCount(
+            APARTMENT_ACCOUNT,
+            APARTMENT_ACCOUNT.ACCOUNT_ID.eq(userId),
+            APARTMENT_ACCOUNT.APARTMENT_ID.eq(apartmentId)
+        ) > 0
+
     fun findAccountsByApartmentId(apartmentId: String, offset: Int, limit: Int): List<ApartmentApplication> {
         return jooq.prepareFindAccountsByApartmentId(apartmentId)
             .offset(offset)

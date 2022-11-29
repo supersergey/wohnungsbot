@@ -39,6 +39,7 @@ import org.ua.wohnung.bot.sheets.SheetReader
 import org.ua.wohnung.bot.user.model.BundesLand
 import java.time.Duration
 import java.time.OffsetDateTime
+import java.time.temporal.ChronoUnit
 import java.util.UUID
 import java.util.stream.Stream
 
@@ -80,7 +81,8 @@ internal class ApartmentServiceTest {
     @Test
     fun `should mark apartments that are not present in the source as INACTIVE`() {
         val activeApartment = anApartment("activeApartment", PublicationStatus.ACTIVE)
-        val activeApartmentMissingInIncomingList = anApartment("activeApartmentMissingInIncomingList", PublicationStatus.ACTIVE)
+        val activeApartmentMissingInIncomingList =
+            anApartment("activeApartmentMissingInIncomingList", PublicationStatus.ACTIVE)
         val newApartment = anApartment("newApartment", PublicationStatus.ACTIVE)
         val apartmentTheBecomesInactive = anApartment("apartmentTheBecomesInactive", PublicationStatus.NOT_ACTIVE)
         val apartmentThatRemainsNotActive = anApartment("apartmentThatRemainsNotActive", PublicationStatus.NOT_ACTIVE)
@@ -134,9 +136,11 @@ internal class ApartmentServiceTest {
 
     @Test
     fun `should rate-limit user applications`() {
+        val userId = 1L
+        val apartmentId = "1"
         val account = mockk<Account>(relaxed = true).also {
             every { it.role } returns Role.USER
-            every { it.id } returns 1L
+            every { it.id } returns userId
         }
         every { accountRepository.findById(any()) } returns account
         every { apartmentRepository.findById(any()) } returns anApartment()
@@ -144,16 +148,43 @@ internal class ApartmentServiceTest {
             OffsetDateTime.now(), OffsetDateTime.now().minus(Duration.ofDays(1))
         )
         val apartmentApplication = mockk<ApartmentApplication>().also {
-            every { it.account.id } returns 1
+            every { it.account.id } returns userId
         }
-        every { apartmentAccountRepository.findAccountsByApartmentId(any(), any(), any()) } returns listOf(apartmentApplication)
+        every { apartmentAccountRepository.findAccountsByApartmentId(any(), any(), any()) } returns listOf(
+            apartmentApplication
+        )
+        every { apartmentAccountRepository.isUserAlreadyAppliedForApartment(apartmentId, userId) } returns false
         every { apartmentAccountRepository.save(any(), any()) } just Runs
 
-        apartmentService.acceptUserApartmentRequest(123L, "1")
+        apartmentService.acceptUserApartmentRequest(userId, apartmentId)
 
         verify {
-            apartmentAccountRepository.save("1", 123L)
+            apartmentAccountRepository.save(apartmentId, userId)
         }
+    }
+
+    @Test
+    fun `should not accept requests for apartments that user has already applied for`() {
+        val userId = 1L
+        val apartmentId = "apartmentId"
+        val account = mockk<Account>(relaxed = true).also {
+            every { it.role } returns Role.USER
+            every { it.id } returns userId
+        }
+        every { accountRepository.findById(any()) } returns account
+        every { apartmentRepository.findById(any()) } returns anApartment()
+        every { apartmentAccountRepository.findLatestApplyTs(any()) } returns listOf(
+            OffsetDateTime.now().minus(2, ChronoUnit.DAYS),
+            OffsetDateTime.now().minus(3, ChronoUnit.DAYS)
+        )
+        every { apartmentAccountRepository.isUserAlreadyAppliedForApartment(any(), any()) } returns true
+
+        apartmentService.acceptUserApartmentRequest(userId, apartmentId)
+        verify { accountRepository.findById(userId) }
+        verify { apartmentRepository.findById(apartmentId) }
+        verify { apartmentAccountRepository.findLatestApplyTs(userId) }
+        verify { apartmentAccountRepository.isUserAlreadyAppliedForApartment(apartmentId, userId) }
+        verify(exactly = 0) { apartmentAccountRepository.save(any(), any()) }
     }
 
     @ParameterizedTest

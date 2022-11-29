@@ -56,7 +56,7 @@ class UserDetailsRepository(private val jooq: DSLContext) {
             .on(USER_DETAILS.ID.eq(ACCOUNT.ID))
             .where(ACCOUNT.ROLE.eq(role))
             .map {
-                UserInfo(it.value1(), it.value2(), it.value3() ?: "невідомо", it.value4(), it.value5())
+                UserInfo(it.value1()!!, it.value2()!!, it.value3() ?: "невідомо", it.value4()!!, it.value5()!!)
             }
     }
 

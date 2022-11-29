@@ -111,9 +111,8 @@ class ApartmentService(
         val apartmentRequestResult = apartmentAccountRepository
             .findLatestApplyTs(userId)
             .assertUserApplicationRateLimit()
-        if (apartmentRequestResult is ApartmentRequestResult.Success && userId.hasNotAlreadyAppliedForApartment(
-                apartmentId
-            )
+        if (apartmentRequestResult is ApartmentRequestResult.Success &&
+            userId.hasNotAlreadyAppliedForApartment(apartmentId)
         ) {
             apartmentAccountRepository.save(apartmentId, userId)
         }
@@ -121,7 +120,7 @@ class ApartmentService(
     }
 
     private fun Long.hasNotAlreadyAppliedForApartment(apartmentId: String): Boolean =
-        apartmentAccountRepository.findAccountsByApartmentId(apartmentId, 0, 1000).none { it.account.id == this }
+        !apartmentAccountRepository.isUserAlreadyAppliedForApartment(apartmentId, this)
 
     fun countApplicationByApartmentId(apartmentId: String): Int =
         apartmentAccountRepository.countAccountsByApartmentId(apartmentId)
