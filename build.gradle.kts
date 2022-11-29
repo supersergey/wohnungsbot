@@ -16,9 +16,9 @@ group = "org.ua.wohnung.bot"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
-val koinVersion = "3.2.0"
-val mockkVersion = "1.12.4"
-val junitVersion = "5.8.2"
+val koinVersion = "3.2.2"
+val mockkVersion = "1.13.2"
+val junitVersion = "5.9.0"
 
 repositories {
     mavenCentral()
@@ -28,25 +28,25 @@ dependencies {
     implementation("io.insert-koin:koin-core:$koinVersion")
 
     implementation("com.zaxxer:HikariCP:5.0.1")
-    implementation("org.flywaydb:flyway-core:8.5.12")
+    implementation("org.flywaydb:flyway-core:9.8.2")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     implementation("org.telegram:telegrambots:6.1.0")
 
-    runtimeOnly("org.postgresql:postgresql:42.3.7")
+    runtimeOnly("org.postgresql:postgresql:42.5.0")
     jooqGenerator("jakarta.xml.bind:jakarta.xml.bind-api:3.0.1")
     jooqGenerator("org.postgresql:postgresql:42.3.7")
 
-    implementation("io.github.microutils:kotlin-logging-jvm:2.1.23")
-    implementation("ch.qos.logback:logback-classic:1.2.11")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
+    implementation("ch.qos.logback:logback-classic:1.4.5")
 
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.3")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0")
 
-    implementation("com.google.auth:google-auth-library-oauth2-http:1.7.0")
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.12.1")
     implementation("com.google.oauth-client:google-oauth-client-jetty:1.34.1")
-    implementation("com.google.apis:google-api-services-sheets:v4-rev20220606-1.32.1")
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20220927-2.0.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
@@ -54,8 +54,8 @@ dependencies {
 
     testImplementation("io.insert-koin:koin-test-junit5:$koinVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("org.testcontainers:testcontainers:1.17.2")
-    testImplementation("org.testcontainers:postgresql:1.17.2")
+    testImplementation("org.testcontainers:testcontainers:1.17.6")
+    testImplementation("org.testcontainers:postgresql:1.17.6")
     testImplementation("org.assertj:assertj-core:3.23.1")
 }
 
