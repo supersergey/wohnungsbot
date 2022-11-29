@@ -23,7 +23,7 @@ fun UserDetails?.stringify(account: Account?): String {
             if (wbs == null)
                 UNDEFINED
             else if (wbs)
-                "так, на кількість кімнат ${wbsNumberOfRooms ?: UNDEFINED}, ${wbsDetails ?: UNDEFINED}"
+                "так, на кількість кімнат: ${wbsNumberOfRooms ?: UNDEFINED}, деталі WBS: ${wbsDetails ?: UNDEFINED}"
             else
                 "ні"
             ),
