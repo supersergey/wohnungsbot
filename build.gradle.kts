@@ -4,7 +4,7 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "1.7.21"
     kotlin("plugin.spring") version "1.6.21"
     application
     id("org.flywaydb.flyway") version "8.5.10"
