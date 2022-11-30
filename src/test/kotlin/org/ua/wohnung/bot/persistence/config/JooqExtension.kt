@@ -91,6 +91,7 @@ class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
         )
             .schemas("main")
             .createSchemas(true)
+            .cleanDisabled(false)
             .load()
             .run {
                 clean()
