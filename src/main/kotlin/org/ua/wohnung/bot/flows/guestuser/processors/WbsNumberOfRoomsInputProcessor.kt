@@ -20,22 +20,21 @@ class WbsNumberOfRoomsInputProcessor(userService: UserService, messageSource: Me
         userService.updateUserDetails(chatMetadata.userId) {
             wbsNumberOfRooms = chatMetadata.input.toShort()
         }
-        return when (userService.findUserRoleById(chatMetadata.userId)) {
+        return if (userService.findById(chatMetadata.userId)?.wbsDetails == null)
+            StepOutput.PlainText(
+                message = messageSource[WBS_DETAILS],
+                nextStep = WBS_DETAILS
+            ) else when (userService.findUserRoleById(chatMetadata.userId)) {
             Role.GUEST -> StepOutput.PlainText(
                 message = messageSource[FlowStep.PHONE_NUMBER],
                 nextStep = FlowStep.PHONE_NUMBER
             )
-            Role.USER -> if (userService.findById(chatMetadata.userId)?.wbsDetails == null)
-                return StepOutput.PlainText(
-                    message = messageSource[WBS_DETAILS],
-                    nextStep = WBS_DETAILS
-                ) else
-                StepOutput.InlineButtons(
-                    message = messageSource[FlowStep.REGISTERED_USER_CONVERSATION_START]
-                        .format(userService.capitalizeFirstLastName(chatMetadata.userId)),
-                    nextStep = FlowStep.REGISTERED_USER_LIST_APARTMENTS,
-                    replyOptions = listOf("Переглянути наявне житло")
-                )
+            Role.USER -> StepOutput.InlineButtons(
+                message = messageSource[FlowStep.REGISTERED_USER_CONVERSATION_START]
+                    .format(userService.capitalizeFirstLastName(chatMetadata.userId)),
+                nextStep = FlowStep.REGISTERED_USER_LIST_APARTMENTS,
+                replyOptions = listOf("Переглянути наявне житло")
+            )
             else -> null
         }
     }

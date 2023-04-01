@@ -85,7 +85,7 @@ class RowMapper : (List<String>) -> Apartment? {
 
     private val columnsMap: Map<TableField<ApartmentRecord, out Any>, Int> = mapOf(
         APARTMENT.ID to 0,
-        APARTMENT.CITY to 1,
+        APARTMENT.CITY to 2,
         APARTMENT.BUNDESLAND to 3,
         APARTMENT.MAP_LOCATION to 4,
         APARTMENT.MIN_TENANTS to 5,
@@ -96,7 +96,7 @@ class RowMapper : (List<String>) -> Apartment? {
         APARTMENT.WBS to 10,
         APARTMENT.WBS_DETAILS to 11,
         APARTMENT.SHOWING_DATE to 12,
-        APARTMENT.PUBLICATIONSTATUS to 17
+        APARTMENT.PUBLICATIONSTATUS to 16
     )
 
     private fun String.parseTenantsNum(): Pair<Short, Short> {
