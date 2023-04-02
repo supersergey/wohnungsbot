@@ -7,6 +7,7 @@ package org.ua.wohnung.bot.persistence.generated;
 import org.ua.wohnung.bot.persistence.generated.tables.Account;
 import org.ua.wohnung.bot.persistence.generated.tables.Apartment;
 import org.ua.wohnung.bot.persistence.generated.tables.ApartmentAccount;
+import org.ua.wohnung.bot.persistence.generated.tables.PostCode;
 import org.ua.wohnung.bot.persistence.generated.tables.UserDetails;
 
 
@@ -30,6 +31,11 @@ public class Tables {
      * The table <code>main.apartment_account</code>.
      */
     public static final ApartmentAccount APARTMENT_ACCOUNT = ApartmentAccount.APARTMENT_ACCOUNT;
+
+    /**
+     * The table <code>main.post_code</code>.
+     */
+    public static final PostCode POST_CODE = PostCode.POST_CODE;
 
     /**
      * The table <code>main.user_details</code>.

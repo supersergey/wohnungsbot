@@ -19,6 +19,7 @@ import org.testcontainers.containers.PostgreSQLContainer
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentAccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentRepository
+import org.ua.wohnung.bot.persistence.PostCodeRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import javax.sql.DataSource
 
@@ -51,6 +52,7 @@ class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
         single { UserDetailsRepository(get()) }
         single { ApartmentRepository(get()) }
         single { ApartmentAccountRepository(get()) }
+        single { PostCodeRepository(get()) }
     }
 
     override fun beforeAll(context: ExtensionContext) {
@@ -92,6 +94,7 @@ class JooqExtension : BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
             .schemas("main")
             .createSchemas(true)
             .cleanDisabled(false)
+            .executeInTransaction(true)
             .load()
             .run {
                 clean()

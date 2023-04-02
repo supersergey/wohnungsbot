@@ -55,6 +55,7 @@ import org.ua.wohnung.bot.gateway.Session
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentAccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentRepository
+import org.ua.wohnung.bot.persistence.PostCodeRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import org.ua.wohnung.bot.security.Secrets
 import org.ua.wohnung.bot.security.Secrets.BOT_API_SECRET
@@ -81,6 +82,7 @@ val persistenceModule = module {
     single { ApartmentRepository(get()) }
     single { UserDetailsRepository(get()) }
     single { ApartmentAccountRepository(get()) }
+    single { PostCodeRepository(get()) }
 }
 
 val servicesModule = module {

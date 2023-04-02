@@ -8,28 +8,16 @@ class DatabaseCleaner {
         TableData("databasechangeloglock")
     )
 
-    data class TableData(val name: String, val schema: String? = "public") {
-        val fullyQualifiedTableName =
-            if (schema != null) "$schema.$name" else name
-    }
+    data class TableData(val name: String, val schema: String? = "public")
 
     fun cleanUp(connection: Connection) {
-        val tablesNames = connection.tableNames()
+        val tablesNames =
+            connection.tableNames().filterNot { it.name == "post_code" }
+                .joinToString(",") { "${it.schema}.${it.name}" }
         if (tablesNames.isEmpty()) {
             return
         }
-        val stringBuilder = StringBuilder("TRUNCATE ")
-        for (i in tablesNames.indices) {
-            if (i == 0) {
-                stringBuilder.append(tablesNames[i].fullyQualifiedTableName)
-            } else {
-                stringBuilder
-                    .append(", ")
-                    .append(tablesNames[i].fullyQualifiedTableName)
-            }
-        }
-        connection.prepareStatement(stringBuilder.toString())
-            .execute()
+        connection.prepareStatement("TRUNCATE $tablesNames").execute()
     }
 
     private fun Connection.tableNames(): List<TableData> {

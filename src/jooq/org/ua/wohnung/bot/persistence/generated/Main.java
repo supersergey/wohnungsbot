@@ -13,6 +13,7 @@ import org.jooq.impl.SchemaImpl;
 import org.ua.wohnung.bot.persistence.generated.tables.Account;
 import org.ua.wohnung.bot.persistence.generated.tables.Apartment;
 import org.ua.wohnung.bot.persistence.generated.tables.ApartmentAccount;
+import org.ua.wohnung.bot.persistence.generated.tables.PostCode;
 import org.ua.wohnung.bot.persistence.generated.tables.UserDetails;
 
 
@@ -45,6 +46,11 @@ public class Main extends SchemaImpl {
     public final ApartmentAccount APARTMENT_ACCOUNT = ApartmentAccount.APARTMENT_ACCOUNT;
 
     /**
+     * The table <code>main.post_code</code>.
+     */
+    public final PostCode POST_CODE = PostCode.POST_CODE;
+
+    /**
      * The table <code>main.user_details</code>.
      */
     public final UserDetails USER_DETAILS = UserDetails.USER_DETAILS;
@@ -68,6 +74,7 @@ public class Main extends SchemaImpl {
             Account.ACCOUNT,
             Apartment.APARTMENT,
             ApartmentAccount.APARTMENT_ACCOUNT,
+            PostCode.POST_CODE,
             UserDetails.USER_DETAILS
         );
     }

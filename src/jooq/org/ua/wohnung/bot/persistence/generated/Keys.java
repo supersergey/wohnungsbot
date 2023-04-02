@@ -12,10 +12,12 @@ import org.jooq.impl.Internal;
 import org.ua.wohnung.bot.persistence.generated.tables.Account;
 import org.ua.wohnung.bot.persistence.generated.tables.Apartment;
 import org.ua.wohnung.bot.persistence.generated.tables.ApartmentAccount;
+import org.ua.wohnung.bot.persistence.generated.tables.PostCode;
 import org.ua.wohnung.bot.persistence.generated.tables.UserDetails;
 import org.ua.wohnung.bot.persistence.generated.tables.records.AccountRecord;
 import org.ua.wohnung.bot.persistence.generated.tables.records.ApartmentAccountRecord;
 import org.ua.wohnung.bot.persistence.generated.tables.records.ApartmentRecord;
+import org.ua.wohnung.bot.persistence.generated.tables.records.PostCodeRecord;
 import org.ua.wohnung.bot.persistence.generated.tables.records.UserDetailsRecord;
 
 
@@ -33,6 +35,7 @@ public class Keys {
     public static final UniqueKey<AccountRecord> ACCOUNT_PKEY = Internal.createUniqueKey(Account.ACCOUNT, DSL.name("account_pkey"), new TableField[] { Account.ACCOUNT.ID }, true);
     public static final UniqueKey<ApartmentRecord> APARTMENT_PKEY = Internal.createUniqueKey(Apartment.APARTMENT, DSL.name("apartment_pkey"), new TableField[] { Apartment.APARTMENT.ID }, true);
     public static final UniqueKey<ApartmentAccountRecord> APARTMENT_ACCOUNT_PKEY = Internal.createUniqueKey(ApartmentAccount.APARTMENT_ACCOUNT, DSL.name("apartment_account_pkey"), new TableField[] { ApartmentAccount.APARTMENT_ACCOUNT.ACCOUNT_ID, ApartmentAccount.APARTMENT_ACCOUNT.APARTMENT_ID }, true);
+    public static final UniqueKey<PostCodeRecord> POST_CODE_PKEY = Internal.createUniqueKey(PostCode.POST_CODE, DSL.name("post_code_pkey"), new TableField[] { PostCode.POST_CODE.ID }, true);
     public static final UniqueKey<UserDetailsRecord> USER_DETAILS_PKEY = Internal.createUniqueKey(UserDetails.USER_DETAILS, DSL.name("user_details_pkey"), new TableField[] { UserDetails.USER_DETAILS.ID }, true);
 
     // -------------------------------------------------------------------------

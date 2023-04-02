@@ -28,25 +28,27 @@ dependencies {
     implementation("io.insert-koin:koin-core:$koinVersion")
 
     implementation("com.zaxxer:HikariCP:5.0.1")
-    implementation("org.flywaydb:flyway-core:9.8.2")
+    implementation("org.flywaydb:flyway-core:9.16.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation("org.telegram:telegrambots:6.1.0")
+    implementation("org.telegram:telegrambots:6.5.0")
 
-    runtimeOnly("org.postgresql:postgresql:42.5.0")
+    runtimeOnly("org.postgresql:postgresql:42.5.4")
     jooqGenerator("jakarta.xml.bind:jakarta.xml.bind-api:3.0.1")
-    jooqGenerator("org.postgresql:postgresql:42.3.7")
+    jooqGenerator("org.postgresql:postgresql:42.5.4")
 
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
-    implementation("ch.qos.logback:logback-classic:1.4.5")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+    implementation("ch.qos.logback:logback-classic:1.4.6")
 
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.0")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 
-    implementation("com.google.auth:google-auth-library-oauth2-http:1.12.1")
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.16.0")
     implementation("com.google.oauth-client:google-oauth-client-jetty:1.34.1")
-    implementation("com.google.apis:google-api-services-sheets:v4-rev20220927-2.0.0")
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20230227-2.0.0")
+
+    implementation("com.opencsv:opencsv:5.7.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
@@ -56,7 +58,7 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("org.testcontainers:testcontainers:1.17.6")
     testImplementation("org.testcontainers:postgresql:1.17.6")
-    testImplementation("org.assertj:assertj-core:3.23.1")
+    testImplementation("org.assertj:assertj-core:3.24.2")
 }
 
 tasks.withType<KotlinCompile> {
