@@ -30,7 +30,8 @@ class RowMapper : (List<String>) -> Apartment? {
                 source.showingDate,
                 source.wbs,
                 source.wbsDetails,
-                source.numberOfRooms
+                source.numberOfRooms,
+                source.postCode
             )
         }.getOrElse {
             logger.debug { "Invalid spreadsheet entry, ${it.message}" }
@@ -82,21 +83,24 @@ class RowMapper : (List<String>) -> Apartment? {
         }
     private val List<String>.wbsDetails: String
         get() = this[columnsMap.getValue(APARTMENT.WBS_DETAILS)].trim()
+    private val List<String>.postCode: String
+        get() = this[columnsMap.getValue(APARTMENT.POST_CODE)].trim()
 
     private val columnsMap: Map<TableField<ApartmentRecord, out Any>, Int> = mapOf(
         APARTMENT.ID to 0,
         APARTMENT.CITY to 2,
-        APARTMENT.BUNDESLAND to 3,
-        APARTMENT.MAP_LOCATION to 4,
-        APARTMENT.MIN_TENANTS to 5,
-        APARTMENT.MAX_TENANTS to 5,
-        APARTMENT.NUMBER_OF_ROOMS to 7,
-        APARTMENT.ETAGE to 8,
-        APARTMENT.PETS_ALLOWED to 9,
-        APARTMENT.WBS to 10,
-        APARTMENT.WBS_DETAILS to 11,
-        APARTMENT.SHOWING_DATE to 12,
-        APARTMENT.PUBLICATIONSTATUS to 16
+        APARTMENT.POST_CODE to 3,
+        APARTMENT.BUNDESLAND to 4,
+        APARTMENT.MAP_LOCATION to 5,
+        APARTMENT.MIN_TENANTS to 6,
+        APARTMENT.MAX_TENANTS to 6,
+        APARTMENT.NUMBER_OF_ROOMS to 8,
+        APARTMENT.ETAGE to 9,
+        APARTMENT.PETS_ALLOWED to 10,
+        APARTMENT.WBS to 11,
+        APARTMENT.WBS_DETAILS to 12,
+        APARTMENT.SHOWING_DATE to 13,
+        APARTMENT.PUBLICATIONSTATUS to 17
     )
 
     private fun String.parseTenantsNum(): Pair<Short, Short> {

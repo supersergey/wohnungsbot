@@ -9,10 +9,7 @@ import org.ua.wohnung.bot.user.model.BundesLand
 
 class ApartmentRepository(private val dslContext: DSLContext) {
     fun findById(apartmentId: String): Apartment? =
-        dslContext.fetchOne(APARTMENT, APARTMENT.ID.eq(apartmentId))?.map {
-            it as ApartmentRecord
-            it.toApartment()
-        }
+        dslContext.fetchOne(APARTMENT, APARTMENT.ID.eq(apartmentId))?.into(Apartment::class.java)
 
     fun save(apartment: Apartment) {
         val apartmentRecord = dslContext.fetchOne(APARTMENT, APARTMENT.ID.eq(apartment.id))
@@ -37,32 +34,12 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             criteria.numberOfRooms?.let { APARTMENT.NUMBER_OF_ROOMS.le(criteria.numberOfRooms) }
         )
 
-        return dslContext.fetch(APARTMENT, criterias).map {
-            it.toApartment()
-        }
+        return dslContext.fetch(APARTMENT, criterias).map { it.into(Apartment::class.java) }
     }
 
     fun count(): Int {
         return dslContext.fetchCount(APARTMENT, APARTMENT.PUBLICATIONSTATUS.eq(PublicationStatus.ACTIVE.name))
     }
-
-    private fun ApartmentRecord.toApartment(): Apartment =
-        Apartment(
-            id,
-            city,
-            bundesland,
-            minTenants,
-            maxTenants,
-            description,
-            petsAllowed,
-            publicationstatus,
-            etage,
-            mapLocation,
-            showingDate,
-            wbs,
-            wbsDetails,
-            numberOfRooms
-        )
 
     private fun ApartmentRecord.updateWith(apartment: Apartment): ApartmentRecord =
         this.apply {
@@ -80,6 +57,7 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             wbs = apartment.wbs
             wbsDetails = apartment.wbsDetails
             numberOfRooms = apartment.numberOfRooms
+            postCode = apartment.postCode
         }
 
     private fun Apartment.toRecord(): ApartmentRecord =
@@ -97,7 +75,8 @@ class ApartmentRepository(private val dslContext: DSLContext) {
             showingDate,
             wbs,
             wbsDetails,
-            numberOfRooms
+            numberOfRooms,
+            postCode
         )
 }
 

@@ -4,11 +4,15 @@
 package org.ua.wohnung.bot.persistence.generated.tables;
 
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row14;
+import org.jooq.Row15;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -17,6 +21,7 @@ import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
+import org.ua.wohnung.bot.persistence.generated.Indexes;
 import org.ua.wohnung.bot.persistence.generated.Keys;
 import org.ua.wohnung.bot.persistence.generated.Main;
 import org.ua.wohnung.bot.persistence.generated.tables.records.ApartmentRecord;
@@ -113,6 +118,11 @@ public class Apartment extends TableImpl<ApartmentRecord> {
      */
     public final TableField<ApartmentRecord, Short> NUMBER_OF_ROOMS = createField(DSL.name("number_of_rooms"), SQLDataType.SMALLINT, this, "");
 
+    /**
+     * The column <code>main.apartment.post_code</code>.
+     */
+    public final TableField<ApartmentRecord, String> POST_CODE = createField(DSL.name("post_code"), SQLDataType.VARCHAR(8), this, "");
+
     private Apartment(Name alias, Table<ApartmentRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -152,6 +162,11 @@ public class Apartment extends TableImpl<ApartmentRecord> {
     }
 
     @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.APARTMENT_POST_CODE_INDEX);
+    }
+
+    @Override
     public UniqueKey<ApartmentRecord> getPrimaryKey() {
         return Keys.APARTMENT_PKEY;
     }
@@ -183,11 +198,11 @@ public class Apartment extends TableImpl<ApartmentRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row14 type methods
+    // Row15 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row14<String, String, String, Short, Short, String, Boolean, String, String, String, String, Boolean, String, Short> fieldsRow() {
-        return (Row14) super.fieldsRow();
+    public Row15<String, String, String, Short, Short, String, Boolean, String, String, String, String, Boolean, String, Short, String> fieldsRow() {
+        return (Row15) super.fieldsRow();
     }
 }

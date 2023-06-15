@@ -76,6 +76,8 @@ val secrets = Properties().apply {
     load(FileInputStream(File(rootProject.rootDir, "src/main/resources/secrets/secrets-dev.properties")))
 }
 
+tasks["build"].dependsOn("ktlintFormat")
+
 tasks.withType<Jar> {
     manifest {
         attributes("Main-Class" to "org.ua.wohnung.bot.WohnungsBotApplicationKt")

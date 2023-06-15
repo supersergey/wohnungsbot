@@ -1,11 +1,13 @@
 package org.ua.wohnung.bot.user
 
 import org.jooq.DSLContext
+import org.ua.wohnung.bot.exception.ServiceException
 import org.ua.wohnung.bot.exception.ServiceException.UserNotFound
 import org.ua.wohnung.bot.flows.Flow
 import org.ua.wohnung.bot.flows.FlowRegistry
 import org.ua.wohnung.bot.persistence.AccountRepository
 import org.ua.wohnung.bot.persistence.ApartmentAccountRepository
+import org.ua.wohnung.bot.persistence.PostCodeRepository
 import org.ua.wohnung.bot.persistence.UserDetailsRepository
 import org.ua.wohnung.bot.persistence.UserInfo
 import org.ua.wohnung.bot.persistence.generated.enums.Role
@@ -16,6 +18,7 @@ class UserService(
     private val accountRepository: AccountRepository,
     private val userDetailsRepository: UserDetailsRepository,
     private val apartmentAccountRepository: ApartmentAccountRepository,
+    private val postCodeRepository: PostCodeRepository,
     private val dslContext: DSLContext,
     private val flowRegistry: FlowRegistry
 ) {
@@ -66,16 +69,15 @@ class UserService(
             this?.pets,
             this?.firstLastName,
             this?.numberOfTenants,
-            this?.district,
             this?.familyMembers,
             this?.allergies,
             this?.foreignLanguages,
-            this?.readyToMove
-        ).size == 11
+            this?.readyToMove,
+        ).size == 10
 
     fun createAccount(account: Account) {
         dslContext.transaction { _ ->
-            accountRepository.save(account)
+            accountRepository.findById(account.id) ?: accountRepository.save(account)
         }
     }
 
@@ -94,6 +96,18 @@ class UserService(
                 ?: throw UserNotFound(id)
             val userDetails = userDetailsRepository.findById(id) ?: UserDetails().apply { this.id = id }
             userDetails.apply(block)
+            userDetailsRepository.save(userDetails)
+        }
+    }
+
+    fun updateWithPostCodeData(id: Long, postCode: String) {
+        dslContext.transaction { _ ->
+            val postCodeEntity = postCodeRepository.findByPostCode(postCode) ?: throw ServiceException.PostCodeNotFound(postCode)
+            val userDetails = userDetailsRepository.findById(id) ?: UserDetails().apply { this.id = id }
+            userDetails.apply {
+                this.bundesland = postCodeEntity.landName
+                this.postCode = postCodeEntity.id
+            }
             userDetailsRepository.save(userDetails)
         }
     }

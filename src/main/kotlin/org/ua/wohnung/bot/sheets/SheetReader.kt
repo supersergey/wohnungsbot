@@ -13,14 +13,14 @@ class SheetReader(
     private val applicationName = "ua-wohnungs-bot"
     private val httpTransport = GoogleNetHttpTransport.newTrustedTransport()
 
-    private val service = Sheets.Builder(httpTransport, jsonFactory, HttpCredentialsAdapter(credentialsProvider.get()))
+    private val sheetsService = Sheets.Builder(httpTransport, jsonFactory, HttpCredentialsAdapter(credentialsProvider.get()))
         .setApplicationName(applicationName)
         .build()
 
     @Suppress("UNCHECKED_CAST")
     fun readRows(): List<List<String>> {
         return (
-            service.spreadsheets().values()
+            sheetsService.spreadsheets().values()
                 .get(sheetProperties.spreadsheetId, sheetProperties.range)
                 .execute().getValues() as List<List<String>>
             )

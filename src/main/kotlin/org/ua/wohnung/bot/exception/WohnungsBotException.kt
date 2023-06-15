@@ -15,6 +15,8 @@ sealed class ServiceException(
     class UnreadableMessage(updateId: Int) : ServiceException("Message unreadable, $updateId")
     class UserNotFound(val userId: Long) :
         ServiceException("User not found: $userId", "Користувач не знайдений: $userId")
+    class PostCodeNotFound(val postCode: String) :
+        ServiceException("Postcode not found: $postCode", "Поштовий індекс не знайдений: $postCode")
 
     class AccessViolation(val userId: Long, actualRole: Role?, vararg expectedRole: Role) :
         ServiceException(

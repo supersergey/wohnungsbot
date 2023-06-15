@@ -5,7 +5,6 @@ import org.ua.wohnung.bot.persistence.generated.Tables.ACCOUNT
 import org.ua.wohnung.bot.persistence.generated.Tables.USER_DETAILS
 import org.ua.wohnung.bot.persistence.generated.enums.Role
 import org.ua.wohnung.bot.persistence.generated.tables.pojos.UserDetails
-import org.ua.wohnung.bot.persistence.generated.tables.records.UserDetailsRecord
 
 class UserDetailsRepository(private val jooq: DSLContext) {
     fun save(userDetails: UserDetails) {
@@ -29,15 +28,13 @@ class UserDetailsRepository(private val jooq: DSLContext) {
             wbs = userDetails.wbs
             wbsDetails = userDetails.wbsDetails
             wbsNumberOfRooms = userDetails.wbsNumberOfRooms
+            postCode = userDetails.postCode
         }
         userDetailsRecord.store()
     }
 
     fun findById(id: Long): UserDetails? =
-        jooq.fetchOne(USER_DETAILS, USER_DETAILS.ID.eq(id))?.map {
-            it as UserDetailsRecord
-            it.toUserDetails()
-        }
+        jooq.fetchOne(USER_DETAILS, USER_DETAILS.ID.eq(id))?.into(UserDetails::class.java)
 
     fun deleteById(id: Long, dslContext: DSLContext = jooq) {
         dslContext.deleteFrom(USER_DETAILS).where(USER_DETAILS.ID.eq(id)).execute()
@@ -59,25 +56,6 @@ class UserDetailsRepository(private val jooq: DSLContext) {
                 UserInfo(it.value1()!!, it.value2()!!, it.value3() ?: "невідомо", it.value4()!!, it.value5()!!)
             }
     }
-
-    private fun UserDetailsRecord.toUserDetails(): UserDetails =
-        UserDetails(
-            id,
-            firstLastName,
-            phone,
-            numberOfTenants,
-            pets,
-            bundesland,
-            district,
-            familyMembers,
-            readyToMove,
-            foreignLanguages,
-            allergies,
-            email,
-            wbs,
-            wbsDetails,
-            wbsNumberOfRooms
-        )
 }
 
 data class UserInfo(

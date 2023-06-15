@@ -34,9 +34,12 @@ import org.ua.wohnung.bot.flows.guestuser.processors.FamilyCountInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.FamilyMembersInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.FirstAndLastNameInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.ForeignLanguagesInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.GermanRegistrationInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.InitInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.PetsInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.PhoneNumberInputProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.PostCodeConfirmProcessor
+import org.ua.wohnung.bot.flows.guestuser.processors.PostCodeInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.ReadyToMoveInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.WbsDetailsInputProcessor
 import org.ua.wohnung.bot.flows.guestuser.processors.WbsInputProcessor
@@ -104,6 +107,9 @@ val messageGatewayModule = module {
             ConversationStartInputProcessor(get(), get()),
             AcceptPoliciesUserInputProcessor(get(), get()),
             ApprovePersonalDataUserInputProcessor(get(), get()),
+            GermanRegistrationInputProcessor(get(), get()),
+            PostCodeConfirmProcessor(get(), get()),
+            PostCodeInputProcessor(get(), get(), get()),
             BundeslandInputProcessor(get(), get()),
             DistrictInputProcessor(get(), get()),
             FamilyMembersInputProcessor(get(), get()),

@@ -242,7 +242,8 @@ internal class ApartmentServiceTest {
             "",
             true,
             "wbs",
-            2
+            2,
+            "26489"
         )
 
     companion object {

@@ -37,25 +37,35 @@ abstract class AbstractRegisteredUserInputProcessor(userService: UserService, me
 
     private fun processStartCommand(chatMetadata: ChatMetadata): StepOutput {
         val userDetails = userService.findById(chatMetadata.userId)
-        return if (userDetails?.wbs == false || (userDetails?.wbs == true && userDetails.isWbsNumberOfRoomsSpecified())) {
-            StepOutput.InlineButtons(
-                message = messageSource[FlowStep.REGISTERED_USER_CONVERSATION_START]
-                    .format(userService.capitalizeFirstLastName(chatMetadata.userId)),
-                nextStep = FlowStep.REGISTERED_USER_LIST_APARTMENTS,
-                replyOptions = listOf("Переглянути наявне житло")
+        if (userDetails?.postCode == null) {
+            return StepOutput.InlineButtons(
+                message = messageSource[FlowStep.GERMAN_REGISTRATION],
+                nextStep = FlowStep.GERMAN_REGISTRATION,
+                replyOptions = listOf("Так", "Ні"),
+                editMessage = false
             )
-        } else if (userDetails?.wbs == true && !userDetails.isWbsNumberOfRoomsSpecified()) {
-            StepOutput.InlineButtons(
-                message = messageSource[FlowStep.WBS_NUMBER_OF_ROOMS],
-                nextStep = FlowStep.WBS_NUMBER_OF_ROOMS,
-                replyOptions = (1..6).map { "$it" }.toList()
-            )
-        } else
-            StepOutput.InlineButtons(
+        }
+        if (userDetails.wbs == null) {
+            return StepOutput.InlineButtons(
                 message = messageSource[FlowStep.WBS],
                 nextStep = FlowStep.WBS,
                 replyOptions = listOf("Так", "Ні")
             )
+        }
+        if (userDetails.wbs == true && !userDetails.isWbsNumberOfRoomsSpecified()) {
+            return StepOutput.InlineButtons(
+                message = messageSource[FlowStep.WBS_NUMBER_OF_ROOMS],
+                nextStep = FlowStep.WBS_NUMBER_OF_ROOMS,
+                replyOptions = (1..6).map { "$it" }.toList()
+            )
+        }
+
+        return StepOutput.InlineButtons(
+            message = messageSource[FlowStep.REGISTERED_USER_CONVERSATION_START]
+                .format(userService.capitalizeFirstLastName(chatMetadata.userId)),
+            nextStep = FlowStep.REGISTERED_USER_LIST_APARTMENTS,
+            replyOptions = listOf("Переглянути наявне житло")
+        )
     }
 
     private fun UserDetails?.isWbsNumberOfRoomsSpecified(): Boolean = this?.wbsNumberOfRooms != null

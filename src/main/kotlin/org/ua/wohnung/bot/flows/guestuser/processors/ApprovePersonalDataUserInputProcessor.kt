@@ -4,11 +4,10 @@ import org.ua.wohnung.bot.configuration.MessageSource
 import org.ua.wohnung.bot.dto.ChatMetadata
 import org.ua.wohnung.bot.flows.processors.StepOutput
 import org.ua.wohnung.bot.flows.step.FlowStep
-import org.ua.wohnung.bot.flows.step.FlowStep.BUNDESLAND_SELECTION
 import org.ua.wohnung.bot.flows.step.FlowStep.CONVERSATION_FINISHED_DECLINED
+import org.ua.wohnung.bot.flows.step.FlowStep.GERMAN_REGISTRATION
 import org.ua.wohnung.bot.flows.step.FlowStep.PERSONAL_DATA_PROCESSING_APPROVAL
 import org.ua.wohnung.bot.user.UserService
-import org.ua.wohnung.bot.user.model.BundesLand
 
 class ApprovePersonalDataUserInputProcessor(userService: UserService, messageSource: MessageSource) :
     AbstractGuestUserInputProcessor(userService, messageSource) {
@@ -17,9 +16,9 @@ class ApprovePersonalDataUserInputProcessor(userService: UserService, messageSou
     override fun processSpecificCommands(chatMetadata: ChatMetadata): StepOutput? {
         return when (chatMetadata.input) {
             "так" -> StepOutput.InlineButtons(
-                message = messageSource[BUNDESLAND_SELECTION],
-                nextStep = BUNDESLAND_SELECTION,
-                replyOptions = BundesLand.values().map { it.germanName },
+                message = messageSource[GERMAN_REGISTRATION],
+                nextStep = GERMAN_REGISTRATION,
+                replyOptions = listOf("Так", "Ні"),
                 editMessage = true
             )
             "ні" -> StepOutput.PlainText(

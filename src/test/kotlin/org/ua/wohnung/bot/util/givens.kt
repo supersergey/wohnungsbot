@@ -34,7 +34,8 @@ fun aFullUserDetails(
     "abc@email.com",
     true,
     "wbs_details",
-    2
+    2,
+    null
 )
 
 fun aPartialUserDetails(id: Long = nextLong()) = UserDetails(
@@ -52,7 +53,8 @@ fun aPartialUserDetails(id: Long = nextLong()) = UserDetails(
     "email",
     null,
     null,
-    2
+    2,
+    null
 )
 
 fun anApartment(
@@ -69,7 +71,8 @@ fun anApartment(
     showingDate: String = "",
     wbs: Boolean = false,
     wbsDetails: String = "wbs_details",
-    numberOrRooms: Short = 2
+    numberOrRooms: Short = 2,
+    postCode: String = "26489"
 ): Apartment {
     return Apartment(
         "$id",
@@ -85,6 +88,7 @@ fun anApartment(
         showingDate,
         wbs,
         wbsDetails,
-        numberOrRooms
+        numberOrRooms,
+        postCode
     )
 }

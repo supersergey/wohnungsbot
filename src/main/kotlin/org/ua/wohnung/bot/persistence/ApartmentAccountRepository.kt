@@ -70,7 +70,8 @@ class ApartmentAccountRepository(private val jooq: DSLContext) {
                         it[USER_DETAILS.EMAIL],
                         it[USER_DETAILS.WBS],
                         it[USER_DETAILS.WBS_DETAILS],
-                        it[USER_DETAILS.WBS_NUMBER_OF_ROOMS]
+                        it[USER_DETAILS.WBS_NUMBER_OF_ROOMS],
+                        it[USER_DETAILS.POST_CODE]
                     )
                 )
             }
